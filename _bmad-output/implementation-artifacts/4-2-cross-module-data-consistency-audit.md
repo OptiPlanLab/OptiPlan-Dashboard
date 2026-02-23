@@ -1,6 +1,6 @@
 # Story 4.2: Cross-Module Data Consistency Audit
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -364,10 +364,11 @@ No errors encountered during implementation.
 
 ### File List
 
-- `index.html` — Modified: added growthRate field to OPTITRACK_DATA, computed _scheduleAdherence variable, updated HERO_GAUGE_CONFIG and STAT_CARD_CONFIG to derive from data, fixed tooltip text, added 7 cross-reference comments
+- `index.html` — Modified: added growthRate field to OPTITRACK_DATA, computed _scheduleAdherence variable, updated HERO_GAUGE_CONFIG and STAT_CARD_CONFIG to derive from data, fixed tooltip text, added 7 cross-reference comments. **Review fixes:** fixed `_getStatusBadge` key mismatch, added `_syncTooltipData()` for data-derived tooltip text, derived cash flow month count from data
 - `_bmad-output/implementation-artifacts/4-2-cross-module-data-consistency-audit.md` — Modified: task checkboxes, Dev Agent Record, File List, Change Log, Status
 - `_bmad-output/implementation-artifacts/sprint-status.yaml` — Modified: story status updated
 
 ### Change Log
 
 - **2026-02-23:** Completed full cross-module data consistency audit. Fixed 3 hardcoded values (schedule gauge, OptiTrack sublabel, coordination tooltip). Added growthRate field to OPTITRACK_DATA. Added _scheduleAdherence computed variable for hero gauge. Added 7 cross-reference comments to data constants. All acceptance criteria satisfied.
+- **2026-02-24:** Code review #1 (Claude Opus 4.6). Fixed 3 issues: (M1) `_getStatusBadge` key mismatch `in_review` → `'in-review'` for Hebrew badge text; (M2) Added `_syncTooltipData()` to tooltip init — tooltip text now derived from data constants at runtime, enforcing AC6 single source of truth; (L1) Cash flow section title "12" now derived from `data.cashFlow.length`. Deleted `nul` artifact file.

@@ -1,6 +1,6 @@
 # Story 4.3: iPad Safari Hardening & Touch Optimization
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -502,3 +502,30 @@ Surgical modifications to `index.html` only (single-file architecture). Changes 
 ### Change Log
 
 - **2026-02-23:** Implemented Story 4.3 — iPad Safari Hardening & Touch Optimization. Added iOS meta tags, global touch prevention CSS, WebKit 3D transform compatibility, comprehensive prefers-reduced-motion support, rotation/phone viewport overlays with Hebrew text, pull-to-refresh prevention JS, touch response :active states, and tablet sidebar collapse breakpoint.
+- **2026-02-24:** Code review #1 (Senior Developer Review). Fixed 2 issues: (H1) Added `display: none !important` for `.sidebar, main, .chat-panel` in portrait and phone media queries — dashboard content was not hidden when viewport overlays displayed, violating AC6 and causing unnecessary CPU/GPU usage under the overlay. (M1) Added `will-change: transform, opacity` to `.module-overlay--closing` — GPU compositing hint was lost when `--active` class was removed before the 350ms close transition.
+
+## Senior Developer Review (AI)
+
+**Reviewer:** BenAkiva (via Claude Opus 4.6)
+**Date:** 2026-02-24
+**Outcome:** Approved with fixes applied
+
+### Findings Summary
+
+| # | Severity | Description | Resolution |
+|---|----------|-------------|------------|
+| H1 | HIGH | Dashboard not hidden when viewport overlays show (AC6 partial) | FIXED — added `display: none !important` for `.sidebar, main, .chat-panel` in portrait/phone media queries |
+| M1 | MEDIUM | `will-change` drops during module overlay close animation | FIXED — added `will-change: transform, opacity` to `.module-overlay--closing` |
+| M2 | MEDIUM | Viewport overlay class names deviate from story spec (`viewport-overlay--*` vs `rotation-prompt`/`mobile-warning`) | ACCEPTED — dev naming is more consistent BEM; documented as known deviation |
+| L1 | LOW | ~20 redundant touch-action declarations across component CSS | NOTED — universal `*` rule makes them redundant but harmless |
+| L2 | LOW | `will-change: stroke-dashoffset` has minimal GPU optimization value on SVG | NOTED — lifecycle correct, just provides minimal benefit |
+| L3 | LOW | Missing explicit `-webkit-user-select: auto` on `.chat-panel__input` | NOTED — functionally covered by generic `input` rule fallback |
+
+### AC Validation
+
+- AC1 (Viewport & Meta): PASS
+- AC2 (Touch CSS): PASS
+- AC3 (WebKit 3D): PASS
+- AC4 (Touch Response): PASS
+- AC5 (Reduced Motion): PASS
+- AC6 (Responsive/Rotation): PASS (after H1 fix)

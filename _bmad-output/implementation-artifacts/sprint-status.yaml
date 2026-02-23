@@ -70,9 +70,9 @@ development_status:
   epic-3-retrospective: optional
 
   # ─── Epic 4: Conference Readiness & Polish ──────────────────────────────────
-  epic-4: in-progress
-  4-1-contextual-tooltips-with-hebrew-sales-copy: review
-  4-2-cross-module-data-consistency-audit: review
-  4-3-ipad-safari-hardening-touch-optimization: review
-  4-4-long-running-stability-session-management: ready-for-dev
+  epic-4: done
+  4-1-contextual-tooltips-with-hebrew-sales-copy: done
+  4-2-cross-module-data-consistency-audit: done
+  4-3-ipad-safari-hardening-touch-optimization: done
+  4-4-long-running-stability-session-management: done
   epic-4-retrospective: optional

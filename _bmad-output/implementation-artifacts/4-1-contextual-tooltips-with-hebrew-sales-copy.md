@@ -1,6 +1,6 @@
 # Story 4.1: Contextual Tooltips with Hebrew Sales Copy
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -61,7 +61,7 @@ so that I understand the significance of each metric without needing anyone to n
 
 - [x] **Task 2: Add `data-tooltip` attributes to HTML elements** (AC: 1, 3)
   - [x] 2.1 Hero gauge — Financial Health (`data-gauge="financial"`, line ~2392): `data-tooltip="ניטור בריאות פיננסית ב-₪1.8 מיליארד תקציב — סטיות מזוהות בזמן אמת"`
-  - [x] 2.2 Hero gauge — Coordination (`data-gauge="coordination"`, line ~2404): `data-tooltip="תיאום עם 12 רשויות ממשלתיות — בפלטפורמה אחת"`
+  - [x] 2.2 Hero gauge — Coordination (`data-gauge="coordination"`, line ~2404): `data-tooltip="תיאום עם 5 רשויות ממשלתיות — בפלטפורמה אחת"` (corrected from 12 to match OPTITRACK_DATA.authorities count)
   - [x] 2.3 Hero gauge — Schedule (`data-gauge="schedule"`, line ~2416): `data-tooltip="מעקב לוחות זמנים ב-6 קטעי ביצוע — חריגות מזוהות אוטומטית"`
   - [x] 2.4 AI Agent Indicator (`.ai-indicator`, line ~2328): `data-tooltip="סוכני AI סורקים מיילים, מסמכים ודוחות — מפיקים תובנות בזמן אמת"`
   - [x] 2.5 Stat card — OptiTrack (`data-module="optitrack"`, line ~2430): `data-tooltip="בקרת תיאומים — 347 פריטים מול 5 רשויות, מכל הקטעים"`
@@ -170,7 +170,7 @@ The tooltip copy follows the "screaming the pain without saying it" philosophy f
 | Target | Hebrew Copy | Pain Implied |
 |--------|-------------|-------------|
 | Financial Health gauge | ניטור בריאות פיננסית ב-₪1.8 מיליארד תקציב — סטיות מזוהות בזמן אמת | Without this: budget overruns go unnoticed |
-| Coordination gauge | תיאום עם 12 רשויות ממשלתיות — בפלטפורמה אחת | Without this: coordination is chaos across authorities |
+| Coordination gauge | תיאום עם 5 רשויות ממשלתיות — בפלטפורמה אחת | Without this: coordination is chaos across authorities |
 | Schedule gauge | מעקב לוחות זמנים ב-6 קטעי ביצוע — חריגות מזוהות אוטומטית | Without this: delays discovered too late |
 | AI Indicator | סוכני AI סורקים מיילים, מסמכים ודוחות — מפיקים תובנות בזמן אמת | Without this: manual review of thousands of documents |
 | OptiTrack card | בקרת תיאומים — 347 פריטים מול 5 רשויות, מכל הקטעים | Without this: permit tracking in spreadsheets |
@@ -353,6 +353,7 @@ $card.addEventListener('touchend', handleStatCardTouchEnd, { passive: true });
 ## Change Log
 
 - **2026-02-23:** Implemented Story 4.1 — Contextual Tooltips with Hebrew Sales Copy. Added tooltip CSS section (lines ~1859-1949), 9 `data-tooltip` attributes to HTML elements (3 hero gauges, 1 AI indicator, 5 stat cards), tooltip JS component `OptiPlan.components.tooltip` with `init()`, `show()`, `hide()`, `_position()`, `destroy()` methods (lines ~3021-3191), auto-positioning with viewport overflow handling, touch/click event handlers with deduplication, and integration with card flip, module overlay, and idle reset systems.
+- **2026-02-23:** Code review fixes (3 HIGH, 3 MEDIUM): Renamed `handleTooltipTap` → `handleTooltipShow` to match AC5 spec; added `tooltip.hide()` in `handleChatOpen()` to dismiss tooltip when chat panel opens; added null guard in `show()` for $tooltip safety; corrected coordination tooltip copy from "12 רשויות" to "5 רשויות" to match OPTITRACK_DATA; declared `_lastTouchTime`/`_lastDismissTouchTime`/`$arrow` properties in component definition with cleanup in `destroy()`; cached arrow DOM reference in `init()` instead of querying per show().
 
 ## Dev Agent Record
 
