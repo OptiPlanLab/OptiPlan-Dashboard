@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+  <meta name="robots" content="noindex">
+  <title>OptiPlan — מרכז בקרה</title>
+
+  <!-- Google Fonts — Varela Round (UI) + JetBrains Mono (data/mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tabler Icons Webfont -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+
+  <style>
+    /* ================================================================ */
+    /* SECTION: CSS Reset & Base                                         */
+    /* ================================================================ */
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Design Tokens (Custom Properties)                        */
+    /* ================================================================ */
+
+    :root {
+      /* Typography */
+      --font-main: 'Varela Round', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Spacing */
+      --gap: 16px;
+      --gap-sm: 8px;
+      --gap-lg: 24px;
+
+      /* Border Radius */
+      --radius: 14px;
+      --radius-sm: 8px;
+
+      /* Transitions */
+      --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-flip: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* Palette D — Module Colors */
+      --optitrack: #0991F3;
+      --optibiz: #F6AE2D;
+      --optirisk: #FF7A3C;
+      --optidocs: #4395FD;
+      --optigantt: #0B3C5D;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0A0E1A;
+      --bg-sidebar: #0F1328;
+      --bg-card: #141833;
+      --bg-card-hover: #1A2044;
+      --bg-input: #181E3A;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.12);
+      --text-primary: #E5E7EB;
+      --text-secondary: rgba(255,255,255,0.58);
+      --text-muted: rgba(255,255,255,0.30);
+      --shadow-card: 0 4px 20px rgba(0,0,0,0.40);
+      --shadow-card-hover: 0 8px 36px rgba(0,0,0,0.55);
+      --gradient-body: radial-gradient(ellipse 70% 55% at 15% 8%, rgba(9,145,243,0.06) 0%, transparent 55%),
+                       radial-gradient(ellipse 55% 45% at 85% 85%, rgba(246,174,45,0.04) 0%, transparent 55%),
+                       linear-gradient(165deg, #0A0E1A 0%, #0D1228 45%, #101636 75%, #0A0E1A 100%);
+      --toggle-bg: #181E3A;
+      --toggle-knob: #F59E0B;
+      --sidebar-active: rgba(9,145,243,0.12);
+      --bar-track: rgba(255,255,255,0.06);
+      --ring-track: rgba(255,255,255,0.05);
+    }
+
+    [data-theme="light"] {
+      --bg-body: #F0F2F8;
+      --bg-sidebar: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F7F8FC;
+      --bg-input: #F0F2F8;
+      --border: rgba(0,0,0,0.07);
+      --border-hover: rgba(0,0,0,0.13);
+      --text-primary: #1A1E36;
+      --text-secondary: rgba(0,0,0,0.55);
+      --text-muted: rgba(0,0,0,0.32);
+      --shadow-card: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-card-hover: 0 6px 24px rgba(0,0,0,0.10);
+      --gradient-body: linear-gradient(165deg, #F0F2F8 0%, #E8EBF4 50%, #F0F2F8 100%);
+      --toggle-bg: #E2E6F0;
+      --toggle-knob: #0991F3;
+      --sidebar-active: rgba(9,145,243,0.08);
+      --bar-track: rgba(0,0,0,0.06);
+      --ring-track: rgba(0,0,0,0.06);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Layout — Body & Main Shell                               */
+    /* ================================================================ */
+
+    body {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+      background: var(--gradient-body);
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Layout — Sidebar (240px, RTL right-side)                 */
+    /* ================================================================ */
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      inset-inline-end: 0;
+      top: 0;
+      background: var(--bg-sidebar);
+      border-inline-start: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Layout — Topbar (58px height)                            */
+    /* ================================================================ */
+
+    .topbar {
+      height: 58px;
+      background: var(--bg-sidebar);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--gap);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Layout — Main Grid                                       */
+    /* ================================================================ */
+
+    .main-content {
+      flex: 1;
+      margin-inline-end: 240px;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      min-height: 100vh;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Theme Toggle                                             */
+    /* ================================================================ */
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: var(--gap-sm) var(--gap);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
+    }
+
+    .theme-toggle__track {
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+      background: var(--toggle-bg);
+      border: 1px solid var(--border);
+      position: relative;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .theme-toggle__knob {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--toggle-knob);
+      position: absolute;
+      top: 2px;
+      /* RTL: knob starts at inline-end (logical end = left in RTL visual) */
+      inset-inline-end: 2px;
+      transition: transform var(--transition-bounce),
+                  background var(--transition);
+      will-change: transform;
+    }
+
+    /* In light theme, shift knob to the other side */
+    [data-theme="light"] .theme-toggle__knob {
+      transform: translateX(-22px);
+    }
+
+    .theme-toggle__label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-main);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Animations & Keyframes                                   */
+    /* ================================================================ */
+
+    /* Placeholder — populated by future stories */
+
+    /* ================================================================ */
+    /* SECTION: Utilities                                                */
+    /* ================================================================ */
+
+    .u-hidden {
+      display: none !important;
+    }
+
+    .u-rtl-flip {
+      transform: scaleX(-1);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Responsive / Accessibility                               */
+    /* ================================================================ */
+
+    /* Reduced motion — accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Phone viewport — show optimize message */
+    @media (max-width: 767px) {
+      .viewport-overlay--phone {
+        display: flex;
+      }
+    }
+
+    .viewport-overlay--phone {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: var(--gap-lg);
+      text-align: center;
+    }
+
+    /* Portrait orientation on tablet — show rotation prompt */
+    @media (orientation: portrait) and (min-width: 768px) {
+      .viewport-overlay--portrait {
+        display: flex;
+      }
+    }
+
+    .viewport-overlay--portrait {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: var(--gap-lg);
+      text-align: center;
+    }
+
+    /* Touch interaction baseline */
+    * {
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Preserve text selection and restore touch defaults in standard text contexts */
+    input, textarea, [contenteditable] {
+      user-select: text;
+      -webkit-user-select: text;
+      touch-action: auto;
+      -webkit-touch-callout: auto;
+    }
+  </style>
+</head>
+<body data-theme="dark" data-palette="d" data-skin="1">
+  <!-- data-palette and data-skin reserved for future story variants (palettes A-C, skins 2+) -->
+
+  <!-- Sidebar: structural container (content added in Story 1.3) -->
+  <aside class="sidebar" aria-label="ניווט ראשי">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle" role="button" aria-label="החלפת ערכת נושא" tabindex="0">
+      <div class="theme-toggle__track" aria-hidden="true">
+        <div class="theme-toggle__knob"></div>
+      </div>
+      <span class="theme-toggle__label">ערכת נושא</span>
+    </div>
+    <!-- Additional sidebar content added in Story 1.3 -->
+  </aside>
+
+  <!-- Main content area -->
+  <div class="main-content">
+    <!-- Topbar: structural container (content added in Story 1.3) -->
+    <header class="topbar" aria-label="סרגל עליון">
+      <!-- Topbar content added in Story 1.3 -->
+    </header>
+
+    <!-- Primary content region (hero gauges, stat cards etc. added in Stories 1.4–1.5) -->
+    <main id="mainRegion">
+    </main>
+  </div>
+
+  <!-- Viewport overlays — content populated in Story 1.3 -->
+  <div class="viewport-overlay--phone" role="alert" aria-live="polite">אנא בחר במצב נוף או בטאבלט</div>
+  <div class="viewport-overlay--portrait" role="alert" aria-live="polite">אנא הפוך את המכשיר לנוף</div>
+
+  <script>
+    // ================================================================
+    // SECTION: Configuration Constants
+    // ================================================================
+
+    const API_KEY = '';
+    const IDLE_TIMEOUT_MS = 90000;
+    const MAX_CHAT_HISTORY = 5;
+
+    // ================================================================
+    // SECTION: Data Constants (stubs — populated in Story 1.2)
+    // ================================================================
+
+    const PROJECT_DATA = {};
+    const OPTITRACK_DATA = {};
+    const OPTIBIZ_DATA = {};
+    const OPTIRISK_DATA = {};
+    const OPTIDOCS_DATA = {};
+    const OPTIGANTT_DATA = {};
+
+    // ================================================================
+    // SECTION: OptiPlan Namespace & State Management
+    // ================================================================
+
+    const _ALLOWED_TRANSITIONS = {
+      'idle':          ['overview'],
+      'overview':      ['card-flip', 'idle'],
+      'card-flip':     ['overview', 'module-expand'],
+      'module-expand': ['overview']
+    };
+
+    const OptiPlan = {
+      state: {
+        currentLayer: 'idle',
+        activeModule: null,
+        activeCard: null,
+        theme: 'dark',
+        _idleTimer: null,
+        _clockInterval: null,
+
+        transition: function(targetLayer) {
+          const allowed = _ALLOWED_TRANSITIONS[this.currentLayer];
+          if (!allowed || !allowed.includes(targetLayer)) {
+            console.warn('[OptiPlan State] Invalid transition:', this.currentLayer, '→', targetLayer);
+            return false;
+          }
+          this.currentLayer = targetLayer;
+          OptiPlan.ui.reflectLayer(targetLayer);
+          return true;
+        },
+
+        set: function(key, value) {
+          this[key] = value;
+          OptiPlan.ui.reflect(key, value);
+        }
+      },
+
+      components: {},
+      animations: {},
+      modules: {},
+      ai: {},
+      touch: {},
+      utils: {},
+      data: {},
+      ui: {}
+    };
+
+    // ================================================================
+    // SECTION: Utility Functions
+    // ================================================================
+
+    OptiPlan.utils.formatCurrency = function(amount) {
+      if (typeof amount !== 'number' || isNaN(amount)) {
+        console.warn('[OptiPlan Utils] Invalid currency amount:', amount);
+        return '';
+      }
+      return new Intl.NumberFormat('he-IL').format(amount);
+    };
+
+    OptiPlan.utils.formatPercent = function(value) {
+      if (typeof value !== 'number' || isNaN(value)) {
+        console.warn('[OptiPlan Utils] Invalid percent value:', value);
+        return '';
+      }
+      return `${value}%`;
+    };
+
+    OptiPlan.utils.formatDate = function(dateStr) {
+      if (!dateStr || isNaN(new Date(dateStr))) {
+        console.warn('[OptiPlan Utils] Invalid date string:', dateStr);
+        return '';
+      }
+      const d = new Date(dateStr);
+      const day   = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year  = String(d.getFullYear()).slice(-2);
+      return `${day}/${month}/${year}`;
+    };
+
+    // ================================================================
+    // SECTION: UI Reflection Layer
+    // ================================================================
+
+    OptiPlan.ui.reflectLayer = function(layer) {
+      // Stub — expanded by future stories
+      // No logging on valid transitions; only log in error paths
+    };
+
+    OptiPlan.ui.reflect = function(key, value) {
+      // Stub — expanded by future stories
+      if (key === 'theme') {
+        document.body.setAttribute('data-theme', value);
+      }
+    };
+
+    // ================================================================
+    // SECTION: Animation Orchestration (stub)
+    // ================================================================
+
+    // OptiPlan.animations populated by future stories
+
+    // ================================================================
+    // SECTION: Touch & Event Management (stub)
+    // ================================================================
+
+    // OptiPlan.touch populated by future stories
+
+    // ================================================================
+    // SECTION: Theme Toggle Handler
+    // ================================================================
+
+    function handleThemeToggle(e) {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      OptiPlan.state.set('theme', newTheme);
+    }
+
+    function handleThemeToggleKeydown(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleThemeToggle(e);
+      }
+    }
+
+    // ================================================================
+    // SECTION: Initialization
+    // ================================================================
+
+    OptiPlan.init = function() {
+      // Attach theme toggle listener
+      const $themeToggle = document.getElementById('themeToggle');
+      if ($themeToggle) {
+        $themeToggle.addEventListener('click', handleThemeToggle);
+        $themeToggle.addEventListener('keydown', handleThemeToggleKeydown);
+      }
+
+      // Set initial layer to overview
+      OptiPlan.state.currentLayer = 'idle';
+      const transitionResult = OptiPlan.state.transition('overview');
+      if (!transitionResult) {
+        console.warn('[OptiPlan Init] Initial transition to overview failed');
+      }
+
+      // Initialize component stubs (future stories add implementations)
+      // OptiPlan.components.init() — added by Story 1.3+
+    };
+
+    document.addEventListener('DOMContentLoaded', OptiPlan.init.bind(OptiPlan));
+  </script>
+</body>
+</html>
