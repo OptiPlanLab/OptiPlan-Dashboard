@@ -451,6 +451,74 @@
     }
 
     /* ================================================================ */
+    /* SECTION: Component — Hero Gauges                                  */
+    /* ================================================================ */
+
+    .hero-gauges {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: var(--gap-lg);
+      padding: var(--gap-lg) 0;
+    }
+
+    .hero-gauge {
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-gauge__svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-gauge__track {
+      stroke: var(--ring-track);
+    }
+
+    .hero-gauge__fill {
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-gauge="financial"] .hero-gauge__fill {
+      stroke: var(--optibiz);
+    }
+
+    [data-gauge="coordination"] .hero-gauge__fill {
+      stroke: var(--optitrack);
+    }
+
+    [data-gauge="schedule"] .hero-gauge__fill {
+      stroke: var(--optigantt);
+    }
+
+    .hero-gauge__value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 24px;
+      fill: var(--text-primary);
+    }
+
+    .hero-gauge__label {
+      font-family: var(--font-main);
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: var(--gap-sm);
+    }
+
+    .hero-gauge__fill.is-animating {
+      will-change: stroke-dashoffset;
+    }
+
+    .hero-gauge__fill.is-idle {
+      animation: gauge-pulse 3s ease-in-out infinite;
+      will-change: opacity;
+    }
+
+    /* ================================================================ */
     /* SECTION: Animations & Keyframes                                   */
     /* ================================================================ */
 
@@ -467,7 +535,14 @@
       }
     }
 
-    /* Placeholder — populated by future stories */
+    @keyframes gauge-pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.85;
+      }
+    }
 
     /* ================================================================ */
     /* SECTION: Utilities                                                */
@@ -574,7 +649,7 @@
     <!-- Navigation: Modules -->
     <nav class="sidebar__nav">
       <span class="sidebar__section-label">מודולים</span>
-      <a class="sidebar__nav-item sidebar__nav-item--active" data-module="dashboard" href="#" role="button">
+      <a class="sidebar__nav-item sidebar__nav-item--active" data-module="dashboard" href="#" role="button" aria-current="page">
         <i class="ti ti-dashboard sidebar__nav-icon"></i>
         <span class="sidebar__nav-label">לוח בקרה</span>
         <span class="sidebar__dot" style="background: var(--optitrack)"></span>
@@ -667,6 +742,45 @@
 
     <!-- Primary content region (hero gauges, stat cards etc. added in Stories 1.4–1.5) -->
     <main id="mainRegion">
+      <!-- Hero Gauges — 3 animated SVG ring gauges (Story 1.4) -->
+      <section class="hero-gauges">
+        <div class="hero-gauge" data-gauge="financial">
+          <svg class="hero-gauge__svg" viewBox="0 0 120 120">
+            <circle class="hero-gauge__track" cx="60" cy="60" r="50"
+                    stroke-width="8" fill="none" />
+            <circle class="hero-gauge__fill" cx="60" cy="60" r="50"
+                    stroke-width="8" fill="none" stroke-linecap="round"
+                    transform="rotate(-90 60 60)" />
+            <text class="hero-gauge__value" x="60" y="60"
+                  text-anchor="middle" dominant-baseline="central"></text>
+          </svg>
+          <span class="hero-gauge__label">בריאות פיננסית</span>
+        </div>
+        <div class="hero-gauge" data-gauge="coordination">
+          <svg class="hero-gauge__svg" viewBox="0 0 120 120">
+            <circle class="hero-gauge__track" cx="60" cy="60" r="50"
+                    stroke-width="8" fill="none" />
+            <circle class="hero-gauge__fill" cx="60" cy="60" r="50"
+                    stroke-width="8" fill="none" stroke-linecap="round"
+                    transform="rotate(-90 60 60)" />
+            <text class="hero-gauge__value" x="60" y="60"
+                  text-anchor="middle" dominant-baseline="central"></text>
+          </svg>
+          <span class="hero-gauge__label">השלמת תיאומים</span>
+        </div>
+        <div class="hero-gauge" data-gauge="schedule">
+          <svg class="hero-gauge__svg" viewBox="0 0 120 120">
+            <circle class="hero-gauge__track" cx="60" cy="60" r="50"
+                    stroke-width="8" fill="none" />
+            <circle class="hero-gauge__fill" cx="60" cy="60" r="50"
+                    stroke-width="8" fill="none" stroke-linecap="round"
+                    transform="rotate(-90 60 60)" />
+            <text class="hero-gauge__value" x="60" y="60"
+                  text-anchor="middle" dominant-baseline="central"></text>
+          </svg>
+          <span class="hero-gauge__label">עמידה בלוח זמנים</span>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -985,12 +1099,14 @@
 
     function handleNavItemTap(e) {
       e.preventDefault();
-      var $tapped = e.currentTarget;
-      var $items = OptiPlan.components.sidebar.$navItems;
+      const $tapped = e.currentTarget;
+      const $items = OptiPlan.components.sidebar.$navItems;
       $items.forEach(function($item) {
         $item.classList.remove('sidebar__nav-item--active');
+        $item.removeAttribute('aria-current');
       });
       $tapped.classList.add('sidebar__nav-item--active');
+      $tapped.setAttribute('aria-current', 'page');
     }
 
     OptiPlan.components.sidebar = {
@@ -1011,6 +1127,7 @@
         var $dashboard = this.$sidebar.querySelector('[data-module="dashboard"]');
         if ($dashboard) {
           $dashboard.classList.add('sidebar__nav-item--active');
+          $dashboard.setAttribute('aria-current', 'page');
         }
       },
 
@@ -1026,15 +1143,16 @@
     // SECTION: Component — Topbar
     // ================================================================
 
+    var _clockFormatter = new Intl.DateTimeFormat('he-IL', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+
     function updateTopbarClock() {
       var $clock = OptiPlan.components.topbar.$clock;
       if (!$clock) return;
-      var formatter = new Intl.DateTimeFormat('he-IL', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      });
-      $clock.textContent = formatter.format(new Date());
+      $clock.textContent = _clockFormatter.format(new Date());
     }
 
     OptiPlan.components.topbar = {
@@ -1048,10 +1166,106 @@
         OptiPlan.state._clockInterval = setInterval(updateTopbarClock, 30000);
       },
 
+      render: function() {
+        updateTopbarClock();
+      },
+
       destroy: function() {
         if (OptiPlan.state._clockInterval) {
           clearInterval(OptiPlan.state._clockInterval);
           OptiPlan.state._clockInterval = null;
+        }
+      }
+    };
+
+    // ================================================================
+    // SECTION: Component — Hero Gauges
+    // ================================================================
+
+    var HERO_GAUGE_CONFIG = [
+      { key: 'financial', value: OPTIBIZ_DATA.budgetUtilization, label: '\u05D1\u05E8\u05D9\u05D0\u05D5\u05EA \u05E4\u05D9\u05E0\u05E0\u05E1\u05D9\u05EA' },
+      { key: 'coordination', value: OPTITRACK_DATA.approvalRate, label: '\u05D4\u05E9\u05DC\u05DE\u05EA \u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD' },
+      { key: 'schedule', value: 52, label: '\u05E2\u05DE\u05D9\u05D3\u05D4 \u05D1\u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD' }
+    ];
+
+    var HERO_GAUGE_RADIUS = 50;
+    var HERO_GAUGE_CIRCUMFERENCE = 2 * Math.PI * HERO_GAUGE_RADIUS;
+    var HERO_GAUGE_FILL_DELAY = 400;
+    var HERO_GAUGE_PULSE_DELAY = 1200;
+
+    function _heroGaugeSetOffset($fill, percent) {
+      var offset = HERO_GAUGE_CIRCUMFERENCE * (1 - percent / 100);
+      $fill.style.strokeDashoffset = offset;
+    }
+
+    OptiPlan.components.heroGauges = {
+      $heroGauges: null,
+      $gauges: null,
+      _fillTimeout: null,
+      _pulseTimeout: null,
+
+      init: function() {
+        this.$heroGauges = document.querySelector('.hero-gauges');
+        if (!this.$heroGauges) return;
+        this.$gauges = this.$heroGauges.querySelectorAll('.hero-gauge');
+        this.render();
+      },
+
+      render: function() {
+        var self = this;
+        var circumference = HERO_GAUGE_CIRCUMFERENCE;
+
+        self.$gauges.forEach(function($gauge, index) {
+          var config = HERO_GAUGE_CONFIG[index];
+          if (!config) return;
+
+          var $fill = $gauge.querySelector('.hero-gauge__fill');
+          var $value = $gauge.querySelector('.hero-gauge__value');
+
+          // Set initial state: full circumference = hidden
+          $fill.style.strokeDasharray = circumference;
+          $fill.style.strokeDashoffset = circumference;
+
+          // Set percentage text
+          $value.textContent = OptiPlan.utils.formatPercent(config.value);
+        });
+
+        // After 400ms delay, animate to target offset (CSS transition handles animation)
+        self._fillTimeout = setTimeout(function() {
+          self.$gauges.forEach(function($gauge, index) {
+            var config = HERO_GAUGE_CONFIG[index];
+            if (!config) return;
+            var $fill = $gauge.querySelector('.hero-gauge__fill');
+            $fill.classList.add('is-animating');
+            _heroGaugeSetOffset($fill, config.value);
+          });
+        }, HERO_GAUGE_FILL_DELAY);
+
+        // After fill animation completes (~1200ms), remove will-change and add idle pulse class
+        self._pulseTimeout = setTimeout(function() {
+          self.$gauges.forEach(function($gauge) {
+            var $fill = $gauge.querySelector('.hero-gauge__fill');
+            $fill.classList.remove('is-animating');
+            $fill.classList.add('is-idle');
+          });
+        }, HERO_GAUGE_PULSE_DELAY);
+      },
+
+      destroy: function() {
+        if (this._fillTimeout) {
+          clearTimeout(this._fillTimeout);
+          this._fillTimeout = null;
+        }
+        if (this._pulseTimeout) {
+          clearTimeout(this._pulseTimeout);
+          this._pulseTimeout = null;
+        }
+        if (this.$gauges) {
+          this.$gauges.forEach(function($gauge) {
+            var $fill = $gauge.querySelector('.hero-gauge__fill');
+            $fill.classList.remove('is-animating');
+            $fill.classList.remove('is-idle');
+          });
         }
       }
     };
@@ -1095,6 +1309,7 @@
       // Initialize components
       OptiPlan.components.sidebar.init();
       OptiPlan.components.topbar.init();
+      OptiPlan.components.heroGauges.init();
     };
 
     document.addEventListener('DOMContentLoaded', OptiPlan.init.bind(OptiPlan));
