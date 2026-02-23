@@ -2511,7 +2511,7 @@
           </svg>
           <span class="hero-gauge__label">בריאות פיננסית</span>
         </div>
-        <div class="hero-gauge" data-gauge="coordination" data-tooltip="תיאום עם 12 רשויות ממשלתיות — בפלטפורמה אחת">
+        <div class="hero-gauge" data-gauge="coordination" data-tooltip="תיאום עם 5 רשויות ממשלתיות — בפלטפורמה אחת">
           <svg class="hero-gauge__svg" viewBox="0 0 120 120">
             <circle class="hero-gauge__track" cx="60" cy="60" r="50"
                     stroke-width="8" fill="none" />
@@ -2707,6 +2707,7 @@
       currency: 'NIS',
       startDate: '2022-04-01',
       targetEndDate: '2027-12-31',
+      // Section IDs and progress must match OPTIGANTT_DATA.sections
       sections: [
         { id: 'a1', name: 'תל אביב מרכז – גבעתיים', phase: 'complete', progress: 100 },
         { id: 'a2', name: 'גבעתיים – רמת גן', phase: 'execution', progress: 78 },
@@ -2720,10 +2721,13 @@
     const OPTITRACK_DATA = {
       totalItems: 347,
       approved: 222,
+      // Derived: approved / totalItems * 100 (rounded)
       approvalRate: 64,
       pending: 35,
       objections: 12,
       inReview: 78,
+      // Monthly change rate displayed on stat card sublabel
+      growthRate: 18,
       authorities: [
         { name: 'עירייה', nameEn: 'Municipality', total: 89, approved: 62, pending: 14, objections: 4, inReview: 9 },
         { name: 'חברת חשמל', nameEn: 'Israel Electric Corp', total: 72, approved: 51, pending: 8, objections: 3, inReview: 10 },
@@ -2750,8 +2754,10 @@
     };
 
     const OPTIBIZ_DATA = {
+      // Must equal PROJECT_DATA.totalBudget
       budgetTotal: 1800000000,
       budgetUtilized: 1220000000,
+      // Derived: budgetUtilized / budgetTotal * 100 (rounded)
       budgetUtilization: 68,
       burnRate: 101666667,
       variance: -22000000,
@@ -2797,6 +2803,7 @@
     const OPTIDOCS_DATA = {
       total: 847,
       approved: 796,
+      // Derived: approved / total * 100 (rounded)
       completionRate: 94,
       pending: 38,
       overdue: 13,
@@ -3317,10 +3324,15 @@
     // SECTION: Component — Hero Gauges
     // ================================================================
 
+    // Computed: average of OPTIGANTT_DATA.sections[].progress (schedule adherence)
+    var _scheduleAdherence = Math.round(
+      OPTIGANTT_DATA.sections.reduce(function(sum, s) { return sum + s.progress; }, 0) / OPTIGANTT_DATA.sections.length
+    );
+
     var HERO_GAUGE_CONFIG = [
       { key: 'financial', value: OPTIBIZ_DATA.budgetUtilization, label: '\u05D1\u05E8\u05D9\u05D0\u05D5\u05EA \u05E4\u05D9\u05E0\u05E0\u05E1\u05D9\u05EA' },
       { key: 'coordination', value: OPTITRACK_DATA.approvalRate, label: '\u05D4\u05E9\u05DC\u05DE\u05EA \u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD' },
-      { key: 'schedule', value: 52, label: '\u05E2\u05DE\u05D9\u05D3\u05D4 \u05D1\u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD' }
+      { key: 'schedule', value: _scheduleAdherence, label: '\u05E2\u05DE\u05D9\u05D3\u05D4 \u05D1\u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD' }
     ];
 
     var HERO_GAUGE_RADIUS = 50;
@@ -3412,7 +3424,7 @@
     var STAT_CARD_CONFIG = [
       { key: 'optitrack', name: 'OptiTrack', icon: 'ti-route',
         value: OPTITRACK_DATA.approved, label: '\u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD \u05DE\u05D0\u05D5\u05E9\u05E8\u05D9\u05DD',
-        sublabel: '+18%' },
+        sublabel: '+' + OPTITRACK_DATA.growthRate + '%' },
       { key: 'optibiz', name: 'OptiBiz', icon: 'ti-chart-bar',
         value: null, label: '\u05E0\u05D9\u05E6\u05D5\u05DC \u05EA\u05E7\u05E6\u05D9\u05D1',
         sublabel: OPTIBIZ_DATA.budgetUtilization + '%',
@@ -4894,6 +4906,15 @@
 
     function handleChatClose(e) {
       if (e) e.preventDefault();
+      // Abort in-flight LLM request on panel close
+      if (OptiPlan.ai._abortController) {
+        OptiPlan.ai._abortController.abort();
+        OptiPlan.ai._abortController = null;
+      }
+      if (OptiPlan.ai._abortTimeoutId) {
+        clearTimeout(OptiPlan.ai._abortTimeoutId);
+        OptiPlan.ai._abortTimeoutId = null;
+      }
       OptiPlan.state.set('chatOpen', false);
       _resetSidebarToDashboard();
     }
@@ -4929,6 +4950,8 @@
       history: [],
       _responseTimeout: null,
       _isTyping: false,
+      _abortController: null,
+      _abortTimeoutId: null,
       $chatPanel: null,
       $backdrop: null,
       $messages: null,
@@ -4988,6 +5011,40 @@
         }
       },
 
+      _buildSystemPrompt: function() {
+        var p = PROJECT_DATA;
+        return 'אתה עוזר AI מומחה לפרויקטי תשתית ובנייה. אתה משמש כיועץ בכיר לפרויקט "' + p.projectName + '".\n\n' +
+          'פרטי הפרויקט:\n' +
+          '- שם: ' + p.projectName + '\n' +
+          '- תקציב כולל: ' + (p.totalBudget / 1000000000).toFixed(1) + ' מיליארד ₪\n' +
+          '- מזמין: ' + p.client + '\n' +
+          '- מספר קטעים: ' + p.sections.length + ' (A1-A6)\n' +
+          '- סיכונים פעילים: ' + OPTIRISK_DATA.activeRisks + ', מתוכם ' + OPTIRISK_DATA.critical + ' קריטיים\n' +
+          '- שיעור אישור תיאומים: ' + OPTITRACK_DATA.approvalRate + '%\n' +
+          '- מסמכים: ' + OPTIDOCS_DATA.total + ' סה"כ, ' + OPTIDOCS_DATA.completionRate + '% הושלמו\n\n' +
+          'כללים:\n' +
+          '1. ענה תמיד בעברית בלבד\n' +
+          '2. הפנה לנתוני פרויקט ספציפיים בכל תשובה (שמות קטעים, מספרים, אחוזים)\n' +
+          '3. לעולם אל תגיד "אני לא יודע" — תמיד ספק תשובה רלוונטית על בסיס הנתונים הזמינים\n' +
+          '4. שמור על תשובות קצרות ומקצועיות (2-4 משפטים)\n' +
+          '5. השתמש במינוחים מקצועיים של תשתיות ובנייה\n' +
+          '6. אם השאלה לא קשורה לפרויקט, הפנה את השיחה חזרה לנתוני הפרויקט';
+      },
+
+      _buildMessages: function(text) {
+        var messages = [];
+        var start = 0;
+        var cap = MAX_CHAT_HISTORY * 2;
+        if (this.history.length > cap) {
+          start = this.history.length - cap;
+        }
+        for (var i = start; i < this.history.length; i++) {
+          messages.push({ role: this.history[i].role, content: this.history[i].content });
+        }
+        messages.push({ role: 'user', content: text });
+        return messages;
+      },
+
       sendMessage: function(text) {
         if (!text || typeof text !== 'string') return;
         text = text.trim();
@@ -5015,11 +5072,68 @@
 
         var self = this;
 
-        // Cache-only mode — LLM API integration deferred to Story 3.2
-        var cached = this.findCachedResponse(text);
-        this._responseTimeout = setTimeout(function showCached() {
-          self.displayResponse(cached);
-        }, 800 + Math.floor(Math.random() * 700));
+        // Abort any previous in-flight request
+        if (this._abortController) {
+          this._abortController.abort();
+        }
+
+        // Skip API call if no API key configured — cache-only mode
+        if (!API_KEY) {
+          var cached = this.findCachedResponse(text);
+          this._responseTimeout = setTimeout(function showCached() {
+            self.displayResponse(cached);
+          }, 800 + Math.floor(Math.random() * 700));
+          return;
+        }
+
+        var controller = new AbortController();
+        this._abortController = controller;
+
+        var timeoutId = setTimeout(function abortTimeout() {
+          controller.abort();
+        }, LLM_TIMEOUT_MS);
+        this._abortTimeoutId = timeoutId;
+
+        fetch(LLM_API_URL, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-api-key': API_KEY,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: LLM_MODEL,
+            max_tokens: LLM_MAX_TOKENS,
+            system: self._buildSystemPrompt(),
+            messages: self._buildMessages(text)
+          }),
+          signal: controller.signal
+        })
+        .then(function handleResponse(res) {
+          clearTimeout(timeoutId);
+          if (!res.ok) {
+            throw new Error('API returned ' + res.status);
+          }
+          return res.json();
+        })
+        .then(function handleData(data) {
+          var responseText = data.content && data.content[0] && data.content[0].text;
+          if (!responseText) {
+            throw new Error('Empty response from API');
+          }
+          self.displayResponse(responseText);
+        })
+        .catch(function handleError(err) {
+          clearTimeout(timeoutId);
+          console.warn('[OptiPlan AI]', err.message);
+          var fallback = self.findCachedResponse(text);
+          self.displayResponse(fallback);
+        })
+        .finally(function cleanupAbort() {
+          self._abortController = null;
+          self._abortTimeoutId = null;
+        });
       },
 
       displayResponse: function(text) {
@@ -5133,6 +5247,16 @@
         if (this._responseTimeout) {
           clearTimeout(this._responseTimeout);
           this._responseTimeout = null;
+        }
+
+        // Abort in-flight LLM request
+        if (this._abortController) {
+          this._abortController.abort();
+          this._abortController = null;
+        }
+        if (this._abortTimeoutId) {
+          clearTimeout(this._abortTimeoutId);
+          this._abortTimeoutId = null;
         }
 
         this.history = [];

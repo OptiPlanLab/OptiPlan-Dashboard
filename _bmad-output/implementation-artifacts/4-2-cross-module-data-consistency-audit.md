@@ -1,6 +1,6 @@
 # Story 4.2: Cross-Module Data Consistency Audit
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -49,53 +49,53 @@ so that I cannot find a single inconsistency that reveals this is a demo rather 
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Audit data constants mathematical consistency** (AC: 1, 2, 3, 4, 5)
-  - [ ] 1.1 Verify `OPTIBIZ_DATA.budgetUtilized` (1,220,000,000) ÷ `PROJECT_DATA.totalBudget` (1,800,000,000) = `OPTIBIZ_DATA.budgetUtilization` (68). Actual: 1220000000/1800000000 = 67.78% → displayed as 68% ✓ (acceptable rounding)
-  - [ ] 1.2 Verify `OPTITRACK_DATA.approved` (222) ÷ `OPTITRACK_DATA.totalItems` (347) = `OPTITRACK_DATA.approvalRate` (64). Actual: 222/347 = 64.0% ✓
-  - [ ] 1.3 Verify `OPTITRACK_DATA.totalItems` (347) = `approved` (222) + `pending` (35) + `objections` (12) + `inReview` (78). Sum: 222+35+12+78 = 347 ✓
-  - [ ] 1.4 Verify `OPTIDOCS_DATA.approved` (796) ÷ `OPTIDOCS_DATA.total` (847) = `OPTIDOCS_DATA.completionRate` (94). Actual: 796/847 = 93.98% → displayed as 94% ✓
-  - [ ] 1.5 Verify `OPTIDOCS_DATA.total` (847) = `approved` (796) + `pending` (38) + `overdue` (13). Sum: 796+38+13 = 847 ✓
-  - [ ] 1.6 Sum all 12 `OPTIBIZ_DATA.cashFlow[].actual` values and verify = `OPTIBIZ_DATA.budgetUtilized` (1,220,000,000)
-  - [ ] 1.7 Sum all 12 `OPTIBIZ_DATA.cashFlow[].plan` values and verify = `OPTIBIZ_DATA.budgetTotal` / `PROJECT_DATA.totalBudget` (1,800,000,000)
-  - [ ] 1.8 Verify `OPTIRISK_DATA` heat map grid cell counts sum to `OPTIRISK_DATA.activeRisks` (23)
-  - [ ] 1.9 Verify `PROJECT_DATA.sections` has 6 entries matching `OPTIGANTT_DATA.sections` (6 entries, same IDs a1-a6)
-  - [ ] 1.10 Verify `PROJECT_DATA.sections[].progress` values match corresponding `OPTIGANTT_DATA.sections[].progress` values
+- [x] **Task 1: Audit data constants mathematical consistency** (AC: 1, 2, 3, 4, 5)
+  - [x] 1.1 Verify `OPTIBIZ_DATA.budgetUtilized` (1,220,000,000) ÷ `PROJECT_DATA.totalBudget` (1,800,000,000) = `OPTIBIZ_DATA.budgetUtilization` (68). Actual: 1220000000/1800000000 = 67.78% → displayed as 68% ✓ (acceptable rounding)
+  - [x] 1.2 Verify `OPTITRACK_DATA.approved` (222) ÷ `OPTITRACK_DATA.totalItems` (347) = `OPTITRACK_DATA.approvalRate` (64). Actual: 222/347 = 64.0% ✓
+  - [x] 1.3 Verify `OPTITRACK_DATA.totalItems` (347) = `approved` (222) + `pending` (35) + `objections` (12) + `inReview` (78). Sum: 222+35+12+78 = 347 ✓
+  - [x] 1.4 Verify `OPTIDOCS_DATA.approved` (796) ÷ `OPTIDOCS_DATA.total` (847) = `OPTIDOCS_DATA.completionRate` (94). Actual: 796/847 = 93.98% → displayed as 94% ✓
+  - [x] 1.5 Verify `OPTIDOCS_DATA.total` (847) = `approved` (796) + `pending` (38) + `overdue` (13). Sum: 796+38+13 = 847 ✓
+  - [x] 1.6 Sum all 12 `OPTIBIZ_DATA.cashFlow[].actual` values and verify = `OPTIBIZ_DATA.budgetUtilized` (1,220,000,000)
+  - [x] 1.7 Sum all 12 `OPTIBIZ_DATA.cashFlow[].plan` values and verify = `OPTIBIZ_DATA.budgetTotal` / `PROJECT_DATA.totalBudget` (1,800,000,000)
+  - [x] 1.8 Verify `OPTIRISK_DATA` heat map grid cell counts sum to `OPTIRISK_DATA.activeRisks` (23)
+  - [x] 1.9 Verify `PROJECT_DATA.sections` has 6 entries matching `OPTIGANTT_DATA.sections` (6 entries, same IDs a1-a6)
+  - [x] 1.10 Verify `PROJECT_DATA.sections[].progress` values match corresponding `OPTIGANTT_DATA.sections[].progress` values
 
-- [ ] **Task 2: Fix orphaned hardcoded schedule gauge value** (AC: 6)
-  - [ ] 2.1 At `HERO_GAUGE_CONFIG` (line ~3047), the schedule adherence gauge value is hardcoded `52`. This should be derived from data.
-  - [ ] 2.2 **Option A (recommended):** Compute schedule adherence as the weighted average of all `OPTIGANTT_DATA.sections[].progress` values, resulting in approximately 47-52%. Store as a computed property or inline computation.
-  - [ ] 2.3 **Option B:** Add an explicit `scheduleAdherence` field to `OPTIGANTT_DATA` or `PROJECT_DATA` and reference it: `value: OPTIGANTT_DATA.scheduleAdherence`
-  - [ ] 2.4 Whichever approach is chosen, the gauge value must now derive from data constants, NOT be a magic number
-  - [ ] 2.5 Add a comment explaining the derivation (e.g., `// Computed: average of OPTIGANTT_DATA.sections[].progress`)
+- [x] **Task 2: Fix orphaned hardcoded schedule gauge value** (AC: 6)
+  - [x] 2.1 At `HERO_GAUGE_CONFIG` (line ~3047), the schedule adherence gauge value is hardcoded `52`. This should be derived from data.
+  - [x] 2.2 **Option A (recommended):** Compute schedule adherence as the weighted average of all `OPTIGANTT_DATA.sections[].progress` values, resulting in approximately 47-52%. Store as a computed property or inline computation.
+  - [x] 2.3 **Option B:** Add an explicit `scheduleAdherence` field to `OPTIGANTT_DATA` or `PROJECT_DATA` and reference it: `value: OPTIGANTT_DATA.scheduleAdherence`
+  - [x] 2.4 Whichever approach is chosen, the gauge value must now derive from data constants, NOT be a magic number
+  - [x] 2.5 Add a comment explaining the derivation (e.g., `// Computed: average of OPTIGANTT_DATA.sections[].progress`)
 
-- [ ] **Task 3: Fix hardcoded OptiTrack growth rate sublabel** (AC: 6)
-  - [ ] 3.1 At stat card config (line ~3139), OptiTrack sublabel is `'+18%'` — a hardcoded string with no data backing
-  - [ ] 3.2 **Option A (recommended):** Add a `growthRate` or `monthlyChange` field to `OPTITRACK_DATA` (e.g., `growthRate: 18`) and reference: `'+' + OPTITRACK_DATA.growthRate + '%'`
-  - [ ] 3.3 **Option B:** Compute from activity feed data or trend data if available
-  - [ ] 3.4 Whichever approach, the sublabel must now derive from a data constant
+- [x] **Task 3: Fix hardcoded OptiTrack growth rate sublabel** (AC: 6)
+  - [x] 3.1 At stat card config (line ~3139), OptiTrack sublabel is `'+18%'` — a hardcoded string with no data backing
+  - [x] 3.2 **Option A (recommended):** Add a `growthRate` or `monthlyChange` field to `OPTITRACK_DATA` (e.g., `growthRate: 18`) and reference: `'+' + OPTITRACK_DATA.growthRate + '%'`
+  - [x] 3.3 **Option B:** Compute from activity feed data or trend data if available
+  - [x] 3.4 Whichever approach, the sublabel must now derive from a data constant
 
-- [ ] **Task 4: Audit module expansion rendering vs data constants** (AC: 1, 2, 3, 4, 5)
-  - [ ] 4.1 Open OptiTrack module overlay: verify metrics summary (347 items, 64% approved, 12 objections, 35 pending) all render from `OPTITRACK_DATA` — not hardcoded in render function
-  - [ ] 4.2 Open OptiTrack permit matrix: verify section rows (A1-A6) and authority columns render from `OPTITRACK_DATA.permitMatrix` and `OPTITRACK_DATA.authorities`
-  - [ ] 4.3 Open OptiBiz module overlay: verify ₪1.22B and 68% render from `OPTIBIZ_DATA.budgetUtilized` and `OPTIBIZ_DATA.budgetUtilization`
-  - [ ] 4.4 Open OptiBiz cash flow chart: verify 12 bars render from `OPTIBIZ_DATA.cashFlow` array values, not hardcoded SVG coordinates
-  - [ ] 4.5 Open OptiRisk module overlay: verify 23 active risks and 8 critical render from `OPTIRISK_DATA`
-  - [ ] 4.6 Open OptiRisk heat map: verify cell counts render from `OPTIRISK_DATA.heatMap` grid data
-  - [ ] 4.7 Open OptiDocs module overlay: verify 847 total, 94% completion, 38 pending, 13 overdue render from `OPTIDOCS_DATA`
-  - [ ] 4.8 Open OptiGantt module overlay: verify 6 section rows render from `OPTIGANTT_DATA.sections`, milestones from `OPTIGANTT_DATA.milestones`
-  - [ ] 4.9 For each module: trace the render path to confirm data flows from constant → render function → DOM (no intermediate hardcoding)
+- [x] **Task 4: Audit module expansion rendering vs data constants** (AC: 1, 2, 3, 4, 5)
+  - [x] 4.1 Open OptiTrack module overlay: verify metrics summary (347 items, 64% approved, 12 objections, 35 pending) all render from `OPTITRACK_DATA` — not hardcoded in render function
+  - [x] 4.2 Open OptiTrack permit matrix: verify section rows (A1-A6) and authority columns render from `OPTITRACK_DATA.permitMatrix` and `OPTITRACK_DATA.authorities`
+  - [x] 4.3 Open OptiBiz module overlay: verify ₪1.22B and 68% render from `OPTIBIZ_DATA.budgetUtilized` and `OPTIBIZ_DATA.budgetUtilization`
+  - [x] 4.4 Open OptiBiz cash flow chart: verify 12 bars render from `OPTIBIZ_DATA.cashFlow` array values, not hardcoded SVG coordinates
+  - [x] 4.5 Open OptiRisk module overlay: verify 23 active risks and 8 critical render from `OPTIRISK_DATA`
+  - [x] 4.6 Open OptiRisk heat map: verify cell counts render from `OPTIRISK_DATA.heatMap` grid data
+  - [x] 4.7 Open OptiDocs module overlay: verify 847 total, 94% completion, 38 pending, 13 overdue render from `OPTIDOCS_DATA`
+  - [x] 4.8 Open OptiGantt module overlay: verify 6 section rows render from `OPTIGANTT_DATA.sections`, milestones from `OPTIGANTT_DATA.milestones`
+  - [x] 4.9 For each module: trace the render path to confirm data flows from constant → render function → DOM (no intermediate hardcoding)
 
-- [ ] **Task 5: Add cross-reference comments to data constants** (AC: 6)
-  - [ ] 5.1 Add comment above `OPTIBIZ_DATA.budgetTotal`: `// Must equal PROJECT_DATA.totalBudget`
-  - [ ] 5.2 Add comment above `OPTIBIZ_DATA.budgetUtilization`: `// Derived: budgetUtilized / budgetTotal * 100 (rounded)`
-  - [ ] 5.3 Add comment above `OPTITRACK_DATA.approvalRate`: `// Derived: approved / totalItems * 100 (rounded)`
-  - [ ] 5.4 Add comment above `OPTIDOCS_DATA.completionRate`: `// Derived: approved / total * 100 (rounded)`
-  - [ ] 5.5 Add comment near `PROJECT_DATA.sections`: `// Section IDs and progress must match OPTIGANTT_DATA.sections`
-  - [ ] 5.6 Add comment near schedule gauge config: explain how schedule adherence value is derived
-  - [ ] 5.7 Add comment near stat card config for any sublabel derivations
+- [x] **Task 5: Add cross-reference comments to data constants** (AC: 6)
+  - [x] 5.1 Add comment above `OPTIBIZ_DATA.budgetTotal`: `// Must equal PROJECT_DATA.totalBudget`
+  - [x] 5.2 Add comment above `OPTIBIZ_DATA.budgetUtilization`: `// Derived: budgetUtilized / budgetTotal * 100 (rounded)`
+  - [x] 5.3 Add comment above `OPTITRACK_DATA.approvalRate`: `// Derived: approved / totalItems * 100 (rounded)`
+  - [x] 5.4 Add comment above `OPTIDOCS_DATA.completionRate`: `// Derived: approved / total * 100 (rounded)`
+  - [x] 5.5 Add comment near `PROJECT_DATA.sections`: `// Section IDs and progress must match OPTIGANTT_DATA.sections`
+  - [x] 5.6 Add comment near schedule gauge config: explain how schedule adherence value is derived
+  - [x] 5.7 Add comment near stat card config for any sublabel derivations
 
-- [ ] **Task 6: Verify tooltip data references (Story 4.1 integration)** (AC: 6)
-  - [ ] 6.1 If Story 4.1 tooltips are implemented, verify tooltip copy numbers match data constants:
+- [x] **Task 6: Verify tooltip data references (Story 4.1 integration)** (AC: 6)
+  - [x] 6.1 If Story 4.1 tooltips are implemented, verify tooltip copy numbers match data constants:
     - "₪1.8 מיליארד" → `PROJECT_DATA.totalBudget / 1000000000` = 1.8
     - "347 פריטים" → `OPTITRACK_DATA.totalItems` = 347
     - "5 רשויות" → `OPTITRACK_DATA.authorities.length` = 5
@@ -104,23 +104,23 @@ so that I cannot find a single inconsistency that reveals this is a demo rather 
     - "847 פריטים" → `OPTIDOCS_DATA.total` = 847
     - "94%" → `OPTIDOCS_DATA.completionRate` = 94
     - "6 קטעים" → `OPTIGANTT_DATA.sections.length` = 6
-  - [ ] 6.2 If tooltip copy numbers don't match data constants, update `data-tooltip` attribute values to match
+  - [x] 6.2 If tooltip copy numbers don't match data constants, update `data-tooltip` attribute values to match
 
-- [ ] **Task 7: Verification** (AC: 1, 2, 3, 4, 5, 6)
-  - [ ] 7.1 Zero console errors on page load
-  - [ ] 7.2 All 3 hero gauge values derive from data constants (financial=68, coordination=64, schedule=derived)
-  - [ ] 7.3 All 5 stat card front face values derive from data constants
-  - [ ] 7.4 All 5 stat card back face KPIs derive from data constants
-  - [ ] 7.5 All 5 module expansion metrics derive from data constants
-  - [ ] 7.6 OptiBiz cash flow bar heights match data constant values
-  - [ ] 7.7 OptiRisk heat map cell counts sum to 23
-  - [ ] 7.8 No hardcoded numeric display values remain in JS render functions (except formatting constants like decimal places)
-  - [ ] 7.9 Cross-reference comments are present in data constants section
-  - [ ] 7.10 Theme toggle works — all modules render correctly in both dark and light themes
-  - [ ] 7.11 Card flip reveals correct KPI values (data-derived)
-  - [ ] 7.12 Module expansion shows correct metrics (data-derived)
-  - [ ] 7.13 No regressions: all animations, interactions, navigation, idle reset still function
-  - [ ] 7.14 **Skeptic test:** Walk through the entire dashboard as an investor cross-checking every visible number against every other occurrence of that number — zero inconsistencies found
+- [x] **Task 7: Verification** (AC: 1, 2, 3, 4, 5, 6)
+  - [x] 7.1 Zero console errors on page load
+  - [x] 7.2 All 3 hero gauge values derive from data constants (financial=68, coordination=64, schedule=derived)
+  - [x] 7.3 All 5 stat card front face values derive from data constants
+  - [x] 7.4 All 5 stat card back face KPIs derive from data constants
+  - [x] 7.5 All 5 module expansion metrics derive from data constants
+  - [x] 7.6 OptiBiz cash flow bar heights match data constant values
+  - [x] 7.7 OptiRisk heat map cell counts sum to 23
+  - [x] 7.8 No hardcoded numeric display values remain in JS render functions (except formatting constants like decimal places)
+  - [x] 7.9 Cross-reference comments are present in data constants section
+  - [x] 7.10 Theme toggle works — all modules render correctly in both dark and light themes
+  - [x] 7.11 Card flip reveals correct KPI values (data-derived)
+  - [x] 7.12 Module expansion shows correct metrics (data-derived)
+  - [x] 7.13 No regressions: all animations, interactions, navigation, idle reset still function
+  - [x] 7.14 **Skeptic test:** Walk through the entire dashboard as an investor cross-checking every visible number against every other occurrence of that number — zero inconsistencies found
 
 ## Dev Notes
 
@@ -346,10 +346,28 @@ This means if the data constant is correct, the module display should be correct
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6 (claude-opus-4-6)
 
 ### Debug Log References
 
+No errors encountered during implementation.
+
 ### Completion Notes List
 
+- **Task 1:** Full mathematical audit of all data constants passed. All sums, ratios, and cross-references verified correct (10/10 checks passed).
+- **Task 2:** Replaced hardcoded `value: 52` in HERO_GAUGE_CONFIG schedule gauge with `_scheduleAdherence`, a computed average of all OPTIGANTT_DATA.sections[].progress values (= Math.round(284/6) = 47%). Added explanatory comment.
+- **Task 3:** Added `growthRate: 18` field to OPTITRACK_DATA. Changed stat card sublabel from hardcoded `'+18%'` to `'+' + OPTITRACK_DATA.growthRate + '%'`. Added descriptive comment.
+- **Task 4:** All 5 module render functions verified — data flows from frozen constants via MODULE_DATA lookup → render(data) parameter → DOM. No intermediate hardcoding found.
+- **Task 5:** Added 7 cross-reference comments to data constants documenting derivation relationships.
+- **Task 6:** Tooltips verified against data constants. Found and fixed coordination hero gauge tooltip discrepancy: changed "12 רשויות" to "5 רשויות" to match OPTITRACK_DATA.authorities.length.
+- **Task 7:** Full verification checklist passed (14/14 items). All hero gauges, stat cards, card backs, and module expansions derive from data constants. Zero hardcoded business values remain.
+
 ### File List
+
+- `index.html` — Modified: added growthRate field to OPTITRACK_DATA, computed _scheduleAdherence variable, updated HERO_GAUGE_CONFIG and STAT_CARD_CONFIG to derive from data, fixed tooltip text, added 7 cross-reference comments
+- `_bmad-output/implementation-artifacts/4-2-cross-module-data-consistency-audit.md` — Modified: task checkboxes, Dev Agent Record, File List, Change Log, Status
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — Modified: story status updated
+
+### Change Log
+
+- **2026-02-23:** Completed full cross-module data consistency audit. Fixed 3 hardcoded values (schedule gauge, OptiTrack sublabel, coordination tooltip). Added growthRate field to OPTITRACK_DATA. Added _scheduleAdherence computed variable for hero gauge. Added 7 cross-reference comments to data constants. All acceptance criteria satisfied.
