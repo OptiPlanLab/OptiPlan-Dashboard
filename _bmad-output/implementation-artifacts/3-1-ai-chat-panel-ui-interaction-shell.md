@@ -1,6 +1,6 @@
 # Story 3.1: AI Chat Panel UI & Interaction Shell
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -43,117 +43,117 @@ so that engaging with the platform's intelligence feels natural and requires zer
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement AI Chat Panel HTML structure (AC: #1)
-  - [ ] 1.1 Add `.chat-panel` container to `index.html` body — positioned as a slide-in panel or overlay (not inside module overlay)
-  - [ ] 1.2 Chat panel sections: header (title + close button), messages area (scrollable), suggested chips row, input row (text input + send button)
-  - [ ] 1.3 Header: "Opium AI" title with `ti-sparkles` Tabler icon, close button (44x44px, `ti-x`)
-  - [ ] 1.4 Messages area: `.chat-panel__messages` container with `overflow-y: auto`, `overscroll-behavior: contain`
-  - [ ] 1.5 Suggested chips: 3-4 Hebrew question pills from `AI_CACHE` keys — `min-height: 44px`, tappable
-  - [ ] 1.6 Input row: Hebrew RTL text input (`placeholder="שאלו על הפרויקט..."`) + send button (`ti-send`, 44x44px)
+- [x] Task 1: Implement AI Chat Panel HTML structure (AC: #1)
+  - [x]1.1 Add `.chat-panel` container to `index.html` body — positioned as a slide-in panel or overlay (not inside module overlay)
+  - [x]1.2 Chat panel sections: header (title + close button), messages area (scrollable), suggested chips row, input row (text input + send button)
+  - [x]1.3 Header: "Opium AI" title with `ti-sparkles` Tabler icon, close button (44x44px, `ti-x`)
+  - [x]1.4 Messages area: `.chat-panel__messages` container with `overflow-y: auto`, `overscroll-behavior: contain`
+  - [x]1.5 Suggested chips: 3-4 Hebrew question pills from `AI_CACHE` keys — `min-height: 44px`, tappable
+  - [x]1.6 Input row: Hebrew RTL text input (`placeholder="שאלו על הפרויקט..."`) + send button (`ti-send`, 44x44px)
 
-- [ ] Task 2: Implement chat panel open/close interaction (AC: #1, #2)
-  - [ ] 2.1 Open triggers: "Opium AI" sidebar nav item tap, AI agent indicator tap (in sidebar footer)
-  - [ ] 2.2 AI agent indicator in sidebar footer: make existing pulsing dot + "3 סוכנים פעילים" text a tap target that opens chat
-  - [ ] 2.3 Open animation: slide-in from right side (RTL: `inset-inline-start`), `transform: translateX()` + `opacity`, 350ms
-  - [ ] 2.4 Close triggers: close button (X), backdrop tap (if using backdrop), sidebar "לוח בקרה" tap
-  - [ ] 2.5 Close animation: reverse slide-out, 250ms
-  - [ ] 2.6 State management: `OptiPlan.state.set('chatOpen', true/false)` — single source of truth
-  - [ ] 2.7 Named event handlers: `handleChatOpen`, `handleChatClose`
+- [x] Task 2: Implement chat panel open/close interaction (AC: #1, #2)
+  - [x]2.1 Open triggers: "Opium AI" sidebar nav item tap, AI agent indicator tap (in sidebar footer)
+  - [x]2.2 AI agent indicator in sidebar footer: make existing pulsing dot + "3 סוכנים פעילים" text a tap target that opens chat
+  - [x]2.3 Open animation: slide-in from right side (RTL: `inset-inline-start`), `transform: translateX()` + `opacity`, 350ms
+  - [x]2.4 Close triggers: close button (X), backdrop tap (if using backdrop), sidebar "לוח בקרה" tap
+  - [x]2.5 Close animation: reverse slide-out, 250ms
+  - [x]2.6 State management: `OptiPlan.state.set('chatOpen', true/false)` — single source of truth
+  - [x]2.7 Named event handlers: `handleChatOpen`, `handleChatClose`
 
-- [ ] Task 3: Implement suggested question chips (AC: #1, #3)
-  - [ ] 3.1 Render 3-4 chips from `AI_CACHE` question keys (first 3-4 entries)
-  - [ ] 3.2 Chip styling: pill shape, `var(--bg-input)` background, `var(--border)` border, `var(--radius-sm)` radius, min 44px height
-  - [ ] 3.3 Touch feedback: `scale(0.98)` on `touchstart` via named `handleChipTouchStart` / `handleChipTouchEnd`
-  - [ ] 3.4 On chip tap: call `OptiPlan.ai.sendMessage(chipText)` — same flow as typed input
-  - [ ] 3.5 Chips remain visible after response for next question (do NOT remove after first use)
+- [x] Task 3: Implement suggested question chips (AC: #1, #3)
+  - [x]3.1 Render 3-4 chips from `AI_CACHE` question keys (first 3-4 entries)
+  - [x]3.2 Chip styling: pill shape, `var(--bg-input)` background, `var(--border)` border, `var(--radius-sm)` radius, min 44px height
+  - [x]3.3 Touch feedback: `scale(0.98)` on `touchstart` via named `handleChipTouchStart` / `handleChipTouchEnd`
+  - [x]3.4 On chip tap: call `OptiPlan.ai.sendMessage(chipText)` — same flow as typed input
+  - [x]3.5 Chips remain visible after response for next question (do NOT remove after first use)
 
-- [ ] Task 4: Implement message display (AC: #3, #4)
-  - [ ] 4.1 User message bubble: right-aligned (RTL), `var(--bg-input)` background, `var(--radius)` radius, Varela Round font
-  - [ ] 4.2 AI response bubble: left-aligned (RTL), slightly different background tint, JetBrains Mono for numeric citations
-  - [ ] 4.3 Message append: `insertAdjacentHTML('beforeend', bubbleHtml)` into `.chat-panel__messages`
-  - [ ] 4.4 Auto-scroll: after each message append, `$messages.scrollTop = $messages.scrollHeight`
-  - [ ] 4.5 Timestamp on each bubble: relative time (JetBrains Mono, muted, small)
+- [x] Task 4: Implement message display (AC: #3, #4)
+  - [x]4.1 User message bubble: right-aligned (RTL), `var(--bg-input)` background, `var(--radius)` radius, Varela Round font
+  - [x]4.2 AI response bubble: left-aligned (RTL), slightly different background tint, JetBrains Mono for numeric citations
+  - [x]4.3 Message append: `insertAdjacentHTML('beforeend', bubbleHtml)` into `.chat-panel__messages`
+  - [x]4.4 Auto-scroll: after each message append, `$messages.scrollTop = $messages.scrollHeight`
+  - [x]4.5 Timestamp on each bubble: relative time (JetBrains Mono, muted, small)
 
-- [ ] Task 5: Implement typing indicator (AC: #3, #4)
-  - [ ] 5.1 Three bouncing dots: CSS `@keyframes bounce` with staggered `animation-delay` (0s, 0.2s, 0.4s)
-  - [ ] 5.2 `showTypingIndicator(true)` — appends typing indicator to messages, scrolls to bottom
-  - [ ] 5.3 `showTypingIndicator(false)` — removes typing indicator from DOM
-  - [ ] 5.4 Typing indicator positioned as left-aligned (AI side) mini-bubble
+- [x] Task 5: Implement typing indicator (AC: #3, #4)
+  - [x]5.1 Three bouncing dots: CSS `@keyframes bounce` with staggered `animation-delay` (0s, 0.2s, 0.4s)
+  - [x]5.2 `showTypingIndicator(true)` — appends typing indicator to messages, scrolls to bottom
+  - [x]5.3 `showTypingIndicator(false)` — removes typing indicator from DOM
+  - [x]5.4 Typing indicator positioned as left-aligned (AI side) mini-bubble
 
-- [ ] Task 6: Implement chat history management (AC: #5)
-  - [ ] 6.1 `OptiPlan.ai.history = []` — array of `{role, content}` objects
-  - [ ] 6.2 On send: push `{role: 'user', content: text}` to history
-  - [ ] 6.3 On response: push `{role: 'assistant', content: responseText}` to history
-  - [ ] 6.4 Before push: if `history.length >= MAX_CHAT_HISTORY * 2`, shift first 2 entries (oldest pair)
-  - [ ] 6.5 DOM cleanup: when oldest pair removed from history, remove corresponding DOM bubbles
+- [x] Task 6: Implement chat history management (AC: #5)
+  - [x]6.1 `OptiPlan.ai.history = []` — array of `{role, content}` objects
+  - [x]6.2 On send: push `{role: 'user', content: text}` to history
+  - [x]6.3 On response: push `{role: 'assistant', content: responseText}` to history
+  - [x]6.4 Before push: if `history.length >= MAX_CHAT_HISTORY * 2`, shift first 2 entries (oldest pair)
+  - [x]6.5 DOM cleanup: when oldest pair removed from history, remove corresponding DOM bubbles
 
-- [ ] Task 7: Implement `OptiPlan.ai` namespace (AC: #6)
-  - [ ] 7.1 `OptiPlan.ai.init()` — cache DOM refs (`$chatPanel`, `$messages`, `$input`, `$sendBtn`, `$chips`)
-  - [ ] 7.2 `OptiPlan.ai.sendMessage(text)` — displays user bubble, shows typing indicator, calls cached response (Story 3.1 uses cache only; Story 3.2 adds live API)
-  - [ ] 7.3 `OptiPlan.ai.displayResponse(text)` — hides typing indicator, renders AI bubble, scrolls to bottom
-  - [ ] 7.4 `OptiPlan.ai.findCachedResponse(text)` — fuzzy-matches user text against `AI_CACHE` keys, returns best match or generic fallback
-  - [ ] 7.5 `OptiPlan.ai.showTypingIndicator(show)` — adds/removes typing dots
-  - [ ] 7.6 `OptiPlan.ai.destroy()` — clear history, remove event listeners, clear DOM
+- [x] Task 7: Implement `OptiPlan.ai` namespace (AC: #6)
+  - [x]7.1 `OptiPlan.ai.init()` — cache DOM refs (`$chatPanel`, `$messages`, `$input`, `$sendBtn`, `$chips`)
+  - [x]7.2 `OptiPlan.ai.sendMessage(text)` — displays user bubble, shows typing indicator, calls cached response (Story 3.1 uses cache only; Story 3.2 adds live API)
+  - [x]7.3 `OptiPlan.ai.displayResponse(text)` — hides typing indicator, renders AI bubble, scrolls to bottom
+  - [x]7.4 `OptiPlan.ai.findCachedResponse(text)` — fuzzy-matches user text against `AI_CACHE` keys, returns best match or generic fallback
+  - [x]7.5 `OptiPlan.ai.showTypingIndicator(show)` — adds/removes typing dots
+  - [x]7.6 `OptiPlan.ai.destroy()` — clear history, remove event listeners, clear DOM
 
-- [ ] Task 8: Implement `findCachedResponse` fuzzy matching (AC: #6)
-  - [ ] 8.1 Iterate `AI_CACHE` entries, compare user text against each question key
-  - [ ] 8.2 Match strategy: check if any `AI_CACHE` key words appear in user text (simple keyword overlap)
-  - [ ] 8.3 Score matches by word overlap count, return highest-scoring answer
-  - [ ] 8.4 If no match scores above threshold: return generic Hebrew fallback string referencing the project name
-  - [ ] 8.5 Generic fallback: "על בסיס נתוני פרויקט הרחבת קו המטרו, גוש דן — המערכת מנתחת כעת את המידע. ניתן לשאול שאלות ספציפיות על תקציב, לוח זמנים, סיכונים או תיאומים."
+- [x] Task 8: Implement `findCachedResponse` fuzzy matching (AC: #6)
+  - [x]8.1 Iterate `AI_CACHE` entries, compare user text against each question key
+  - [x]8.2 Match strategy: check if any `AI_CACHE` key words appear in user text (simple keyword overlap)
+  - [x]8.3 Score matches by word overlap count, return highest-scoring answer
+  - [x]8.4 If no match scores above threshold: return generic Hebrew fallback string referencing the project name
+  - [x]8.5 Generic fallback: "על בסיס נתוני פרויקט הרחבת קו המטרו, גוש דן — המערכת מנתחת כעת את המידע. ניתן לשאול שאלות ספציפיות על תקציב, לוח זמנים, סיכונים או תיאומים."
 
-- [ ] Task 9: Implement text input submission (AC: #1, #3)
-  - [ ] 9.1 Send on Enter key press (named handler `handleInputKeydown`)
-  - [ ] 9.2 Send on send button tap (named handler `handleSendTap`)
-  - [ ] 9.3 Trim and validate input (ignore empty strings)
-  - [ ] 9.4 Clear input field after send
-  - [ ] 9.5 Disable send button while typing indicator is shown (prevent double-send)
+- [x] Task 9: Implement text input submission (AC: #1, #3)
+  - [x]9.1 Send on Enter key press (named handler `handleInputKeydown`)
+  - [x]9.2 Send on send button tap (named handler `handleSendTap`)
+  - [x]9.3 Trim and validate input (ignore empty strings)
+  - [x]9.4 Clear input field after send
+  - [x]9.5 Disable send button while typing indicator is shown (prevent double-send)
 
-- [ ] Task 10: Simulate response delay for cached responses (AC: #3, #4)
-  - [ ] 10.1 After showing typing indicator, wait 800-1500ms (random) before showing response
-  - [ ] 10.2 Use `setTimeout` with stored reference for cleanup
-  - [ ] 10.3 This simulates API response time — Story 3.2 replaces with real fetch
+- [x] Task 10: Simulate response delay for cached responses (AC: #3, #4)
+  - [x]10.1 After showing typing indicator, wait 800-1500ms (random) before showing response
+  - [x]10.2 Use `setTimeout` with stored reference for cleanup
+  - [x]10.3 This simulates API response time — Story 3.2 replaces with real fetch
 
-- [ ] Task 11: Add CSS section for AI Chat Panel
-  - [ ] 11.1 New CSS section: `/* SECTION: Component — AI Chat Panel */` after OptiGantt Module CSS
-  - [ ] 11.2 Chat panel positioning: fixed, right side (RTL), full height or 85% height
-  - [ ] 11.3 Panel width: 380-420px (enough for Hebrew text without cramping)
-  - [ ] 11.4 Message bubble styles (user vs. AI alignment, colors, radius)
-  - [ ] 11.5 Suggested chip styles (pill, touch feedback, spacing)
-  - [ ] 11.6 Typing indicator animation (`@keyframes bounce`)
-  - [ ] 11.7 Input row styles (input field + send button layout)
-  - [ ] 11.8 Slide-in/out animation classes
-  - [ ] 11.9 All colors via `var(--*)` tokens — zero hardcoded hex
-  - [ ] 11.10 Backdrop: `rgba(0,0,0,0.3)` semi-transparent overlay behind chat panel
+- [x] Task 11: Add CSS section for AI Chat Panel
+  - [x]11.1 New CSS section: `/* SECTION: Component — AI Chat Panel */` after OptiGantt Module CSS
+  - [x]11.2 Chat panel positioning: fixed, right side (RTL), full height or 85% height
+  - [x]11.3 Panel width: 380-420px (enough for Hebrew text without cramping)
+  - [x]11.4 Message bubble styles (user vs. AI alignment, colors, radius)
+  - [x]11.5 Suggested chip styles (pill, touch feedback, spacing)
+  - [x]11.6 Typing indicator animation (`@keyframes bounce`)
+  - [x]11.7 Input row styles (input field + send button layout)
+  - [x]11.8 Slide-in/out animation classes
+  - [x]11.9 All colors via `var(--*)` tokens — zero hardcoded hex
+  - [x]11.10 Backdrop: `rgba(0,0,0,0.3)` semi-transparent overlay behind chat panel
 
-- [ ] Task 12: Add JS section for AI Chat module
-  - [ ] 12.1 New JS section with delimiter: `// ================================================================ // SECTION: AI Chat // ================================================================`
-  - [ ] 12.2 Place after OptiGantt module section, before Animation Orchestration
-  - [ ] 12.3 Complete `OptiPlan.ai` namespace with all methods
+- [x] Task 12: Add JS section for AI Chat module
+  - [x]12.1 New JS section with delimiter: `// ================================================================ // SECTION: AI Chat // ================================================================`
+  - [x]12.2 Place after OptiGantt module section, before Animation Orchestration
+  - [x]12.3 Complete `OptiPlan.ai` namespace with all methods
 
-- [ ] Task 13: Integration with existing sidebar and state
-  - [ ] 13.1 Wire "Opium AI" sidebar nav item to `handleChatOpen`
-  - [ ] 13.2 Wire AI agent indicator (sidebar footer pulsing dot) to `handleChatOpen`
-  - [ ] 13.3 Update sidebar active state when chat is open ("Opium AI" shows active styling)
-  - [ ] 13.4 Close chat when module overlay opens (chat and module overlay are mutually exclusive or can coexist — determine from existing behavior)
-  - [ ] 13.5 Idle timer integration: chat interaction resets idle timer (`handleActivityReset`)
-  - [ ] 13.6 Idle auto-reset closes chat panel if open
+- [x] Task 13: Integration with existing sidebar and state
+  - [x]13.1 Wire "Opium AI" sidebar nav item to `handleChatOpen`
+  - [x]13.2 Wire AI agent indicator (sidebar footer pulsing dot) to `handleChatOpen`
+  - [x]13.3 Update sidebar active state when chat is open ("Opium AI" shows active styling)
+  - [x]13.4 Close chat when module overlay opens (chat and module overlay are mutually exclusive or can coexist — determine from existing behavior)
+  - [x]13.5 Idle timer integration: chat interaction resets idle timer (`handleActivityReset`)
+  - [x]13.6 Idle auto-reset closes chat panel if open
 
-- [ ] Task 14: Verify and test all acceptance criteria
-  - [ ] 14.1 Zero console errors on chat open/close
-  - [ ] 14.2 3-4 suggested question chips render with Hebrew text
-  - [ ] 14.3 Chip tap sends message and shows in chat
-  - [ ] 14.4 Typing indicator appears and disappears correctly
-  - [ ] 14.5 Cached response displays after simulated delay
-  - [ ] 14.6 Chat scrolls to latest message
-  - [ ] 14.7 History cap works (send 6+ messages, verify oldest removed)
-  - [ ] 14.8 Text input works with Enter key and send button
-  - [ ] 14.9 Theme toggle works on all chat panel elements (dark/light)
-  - [ ] 14.10 RTL layout correct (user messages right, AI messages left)
-  - [ ] 14.11 Existing features unbroken: card flip, overlay, sidebar nav, idle reset
-  - [ ] 14.12 Touch targets meet 44px minimum on all interactive elements
-  - [ ] 14.13 Named functions only — no anonymous callbacks
-  - [ ] 14.14 All colors via CSS custom properties
+- [x] Task 14: Verify and test all acceptance criteria
+  - [x]14.1 Zero console errors on chat open/close
+  - [x]14.2 3-4 suggested question chips render with Hebrew text
+  - [x]14.3 Chip tap sends message and shows in chat
+  - [x]14.4 Typing indicator appears and disappears correctly
+  - [x]14.5 Cached response displays after simulated delay
+  - [x]14.6 Chat scrolls to latest message
+  - [x]14.7 History cap works (send 6+ messages, verify oldest removed)
+  - [x]14.8 Text input works with Enter key and send button
+  - [x]14.9 Theme toggle works on all chat panel elements (dark/light)
+  - [x]14.10 RTL layout correct (user messages right, AI messages left)
+  - [x]14.11 Existing features unbroken: card flip, overlay, sidebar nav, idle reset
+  - [x]14.12 Touch targets meet 44px minimum on all interactive elements
+  - [x]14.13 Named functions only — no anonymous callbacks
+  - [x]14.14 All colors via CSS custom properties
 
 ## Dev Notes
 
@@ -586,10 +586,33 @@ This story creates the UI shell. Story 3.2 will:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+No blocking issues encountered during implementation.
+
 ### Completion Notes List
 
+- Implemented complete AI Chat Panel UI shell in `index.html` (single file architecture)
+- **HTML**: Added chat panel backdrop, panel container with header/messages/chips/input sections after module overlay HTML
+- **CSS**: Added `SECTION: Component — AI Chat Panel` after AI Agent Indicator section with full styling — panel positioning, slide-in/out animation (350ms open, 250ms close), backdrop, message bubbles (user right-aligned, AI left-aligned in RTL), typing indicator bouncing dots, suggested chips, input row. All colors via `var(--*)` tokens, all touch targets 44px minimum, `-webkit-` prefixes for Safari
+- **JS**: Added `SECTION: AI Chat` before Theme Toggle Handler with complete `OptiPlan.ai` namespace — `init()`, `sendMessage()`, `displayResponse()`, `findCachedResponse()`, `showTypingIndicator()`, `destroy()`, `_escapeHtml()`, `_getTimeString()`
+- Named function handlers: `handleChatOpen`, `handleChatClose`, `handleChatBackdropTap`, `handleInputKeydown`, `handleSendTap`, `handleChipTap`, `handleChipTouchStart`, `handleChipTouchEnd`
+- `findCachedResponse` uses fuzzy word overlap matching against `AI_CACHE` entries (object keyed by Hebrew topic names) with cache key boost, falls back to generic Hebrew response
+- Chips dynamically generated from first 4 `AI_CACHE` question entries
+- History capped at `MAX_CHAT_HISTORY * 2` entries (5 pairs) with DOM cleanup
+- Simulated response delay: 800-1500ms random `setTimeout` with stored reference for cleanup
+- **Integration**: Modified `handleNavItemTap` for 'opium-ai' routing, `executeIdleReset` to close chat on idle, `OptiPlan.ui.reflect` to handle 'chatOpen' state, `OptiPlan.init` to call `OptiPlan.ai.init()`
+- Chat and module overlay are mutually exclusive — opening one closes the other
+- AI indicator in sidebar footer wired as additional tap target for chat open
+- All event handlers are named functions, no anonymous callbacks
+- `prefers-reduced-motion` media query disables animations for accessibility
+
 ### File List
+
+- `index.html` — Modified: added AI Chat Panel HTML, CSS section, JS section, and integrated with existing sidebar/idle/state/init code
+
+## Change Log
+
+- 2026-02-23: Implemented Story 3.1 — AI Chat Panel UI & Interaction Shell. Added complete chat panel with slide-in animation, message bubbles (user/AI), typing indicator, suggested question chips from AI_CACHE, fuzzy cached response matching, history management with cap, and full integration with sidebar nav, AI indicator, idle reset, and state management.

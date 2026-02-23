@@ -1770,7 +1770,7 @@
     .optigantt-milestone__label {
       fill: var(--text-muted);
       font-family: var(--font-main);
-      font-size: 8px;
+      font-size: 10px;
     }
 
     .optigantt-today {
@@ -1792,6 +1792,7 @@
       transform: translateY(12px);
       transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
                   transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
     }
 
     .optigantt-section--visible {
@@ -2285,8 +2286,8 @@
   <aside class="sidebar" aria-label="ניווט ראשי">
     <!-- Brand Badge -->
     <div class="sidebar__brand">
-      <img class="sidebar__brand-logo" src="user-data/LOGO-ICON.png" alt="OptiPlan logo" width="28" height="28">
-      <span class="sidebar__brand-text">OptiPlan</span>
+      <img class="sidebar__brand-logo" src="user-data/LOGO-ICON.png" alt="" width="28" height="28" decoding="async">
+      <span class="sidebar__brand-text" lang="en">OptiPlan</span>
     </div>
 
     <!-- User Avatar -->
@@ -2380,8 +2381,8 @@
     <!-- Topbar -->
     <header class="topbar" aria-label="סרגל עליון">
       <div class="topbar__title-block">
-        <span class="topbar__title">OptiPlan</span>
-        <span class="topbar__subtitle">מרכז בקרה · הרחבת קו מטרו, גוש דן</span>
+        <span class="topbar__title" lang="en" dir="ltr">OptiPlan</span>
+        <span class="topbar__subtitle">מרכז בקרה <span aria-hidden="true">·</span> הרחבת קו מטרו, גוש דן</span>
       </div>
       <div class="topbar__actions">
         <span class="topbar__clock" id="topbarClock"></span>
@@ -2587,6 +2588,10 @@
     // ================================================================
 
     const API_KEY = '';
+    const LLM_API_URL = 'https://api.anthropic.com/v1/messages';
+    const LLM_MODEL = 'claude-sonnet-4-5-20250514';
+    const LLM_TIMEOUT_MS = 8000;
+    const LLM_MAX_TOKENS = 512;
     const IDLE_TIMEOUT_MS = 90000;
     const MAX_CHAT_HISTORY = 5;
 
@@ -3154,7 +3159,7 @@
         sublabel: null,
         sublabelCompute: function() {
           var delayed = OPTIGANTT_DATA.sections.filter(function(s) {
-            return s.progress < 100 && s.progress < 50;
+            return s.progress < 50;
           }).length;
           return delayed + ' \u05D1\u05E2\u05D9\u05DB\u05D5\u05D1';
         }}
@@ -4359,6 +4364,9 @@
       }
     };
 
+    // ================================================================
+    // MODULE: OptiGantt
+    // ================================================================
     OptiPlan.modules.optigantt = {
       $content: null,
       _entranceTimeouts: [],
@@ -4478,7 +4486,7 @@
             }
             // Quarter labels (every 3 months: Jan, Apr, Jul, Oct)
             if (mo % 3 === 1) {
-              var monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+              var monthNames = ['', '\u05D9\u05E0\u05D5\u05F3', '\u05E4\u05D1\u05E8\u05F3', '\u05DE\u05E8\u05E5', '\u05D0\u05E4\u05E8\u05F3', '\u05DE\u05D0\u05D9', '\u05D9\u05D5\u05E0\u05F3', '\u05D9\u05D5\u05DC\u05F3', '\u05D0\u05D5\u05D2\u05F3', '\u05E1\u05E4\u05D8\u05F3', '\u05D0\u05D5\u05E7\u05F3', '\u05E0\u05D5\u05D1\u05F3', '\u05D3\u05E6\u05DE\u05F3'];
               svg += '<text class="optigantt-chart__axis-label" x="' + x + '" y="' + (gridEndY + 15) + '" text-anchor="middle">' + monthNames[mo] + '</text>';
             }
           }
@@ -4610,6 +4618,15 @@
 
     function handleChatClose(e) {
       if (e) e.preventDefault();
+      // Abort any in-flight LLM request on panel close
+      if (OptiPlan.ai._abortController) {
+        OptiPlan.ai._abortController.abort();
+        OptiPlan.ai._abortController = null;
+      }
+      if (OptiPlan.ai._abortTimeoutId) {
+        clearTimeout(OptiPlan.ai._abortTimeoutId);
+        OptiPlan.ai._abortTimeoutId = null;
+      }
       OptiPlan.state.set('chatOpen', false);
       _resetSidebarToDashboard();
     }
@@ -4654,6 +4671,8 @@
     OptiPlan.ai = {
       history: [],
       _responseTimeout: null,
+      _abortController: null,
+      _abortTimeoutId: null,
       _isTyping: false,
       $chatPanel: null,
       $backdrop: null,
@@ -4716,6 +4735,37 @@
         }
       },
 
+      _buildSystemPrompt: function() {
+        var p = PROJECT_DATA;
+        return 'אתה עוזר AI מומחה לפרויקטי תשתית ובנייה. אתה משמש כיועץ בכיר לפרויקט "' + p.projectName + '".\n\n' +
+          'פרטי הפרויקט:\n' +
+          '- שם: ' + p.projectName + '\n' +
+          '- תקציב כולל: ' + (p.totalBudget / 1000000000).toFixed(1) + ' מיליארד ₪\n' +
+          '- מזמין: ' + p.client + '\n' +
+          '- מספר קטעים: ' + p.sections.length + ' (A1-A6)\n' +
+          '- סיכונים פעילים: ' + OPTIRISK_DATA.activeRisks + ', מתוכם ' + OPTIRISK_DATA.critical + ' קריטיים\n' +
+          '- אישורי רישוי: ' + OPTITRACK_DATA.approvalRate + '%\n' +
+          '- מסמכים: ' + OPTIDOCS_DATA.total + ' סה"כ, ' + OPTIDOCS_DATA.completionRate + '% הושלמו\n\n' +
+          'כללים:\n' +
+          '1. ענה תמיד בעברית בלבד\n' +
+          '2. הפנה לנתוני פרויקט ספציפיים בכל תשובה (שמות קטעים, מספרים, אחוזים)\n' +
+          '3. לעולם אל תגיד "אני לא יודע" — תמיד ספק תשובה רלוונטית על בסיס הנתונים הזמינים\n' +
+          '4. שמור על תשובות קצרות ומקצועיות (2-4 משפטים)\n' +
+          '5. השתמש במינוחים מקצועיים של תשתיות ובנייה\n' +
+          '6. אם השאלה לא קשורה לפרויקט, הפנה את השיחה חזרה לנתוני הפרויקט';
+      },
+
+      _buildMessages: function(text) {
+        var messages = [];
+        var historyLimit = MAX_CHAT_HISTORY * 2;
+        var startIndex = Math.max(0, this.history.length - historyLimit);
+        for (var i = startIndex; i < this.history.length; i++) {
+          messages.push({ role: this.history[i].role, content: this.history[i].content });
+        }
+        messages.push({ role: 'user', content: text });
+        return messages;
+      },
+
       sendMessage: function(text) {
         if (!text || typeof text !== 'string') return;
         text = text.trim();
@@ -4741,13 +4791,70 @@
         // Show typing indicator
         this.showTypingIndicator(true);
 
-        // Find cached response and simulate delay
         var self = this;
-        var response = this.findCachedResponse(text);
-        var delay = 800 + Math.floor(Math.random() * 700);
-        this._responseTimeout = setTimeout(function() {
-          self.displayResponse(response);
-        }, delay);
+
+        // Abort any previous in-flight request
+        if (this._abortController) {
+          this._abortController.abort();
+        }
+
+        // Skip API call if no API key configured — cache-only mode
+        if (!API_KEY) {
+          var cached = this.findCachedResponse(text);
+          this._responseTimeout = setTimeout(function showCached() {
+            self.displayResponse(cached);
+          }, 800 + Math.floor(Math.random() * 700));
+          return;
+        }
+
+        var controller = new AbortController();
+        this._abortController = controller;
+
+        var timeoutId = setTimeout(function abortTimeout() {
+          controller.abort();
+        }, LLM_TIMEOUT_MS);
+        this._abortTimeoutId = timeoutId;
+
+        fetch(LLM_API_URL, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-api-key': API_KEY,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: LLM_MODEL,
+            max_tokens: LLM_MAX_TOKENS,
+            system: self._buildSystemPrompt(),
+            messages: self._buildMessages(text)
+          }),
+          signal: controller.signal
+        })
+        .then(function handleResponse(res) {
+          clearTimeout(timeoutId);
+          if (!res.ok) {
+            throw new Error('API returned ' + res.status);
+          }
+          return res.json();
+        })
+        .then(function handleData(data) {
+          var responseText = data.content && data.content[0] && data.content[0].text;
+          if (!responseText) {
+            throw new Error('Empty response from API');
+          }
+          self.displayResponse(responseText);
+        })
+        .catch(function handleError(err) {
+          clearTimeout(timeoutId);
+          console.warn('[OptiPlan AI]', err.message);
+          var fallback = self.findCachedResponse(text);
+          self.displayResponse(fallback);
+        })
+        .finally(function cleanupFetch() {
+          self._abortController = null;
+          self._abortTimeoutId = null;
+        });
       },
 
       displayResponse: function(text) {
@@ -4857,6 +4964,16 @@
         if (this._responseTimeout) {
           clearTimeout(this._responseTimeout);
           this._responseTimeout = null;
+        }
+
+        // Abort any in-flight LLM request
+        if (this._abortController) {
+          this._abortController.abort();
+          this._abortController = null;
+        }
+        if (this._abortTimeoutId) {
+          clearTimeout(this._abortTimeoutId);
+          this._abortTimeoutId = null;
         }
 
         this.history = [];

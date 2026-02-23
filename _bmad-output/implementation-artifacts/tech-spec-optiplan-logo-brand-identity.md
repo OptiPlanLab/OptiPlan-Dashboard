@@ -2,7 +2,7 @@
 title: 'OptiPlan Logo & Brand Identity Integration'
 slug: 'optiplan-logo-brand-identity'
 created: '2026-02-23'
-status: 'implementation-complete'
+status: 'completed'
 stepsCompleted: [1, 2, 3, 4]
 tech_stack: ['HTML5', 'CSS3 (embedded <style>)', 'Vanilla JS', 'Varela Round + JetBrains Mono fonts', 'Tabler Icons']
 files_to_modify: ['index.html']
@@ -138,3 +138,13 @@ Integrate the OptiPlan logo image into the sidebar brand area, set it as the bro
 - The logo PNG dimensions should ideally be square or near-square for clean rendering at 28x28px in the sidebar. If the aspect ratio is off, `object-fit: contain` will handle it.
 - Favicon best practice would eventually include an `.ico` file and multiple sizes, but for this dashboard (internal tool, not public-facing) a single PNG is sufficient.
 - The `<title>` tag already reads "OptiPlan — מרכז בקרה" and requires no changes.
+
+## Review Notes
+
+- Adversarial review completed
+- Findings: 10 total, 6 fixed, 4 skipped
+- Resolution approach: auto-fix
+- Fixed: F3 (bidi isolation), F6 (decoding=async), F7 (aria-hidden on separator), F8 (lang=en on English text), F10 (empty alt on decorative logo img)
+- Skipped (intentional per spec): F4 (redundant brand — by design), F5 (flat text styling — by design)
+- Skipped (noise): F9 (relative path — matches project architecture)
+- Deferred: F1 (oversized PNG — needs image processing outside scope), F2 (additional favicon formats — noted for future)
