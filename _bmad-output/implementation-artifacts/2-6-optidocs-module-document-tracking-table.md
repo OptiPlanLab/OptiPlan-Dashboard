@@ -1,6 +1,6 @@
 # Story 2.6: OptiDocs Module — Document Tracking Table
 
-Status: review
+Status: done
 
 ## Story
 
@@ -17,7 +17,7 @@ so that I understand the platform's document management and approval workflow at
 
 2. **Given** the OptiDocs overlay renders
    **When** a developer inspects the document table
-   **Then** rows contain: Hebrew document name, document type, status badge (pill: green=אושר, amber=ממתין, red=נדחה), date in DD/MM/YY format (JetBrains Mono), and assigned person initials
+   **Then** rows contain: Hebrew document name, document type, status badge (pill: green=אושר, amber=ממתין, red=באיחור), date in DD/MM/YY format (JetBrains Mono), and assigned person initials
    **And** alternating rows use `background: var(--bar-track)` and row hover uses `background: var(--feed-hover)`
    **And** status badges always combine color with Hebrew text — never color alone
 
@@ -588,7 +588,8 @@ No debug issues encountered during implementation.
 ### Change Log
 
 - 2026-02-23: Implemented Story 2.6 — OptiDocs Module with document tracking table, metrics summary, status badges, and staggered entrance animations
+- 2026-02-23: Code review fixes — Added render() timeout cleanup, prefers-reduced-motion CSS/JS support, date column color fix, light theme pending badge contrast, will-change on animated elements, named setTimeout callback
 
 ### File List
 
-- index.html (modified) — Added OptiDocs CSS section and replaced JS placeholder stub with full module implementation
+- index.html (modified) — Added OptiDocs CSS section (metrics, table, badges, assignee, entrance animation), replaced JS placeholder stub with full init/render/destroy implementation, added `--feed-hover` design token to `:root`, added `MODULE_DATA` lookup map

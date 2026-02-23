@@ -14,6 +14,9 @@
   <!-- Tabler Icons Webfont -->
   <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="user-data/LOGO-ICON.png">
+
   <style>
     /* ================================================================ */
     /* SECTION: CSS Reset & Base                                         */
@@ -234,20 +237,23 @@
     .sidebar__brand {
       padding: var(--gap) var(--gap);
       display: flex;
+      align-items: center;
       justify-content: center;
+      gap: var(--gap-sm);
     }
 
-    .sidebar__brand-pill {
-      display: inline-block;
-      padding: 4px 14px;
-      background: linear-gradient(135deg, var(--optitrack), var(--optibiz));
-      border-radius: var(--radius-sm);
-      font-family: var(--font-mono);
-      font-size: 10px;
+    .sidebar__brand-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .sidebar__brand-text {
+      font-family: var(--font-main);
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--bg-body);
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
     }
 
     .sidebar__avatar {
@@ -1588,7 +1594,7 @@
     .optidocs-table__col--date {
       font-family: var(--font-mono);
       font-size: 13px;
-      color: var(--text-primary);
+      color: var(--text-secondary);
     }
 
     /* --- Status Badges --- */
@@ -1617,6 +1623,10 @@
       color: #EF4444;
     }
 
+    [data-theme="light"] .optidocs-badge--pending {
+      color: color-mix(in srgb, var(--optibiz) 70%, #000);
+    }
+
     /* --- Assignee Initials --- */
     .optidocs-assignee {
       display: inline-flex;
@@ -1638,11 +1648,20 @@
       transform: translateY(12px);
       transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
                   transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
     }
 
     .optidocs-section--visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .optidocs-section {
+        transition: none;
+        opacity: 1;
+        transform: none;
+      }
     }
 
     /* ================================================================ */
@@ -1837,6 +1856,282 @@
     }
 
     /* ================================================================ */
+    /* SECTION: Component — AI Chat Panel                                */
+    /* ================================================================ */
+
+    .chat-panel-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1),
+                  visibility 350ms;
+    }
+
+    .chat-panel-backdrop--active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .chat-panel {
+      position: fixed;
+      top: 0;
+      inset-inline-start: 0;
+      width: 400px;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg-card);
+      border-inline-end: 1px solid var(--border);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      -webkit-transform: translateX(100%);
+      transform: translateX(100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 250ms cubic-bezier(0.16, 1, 0.3, 1),
+                  -webkit-transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .chat-panel--open {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+      transition-duration: 350ms;
+    }
+
+    .chat-panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--gap);
+      height: 58px;
+      min-height: 58px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-panel__header-title {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      font-family: var(--font-main);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .chat-panel__header-title .ti-sparkles {
+      color: var(--optitrack);
+    }
+
+    .chat-panel__close {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: background 150ms ease, color 150ms ease;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    .chat-panel__close:active {
+      background: color-mix(in srgb, var(--text-muted) 15%, transparent);
+      color: var(--text-primary);
+    }
+
+    .chat-panel__messages {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-sm);
+    }
+
+    .chat-bubble {
+      max-width: 85%;
+      padding: var(--gap-sm) var(--gap);
+      border-radius: var(--radius);
+      font-family: var(--font-main);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      word-wrap: break-word;
+    }
+
+    .chat-bubble--user {
+      margin-inline-start: auto;
+      background: color-mix(in srgb, var(--optitrack) 12%, var(--bg-input));
+      border-end-end-radius: var(--radius-sm);
+    }
+
+    .chat-bubble--ai {
+      margin-inline-end: auto;
+      background: var(--bg-input);
+      border-end-start-radius: var(--radius-sm);
+    }
+
+    .chat-bubble__text {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .chat-bubble__time {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .chat-typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--gap-sm) var(--gap);
+      margin-inline-end: auto;
+      background: var(--bg-input);
+      border-radius: var(--radius);
+      width: fit-content;
+    }
+
+    @keyframes chatBounce {
+      0%, 80%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+      40% { -webkit-transform: translateY(-6px); transform: translateY(-6px); }
+    }
+
+    .chat-typing__dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      -webkit-animation: chatBounce 1.4s ease-in-out infinite;
+      animation: chatBounce 1.4s ease-in-out infinite;
+    }
+
+    .chat-typing__dot:nth-child(2) { -webkit-animation-delay: 0.2s; animation-delay: 0.2s; }
+    .chat-typing__dot:nth-child(3) { -webkit-animation-delay: 0.4s; animation-delay: 0.4s; }
+
+    .chat-panel__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap-sm);
+      padding: var(--gap-sm) var(--gap);
+      border-top: 1px solid var(--border);
+    }
+
+    .chat-panel__chip {
+      min-height: 44px;
+      padding: var(--gap-sm) var(--gap);
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-main);
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      text-align: right;
+      direction: rtl;
+    }
+
+    .chat-panel__chip:active {
+      -webkit-transform: scale(0.98);
+      transform: scale(0.98);
+      background: color-mix(in srgb, var(--optitrack) 8%, var(--bg-input));
+    }
+
+    .chat-panel__input-row {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: var(--gap-sm) var(--gap);
+      border-top: 1px solid var(--border);
+    }
+
+    .chat-panel__input {
+      flex: 1;
+      height: 44px;
+      padding: 0 var(--gap);
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-main);
+      font-size: 14px;
+      color: var(--text-primary);
+      direction: rtl;
+      touch-action: manipulation;
+      user-select: auto;
+    }
+
+    .chat-panel__input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .chat-panel__input:focus {
+      outline: none;
+      border-color: var(--optitrack);
+    }
+
+    .chat-panel__send {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in srgb, var(--optitrack) 15%, var(--bg-input));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--optitrack);
+      cursor: pointer;
+      transition: background 150ms ease, opacity 150ms ease;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    .chat-panel__send:active {
+      background: color-mix(in srgb, var(--optitrack) 25%, var(--bg-input));
+    }
+
+    .chat-panel__send:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .chat-panel,
+      .chat-panel-backdrop {
+        transition: none;
+      }
+      .chat-typing__dot {
+        -webkit-animation: none;
+        animation: none;
+      }
+    }
+
+    /* ================================================================ */
     /* SECTION: Animations & Keyframes                                   */
     /* ================================================================ */
 
@@ -1990,7 +2285,8 @@
   <aside class="sidebar" aria-label="ניווט ראשי">
     <!-- Brand Badge -->
     <div class="sidebar__brand">
-      <span class="sidebar__brand-pill">OPTIPLAN</span>
+      <img class="sidebar__brand-logo" src="user-data/LOGO-ICON.png" alt="OptiPlan logo" width="28" height="28">
+      <span class="sidebar__brand-text">OptiPlan</span>
     </div>
 
     <!-- User Avatar -->
@@ -2084,8 +2380,8 @@
     <!-- Topbar -->
     <header class="topbar" aria-label="סרגל עליון">
       <div class="topbar__title-block">
-        <span class="topbar__title">מרכז בקרה</span>
-        <span class="topbar__subtitle">הרחבת קו מטרו, גוש דן</span>
+        <span class="topbar__title">OptiPlan</span>
+        <span class="topbar__subtitle">מרכז בקרה · הרחבת קו מטרו, גוש דן</span>
       </div>
       <div class="topbar__actions">
         <span class="topbar__clock" id="topbarClock"></span>
@@ -2257,6 +2553,28 @@
       </button>
     </div>
     <div class="module-overlay__content"></div>
+  </div>
+
+  <!-- AI Chat Panel -->
+  <div class="chat-panel-backdrop" id="chatBackdrop"></div>
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-modal="true" aria-label="Opium AI Chat">
+    <div class="chat-panel__header">
+      <div class="chat-panel__header-title">
+        <i class="ti ti-sparkles"></i>
+        <span>Opium AI</span>
+      </div>
+      <button class="chat-panel__close" id="chatClose" aria-label="סגירת צ'אט">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    <div class="chat-panel__messages" id="chatMessages"></div>
+    <div class="chat-panel__chips" id="chatChips"></div>
+    <div class="chat-panel__input-row">
+      <input type="text" class="chat-panel__input" id="chatInput" placeholder="שאלו על הפרויקט..." autocomplete="off">
+      <button class="chat-panel__send" id="chatSend" aria-label="שליחת הודעה">
+        <i class="ti ti-send"></i>
+      </button>
+    </div>
   </div>
 
   <!-- Viewport overlays — content populated in Story 1.3 -->
@@ -2576,6 +2894,17 @@
       if (key === 'theme') {
         document.body.setAttribute('data-theme', value);
       }
+      if (key === 'chatOpen') {
+        var $panel = document.getElementById('chatPanel');
+        var $backdrop = document.getElementById('chatBackdrop');
+        if (value) {
+          if ($panel) $panel.classList.add('chat-panel--open');
+          if ($backdrop) $backdrop.classList.add('chat-panel-backdrop--active');
+        } else {
+          if ($panel) $panel.classList.remove('chat-panel--open');
+          if ($backdrop) $backdrop.classList.remove('chat-panel-backdrop--active');
+        }
+      }
     };
 
     // ================================================================
@@ -2599,18 +2928,32 @@
       var $tapped = e.currentTarget;
       var moduleId = $tapped.dataset.module;
 
-      // If tapping Dashboard while overlay is open, close it
+      // If tapping Dashboard, close overlay and/or chat
       if (moduleId === 'dashboard') {
         if (OptiPlan.state.currentLayer === 'module-expand') {
           OptiPlan.components.moduleOverlay.close();
         }
+        if (OptiPlan.state.chatOpen) {
+          handleChatClose(e);
+          return;
+        }
         _resetSidebarToDashboard();
+        return;
+      }
+
+      // If tapping Opium AI, open chat panel
+      if (moduleId === 'opium-ai') {
+        handleChatOpen(e);
         return;
       }
 
       // If tapping a module nav item, open/switch overlay
       var moduleIds = ['optitrack', 'optibiz', 'optirisk', 'optidocs', 'optigantt'];
       if (moduleIds.indexOf(moduleId) !== -1) {
+        // Close chat if open (mutually exclusive)
+        if (OptiPlan.state.chatOpen) {
+          handleChatClose(e);
+        }
         OptiPlan.components.moduleOverlay.expand(moduleId);
         return;
       }
@@ -3921,6 +4264,12 @@
         this.$content = document.querySelector('.module-overlay__content');
         if (!this.$content || !data) return;
 
+        // Clear pending entrance timeouts from any previous render
+        for (var t = 0; t < this._entranceTimeouts.length; t++) {
+          clearTimeout(this._entranceTimeouts[t]);
+        }
+        this._entranceTimeouts = [];
+
         var statusLabels = {
           approved: '\u05D0\u05D5\u05E9\u05E8',
           pending: '\u05DE\u05DE\u05EA\u05D9\u05DF',
@@ -3972,15 +4321,22 @@
 
         this.$content.innerHTML = html;
 
-        // Staggered entrance animation
+        // Staggered entrance animation (skip delays for reduced-motion)
         var sections = this.$content.querySelectorAll('.optidocs-section');
-        for (var s = 0; s < sections.length; s++) {
-          (function(section, delay) {
-            var timeout = setTimeout(function() {
-              section.classList.add('optidocs-section--visible');
-            }, delay);
-            self._entranceTimeouts.push(timeout);
-          })(sections[s], s * 100);
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+          for (var s = 0; s < sections.length; s++) {
+            sections[s].classList.add('optidocs-section--visible');
+          }
+        } else {
+          for (var s = 0; s < sections.length; s++) {
+            (function(section, delay) {
+              var timeout = setTimeout(function applyDocsVisible() {
+                section.classList.add('optidocs-section--visible');
+              }, delay);
+              self._entranceTimeouts.push(timeout);
+            })(sections[s], s * 100);
+          }
         }
       },
 
@@ -4238,6 +4594,319 @@
     };
 
     // ================================================================
+    // SECTION: AI Chat
+    // ================================================================
+
+    function handleChatOpen(e) {
+      if (e) e.preventDefault();
+      // Close module overlay if open (mutually exclusive)
+      if (OptiPlan.state.currentLayer === 'module-expand') {
+        OptiPlan.components.moduleOverlay.close();
+      }
+      OptiPlan.state.set('chatOpen', true);
+      _updateSidebarForModule('opium-ai');
+      handleActivityReset();
+    }
+
+    function handleChatClose(e) {
+      if (e) e.preventDefault();
+      OptiPlan.state.set('chatOpen', false);
+      _resetSidebarToDashboard();
+    }
+
+    function handleChatBackdropTap(e) {
+      if (e.target === OptiPlan.ai.$backdrop) {
+        handleChatClose(e);
+      }
+    }
+
+    function handleInputKeydown(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        OptiPlan.ai.sendMessage(OptiPlan.ai.$input.value);
+        handleActivityReset();
+      }
+    }
+
+    function handleSendTap(e) {
+      e.preventDefault();
+      OptiPlan.ai.sendMessage(OptiPlan.ai.$input.value);
+      handleActivityReset();
+    }
+
+    function handleChipTap(e) {
+      e.preventDefault();
+      var chipText = e.currentTarget.textContent.trim();
+      OptiPlan.ai.sendMessage(chipText);
+      handleActivityReset();
+    }
+
+    function handleChipTouchStart(e) {
+      e.currentTarget.style.transform = 'scale(0.98)';
+      e.currentTarget.style.webkitTransform = 'scale(0.98)';
+    }
+
+    function handleChipTouchEnd(e) {
+      e.currentTarget.style.transform = '';
+      e.currentTarget.style.webkitTransform = '';
+    }
+
+    OptiPlan.ai = {
+      history: [],
+      _responseTimeout: null,
+      _isTyping: false,
+      $chatPanel: null,
+      $backdrop: null,
+      $messages: null,
+      $input: null,
+      $sendBtn: null,
+      $chips: null,
+
+      init: function() {
+        this.$chatPanel = document.getElementById('chatPanel');
+        this.$backdrop = document.getElementById('chatBackdrop');
+        this.$messages = document.getElementById('chatMessages');
+        this.$input = document.getElementById('chatInput');
+        this.$sendBtn = document.getElementById('chatSend');
+
+        // Build chips from AI_CACHE
+        var $chipsContainer = document.getElementById('chatChips');
+        var cacheKeys = Object.keys(AI_CACHE);
+        var chipCount = Math.min(cacheKeys.length, 4);
+        for (var i = 0; i < chipCount; i++) {
+          var chipBtn = document.createElement('button');
+          chipBtn.className = 'chat-panel__chip';
+          chipBtn.textContent = AI_CACHE[cacheKeys[i]].question;
+          chipBtn.addEventListener('touchstart', handleChipTouchStart, { passive: true });
+          chipBtn.addEventListener('touchend', handleChipTouchEnd, { passive: true });
+          chipBtn.addEventListener('click', handleChipTap);
+          $chipsContainer.appendChild(chipBtn);
+        }
+        this.$chips = $chipsContainer.querySelectorAll('.chat-panel__chip');
+
+        // Close button
+        var $closeBtn = document.getElementById('chatClose');
+        if ($closeBtn) {
+          $closeBtn.addEventListener('touchstart', handleChatClose, { passive: false });
+          $closeBtn.addEventListener('click', handleChatClose);
+        }
+
+        // Backdrop tap
+        if (this.$backdrop) {
+          this.$backdrop.addEventListener('click', handleChatBackdropTap);
+        }
+
+        // Input events
+        if (this.$input) {
+          this.$input.addEventListener('keydown', handleInputKeydown);
+        }
+
+        // Send button
+        if (this.$sendBtn) {
+          this.$sendBtn.addEventListener('touchstart', handleSendTap, { passive: false });
+          this.$sendBtn.addEventListener('click', handleSendTap);
+        }
+
+        // Wire AI indicator as tap target
+        var $aiIndicator = document.querySelector('.ai-indicator');
+        if ($aiIndicator) {
+          $aiIndicator.style.cursor = 'pointer';
+          $aiIndicator.addEventListener('click', handleChatOpen);
+          $aiIndicator.addEventListener('touchstart', handleChatOpen, { passive: false });
+        }
+      },
+
+      sendMessage: function(text) {
+        if (!text || typeof text !== 'string') return;
+        text = text.trim();
+        if (!text) return;
+        if (this._isTyping) return;
+
+        // Add user bubble
+        var userBubbleHtml = '<div class="chat-bubble chat-bubble--user">' +
+          '<div class="chat-bubble__text">' + this._escapeHtml(text) + '</div>' +
+          '<span class="chat-bubble__time">' + this._getTimeString() + '</span>' +
+          '</div>';
+        this.$messages.insertAdjacentHTML('beforeend', userBubbleHtml);
+        this.$messages.scrollTop = this.$messages.scrollHeight;
+
+        // Push to history
+        this.history.push({ role: 'user', content: text });
+
+        // Clear input
+        if (this.$input) {
+          this.$input.value = '';
+        }
+
+        // Show typing indicator
+        this.showTypingIndicator(true);
+
+        // Find cached response and simulate delay
+        var self = this;
+        var response = this.findCachedResponse(text);
+        var delay = 800 + Math.floor(Math.random() * 700);
+        this._responseTimeout = setTimeout(function() {
+          self.displayResponse(response);
+        }, delay);
+      },
+
+      displayResponse: function(text) {
+        // Hide typing indicator
+        this.showTypingIndicator(false);
+
+        // Add AI bubble
+        var aiBubbleHtml = '<div class="chat-bubble chat-bubble--ai">' +
+          '<div class="chat-bubble__text">' + this._escapeHtml(text) + '</div>' +
+          '<span class="chat-bubble__time">' + this._getTimeString() + '</span>' +
+          '</div>';
+        this.$messages.insertAdjacentHTML('beforeend', aiBubbleHtml);
+
+        // Push to history
+        this.history.push({ role: 'assistant', content: text });
+
+        // Scroll to bottom
+        this.$messages.scrollTop = this.$messages.scrollHeight;
+
+        // Cap history — remove oldest pair if over limit
+        if (this.history.length >= MAX_CHAT_HISTORY * 2) {
+          this.history.shift();
+          this.history.shift();
+          // Remove oldest DOM bubbles
+          var $bubbles = this.$messages.querySelectorAll('.chat-bubble');
+          if ($bubbles.length >= 2) {
+            $bubbles[0].remove();
+            $bubbles[1].remove();
+          }
+        }
+
+        // Re-enable send button
+        if (this.$sendBtn) {
+          this.$sendBtn.disabled = false;
+        }
+      },
+
+      findCachedResponse: function(text) {
+        var cacheKeys = Object.keys(AI_CACHE);
+        var bestMatch = null;
+        var bestScore = 0;
+        var userWords = text.split(/\s+/);
+
+        for (var i = 0; i < cacheKeys.length; i++) {
+          var entry = AI_CACHE[cacheKeys[i]];
+          var qWords = entry.question.split(/\s+/);
+          var score = 0;
+
+          for (var j = 0; j < userWords.length; j++) {
+            for (var k = 0; k < qWords.length; k++) {
+              if (userWords[j] === qWords[k] && userWords[j].length > 2) {
+                score++;
+              }
+            }
+          }
+
+          // Boost score if cache key appears in user text
+          if (text.indexOf(cacheKeys[i]) !== -1) {
+            score += 3;
+          }
+
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = entry.answer;
+          }
+        }
+
+        if (bestScore === 0 || !bestMatch) {
+          return 'על בסיס נתוני פרויקט הרחבת קו המטרו, גוש דן — המערכת מנתחת כעת את המידע. ניתן לשאול שאלות ספציפיות על תקציב, לוח זמנים, סיכונים או תיאומים.';
+        }
+
+        return bestMatch;
+      },
+
+      showTypingIndicator: function(show) {
+        if (show) {
+          this._isTyping = true;
+          if (this.$sendBtn) this.$sendBtn.disabled = true;
+          var typingHtml = '<div class="chat-typing" id="chat-typing">' +
+            '<span class="chat-typing__dot"></span>' +
+            '<span class="chat-typing__dot"></span>' +
+            '<span class="chat-typing__dot"></span>' +
+            '</div>';
+          this.$messages.insertAdjacentHTML('beforeend', typingHtml);
+          this.$messages.scrollTop = this.$messages.scrollHeight;
+        } else {
+          this._isTyping = false;
+          var $typing = document.getElementById('chat-typing');
+          if ($typing) $typing.remove();
+        }
+      },
+
+      _escapeHtml: function(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      },
+
+      _getTimeString: function() {
+        return new Intl.DateTimeFormat('he-IL', {
+          hour: '2-digit',
+          minute: '2-digit'
+        }).format(new Date());
+      },
+
+      destroy: function() {
+        if (this._responseTimeout) {
+          clearTimeout(this._responseTimeout);
+          this._responseTimeout = null;
+        }
+
+        this.history = [];
+        this._isTyping = false;
+
+        var $closeBtn = document.getElementById('chatClose');
+        if ($closeBtn) {
+          $closeBtn.removeEventListener('click', handleChatClose);
+          $closeBtn.removeEventListener('touchstart', handleChatClose);
+        }
+
+        if (this.$backdrop) {
+          this.$backdrop.removeEventListener('click', handleChatBackdropTap);
+        }
+
+        if (this.$input) {
+          this.$input.removeEventListener('keydown', handleInputKeydown);
+        }
+
+        if (this.$sendBtn) {
+          this.$sendBtn.removeEventListener('click', handleSendTap);
+          this.$sendBtn.removeEventListener('touchstart', handleSendTap);
+        }
+
+        if (this.$chips) {
+          this.$chips.forEach(function($chip) {
+            $chip.removeEventListener('touchstart', handleChipTouchStart);
+            $chip.removeEventListener('touchend', handleChipTouchEnd);
+            $chip.removeEventListener('click', handleChipTap);
+          });
+        }
+
+        var $aiIndicator = document.querySelector('.ai-indicator');
+        if ($aiIndicator) {
+          $aiIndicator.removeEventListener('click', handleChatOpen);
+          $aiIndicator.removeEventListener('touchstart', handleChatOpen);
+        }
+
+        if (this.$messages) this.$messages.innerHTML = '';
+
+        this.$chatPanel = null;
+        this.$backdrop = null;
+        this.$messages = null;
+        this.$input = null;
+        this.$sendBtn = null;
+        this.$chips = null;
+      }
+    };
+
+    // ================================================================
     // SECTION: Theme Toggle Handler
     // ================================================================
 
@@ -4259,6 +4928,11 @@
     // ================================================================
 
     function executeIdleReset() {
+      // Close chat panel if open
+      if (OptiPlan.state.chatOpen) {
+        handleChatClose();
+      }
+
       var currentLayer = OptiPlan.state.currentLayer;
 
       if (currentLayer === 'overview' || currentLayer === 'idle') {
@@ -4329,6 +5003,9 @@
       OptiPlan.components.heroGauges.init();
       OptiPlan.components.statCards.init();
       OptiPlan.components.moduleOverlay.init();
+
+      // AI Chat
+      OptiPlan.ai.init();
 
       // Idle auto-reset
       OptiPlan.components.idleReset.init();
