@@ -169,6 +169,7 @@
       flex-direction: column;
       overflow: auto;
       min-height: 100vh;
+      position: relative;
     }
 
     /* ================================================================ */
@@ -519,8 +520,149 @@
     }
 
     /* ================================================================ */
+    /* SECTION: Component — Stat Cards                                   */
+    /* ================================================================ */
+
+    .stat-cards-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 12px;
+      padding: var(--gap) 0;
+    }
+
+    .stat-card {
+      border-radius: var(--radius);
+      padding: var(--gap);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      min-width: 140px;
+      flex: 1;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
+      transition: transform var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    [data-module="optitrack"] { --module: var(--optitrack); }
+    [data-module="optibiz"]   { --module: var(--optibiz); }
+    [data-module="optirisk"]  { --module: var(--optirisk); }
+    [data-module="optidocs"]  { --module: var(--optidocs); }
+    [data-module="optigantt"] { --module: var(--optigantt); }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--module), color-mix(in srgb, var(--module) 68%, #000));
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--module) 35%, transparent);
+    }
+
+    .stat-card__name {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+      color: #fff;
+    }
+
+    .stat-card__value {
+      display: block;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .stat-card__label {
+      display: block;
+      font-size: 10px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .stat-card__sublabel {
+      display: block;
+      font-size: 9px;
+      opacity: 0.7;
+      color: #fff;
+    }
+
+    .stat-card__icon {
+      position: absolute;
+      bottom: 8px;
+      inset-inline-start: 8px;
+      font-size: 28px;
+      opacity: 0.2;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — Ambient Background                            */
+    /* ================================================================ */
+
+    .main-content::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(9,145,243,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(246,174,45,0.04) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 35% at 50% 50%, rgba(67,149,253,0.03) 0%, transparent 50%);
+      background-size: 200% 200%;
+      animation: ambient-gradient 20s ease-in-out infinite;
+      will-change: background-position;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — AI Agent Indicator                             */
+    /* ================================================================ */
+
+    .ai-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: 4px 12px;
+      margin-top: 2px;
+    }
+
+    .ai-indicator__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-online);
+      animation: ai-pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .ai-indicator__text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ================================================================ */
     /* SECTION: Animations & Keyframes                                   */
     /* ================================================================ */
+
+    @keyframes stat-card-entrance {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
 
     @keyframes sidebar-pulse {
       0%, 100% {
@@ -541,6 +683,32 @@
       }
       50% {
         opacity: 0.85;
+      }
+    }
+
+    @keyframes ai-pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+      }
+    }
+
+    @keyframes ambient-gradient {
+      0% {
+        background-position: 0% 0%;
+      }
+      33% {
+        background-position: 100% 50%;
+      }
+      66% {
+        background-position: 50% 100%;
+      }
+      100% {
+        background-position: 0% 0%;
       }
     }
 
@@ -686,6 +854,10 @@
         <i class="ti ti-robot sidebar__nav-icon"></i>
         <span class="sidebar__nav-label">Opium AI</span>
       </a>
+      <div class="ai-indicator">
+        <span class="ai-indicator__dot"></span>
+        <span class="ai-indicator__text">3 סוכנים פעילים</span>
+      </div>
       <a class="sidebar__nav-item" data-module="section-map" href="#" role="button">
         <i class="ti ti-map sidebar__nav-icon"></i>
         <span class="sidebar__nav-label">מפת קטעים</span>
@@ -779,6 +951,45 @@
                   text-anchor="middle" dominant-baseline="central"></text>
           </svg>
           <span class="hero-gauge__label">עמידה בלוח זמנים</span>
+        </div>
+      </section>
+
+      <!-- Stat Cards — 5 module KPI cards (Story 1.5) -->
+      <section class="stat-cards-row">
+        <div class="stat-card" data-module="optitrack" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+          <span class="stat-card__name">OptiTrack</span>
+          <span class="stat-card__value"></span>
+          <span class="stat-card__label"></span>
+          <span class="stat-card__sublabel"></span>
+          <i class="stat-card__icon ti ti-route"></i>
+        </div>
+        <div class="stat-card" data-module="optibiz" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+          <span class="stat-card__name">OptiBiz</span>
+          <span class="stat-card__value"></span>
+          <span class="stat-card__label"></span>
+          <span class="stat-card__sublabel"></span>
+          <i class="stat-card__icon ti ti-chart-bar"></i>
+        </div>
+        <div class="stat-card" data-module="optirisk" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+          <span class="stat-card__name">OptiRisk</span>
+          <span class="stat-card__value"></span>
+          <span class="stat-card__label"></span>
+          <span class="stat-card__sublabel"></span>
+          <i class="stat-card__icon ti ti-alert-triangle"></i>
+        </div>
+        <div class="stat-card" data-module="optidocs" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+          <span class="stat-card__name">OptiDocs</span>
+          <span class="stat-card__value"></span>
+          <span class="stat-card__label"></span>
+          <span class="stat-card__sublabel"></span>
+          <i class="stat-card__icon ti ti-file-text"></i>
+        </div>
+        <div class="stat-card" data-module="optigantt" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+          <span class="stat-card__name">OptiGantt</span>
+          <span class="stat-card__value"></span>
+          <span class="stat-card__label"></span>
+          <span class="stat-card__sublabel"></span>
+          <i class="stat-card__icon ti ti-calendar-stats"></i>
         </div>
       </section>
     </main>
@@ -1271,6 +1482,125 @@
     };
 
     // ================================================================
+    // SECTION: Component — Stat Cards
+    // ================================================================
+
+    var STAT_CARD_CONFIG = [
+      { key: 'optitrack', name: 'OptiTrack', icon: 'ti-route',
+        value: OPTITRACK_DATA.approved, label: '\u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD \u05DE\u05D0\u05D5\u05E9\u05E8\u05D9\u05DD',
+        sublabel: '+18%' },
+      { key: 'optibiz', name: 'OptiBiz', icon: 'ti-chart-bar',
+        value: null, label: '\u05E0\u05D9\u05E6\u05D5\u05DC \u05EA\u05E7\u05E6\u05D9\u05D1',
+        sublabel: OPTIBIZ_DATA.budgetUtilization + '%',
+        formatter: function() {
+          return '\u20AA' + (OPTIBIZ_DATA.budgetUtilized / 1000000000).toFixed(2) + 'B';
+        }},
+      { key: 'optirisk', name: 'OptiRisk', icon: 'ti-alert-triangle',
+        value: OPTIRISK_DATA.activeRisks, label: '\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05E4\u05E2\u05D9\u05DC\u05D9\u05DD',
+        sublabel: OPTIRISK_DATA.critical + ' \u05E7\u05E8\u05D9\u05D8\u05D9\u05D9\u05DD' },
+      { key: 'optidocs', name: 'OptiDocs', icon: 'ti-file-text',
+        value: OPTIDOCS_DATA.total, label: '\u05DE\u05E1\u05DE\u05DB\u05D9\u05DD',
+        sublabel: OPTIDOCS_DATA.completionRate + '% \u05D4\u05D5\u05E9\u05DC\u05DD' },
+      { key: 'optigantt', name: 'OptiGantt', icon: 'ti-calendar-stats',
+        value: OPTIGANTT_DATA.sections.length, label: '\u05E7\u05D8\u05E2\u05D9 \u05E4\u05E8\u05D5\u05D9\u05E7\u05D8',
+        sublabel: null,
+        sublabelCompute: function() {
+          var delayed = OPTIGANTT_DATA.sections.filter(function(s) {
+            return s.progress < 100 && s.progress < 50;
+          }).length;
+          return delayed + ' \u05D1\u05E2\u05D9\u05DB\u05D5\u05D1';
+        }}
+    ];
+
+    var STAT_CARD_ENTRANCE_DELAY = 1200;
+    var STAT_CARD_STAGGER_MS = 60;
+
+    function handleStatCardTouchStart(e) {
+      var card = e.currentTarget;
+      card.style.transform = 'scale(0.98)';
+    }
+
+    function handleStatCardTouchEnd(e) {
+      var card = e.currentTarget;
+      card.style.transform = '';
+    }
+
+    OptiPlan.components.statCards = {
+      $statCardsRow: null,
+      $statCards: null,
+      _entranceTimeouts: [],
+
+      init: function() {
+        this.$statCardsRow = document.querySelector('.stat-cards-row');
+        if (!this.$statCardsRow) return;
+        this.$statCards = this.$statCardsRow.querySelectorAll('.stat-card');
+        this.render();
+        this._bindEvents();
+      },
+
+      render: function(data) {
+        var self = this;
+        // Populate card content from config
+        STAT_CARD_CONFIG.forEach(function(config, i) {
+          var $card = self.$statCards[i];
+          if (!$card) return;
+          var $value = $card.querySelector('.stat-card__value');
+          var $label = $card.querySelector('.stat-card__label');
+          var $sublabel = $card.querySelector('.stat-card__sublabel');
+          if ($value) {
+            $value.textContent = config.formatter
+              ? config.formatter()
+              : config.value;
+          }
+          if ($label) $label.textContent = config.label;
+          if ($sublabel) {
+            $sublabel.textContent = config.sublabelCompute
+              ? config.sublabelCompute()
+              : config.sublabel;
+          }
+        });
+
+        // Staggered entrance animation
+        STAT_CARD_CONFIG.forEach(function(config, i) {
+          var timeout = setTimeout(function() {
+            var $card = self.$statCards[i];
+            if ($card) {
+              $card.style.animation = 'stat-card-entrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+              $card.addEventListener('animationend', function handler() {
+                $card.removeEventListener('animationend', handler);
+                $card.style.animation = '';
+                $card.style.opacity = '1';
+                $card.style.transform = '';
+              });
+            }
+          }, STAT_CARD_ENTRANCE_DELAY + (i * STAT_CARD_STAGGER_MS));
+          self._entranceTimeouts.push(timeout);
+        });
+      },
+
+      _bindEvents: function() {
+        if (!this.$statCards) return;
+        for (var i = 0; i < this.$statCards.length; i++) {
+          this.$statCards[i].addEventListener('touchstart', handleStatCardTouchStart, { passive: true });
+          this.$statCards[i].addEventListener('touchend', handleStatCardTouchEnd, { passive: true });
+        }
+      },
+
+      destroy: function() {
+        // Clear entrance timeouts
+        this._entranceTimeouts.forEach(function(t) { clearTimeout(t); });
+        this._entranceTimeouts = [];
+        // Remove event listeners
+        if (this.$statCards) {
+          for (var i = 0; i < this.$statCards.length; i++) {
+            this.$statCards[i].removeEventListener('touchstart', handleStatCardTouchStart);
+            this.$statCards[i].removeEventListener('touchend', handleStatCardTouchEnd);
+          }
+        }
+      }
+    };
+
+    // ================================================================
     // SECTION: Theme Toggle Handler
     // ================================================================
 
@@ -1285,6 +1615,40 @@
         e.preventDefault();
         handleThemeToggle(e);
       }
+    }
+
+    // ================================================================
+    // SECTION: Idle Auto-Reset
+    // ================================================================
+
+    function executeIdleReset() {
+      var currentLayer = OptiPlan.state.currentLayer;
+
+      if (currentLayer === 'overview') {
+        // Already in overview — nothing to reset
+        return;
+      }
+
+      // Transition back to overview from any deeper layer
+      // Future: When module overlay and card flip components exist,
+      // call their close/reset methods here before transitioning.
+      // e.g., if (OptiPlan.components.moduleOverlay) OptiPlan.components.moduleOverlay.close();
+      // e.g., if (OptiPlan.components.statCards.resetFlip) OptiPlan.components.statCards.resetFlip();
+
+      if (currentLayer === 'module-expand') {
+        OptiPlan.state.transition('overview');
+      } else if (currentLayer === 'card-flip') {
+        OptiPlan.state.transition('overview');
+      }
+
+      console.log('[OptiPlan Idle] Auto-reset to overview');
+    }
+
+    function handleActivityReset() {
+      if (OptiPlan.state._idleTimer) {
+        clearTimeout(OptiPlan.state._idleTimer);
+      }
+      OptiPlan.state._idleTimer = setTimeout(executeIdleReset, IDLE_TIMEOUT_MS);
     }
 
     // ================================================================
@@ -1310,6 +1674,12 @@
       OptiPlan.components.sidebar.init();
       OptiPlan.components.topbar.init();
       OptiPlan.components.heroGauges.init();
+      OptiPlan.components.statCards.init();
+
+      // Idle auto-reset
+      document.addEventListener('touchstart', handleActivityReset, { passive: true });
+      document.addEventListener('click', handleActivityReset, { passive: true });
+      handleActivityReset();
     };
 
     document.addEventListener('DOMContentLoaded', OptiPlan.init.bind(OptiPlan));
