@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OptiPlan — מרכז בקרה</title>
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CSS VARIABLES — OPTIPLAN PALETTE                              */
+/* ═══════════════════════════════════════════════════════════════ */
+:root {
+  --font-main: 'Varela Round', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* OptiPlan Module Colors */
+  --optitrack: #3B82F6;
+  --optibiz: #8B5CF6;
+  --optirisk: #EF4444;
+  --optidocs: #22C55E;
+  --optigantt: #6366F1;
+
+  /* Accent aliases */
+  --blue: #3B82F6;
+  --green: #22C55E;
+  --red: #EF4444;
+  --orange: #F59E0B;
+  --purple: #8B5CF6;
+  --indigo: #6366F1;
+  --cyan: #06B6D4;
+}
+
+/* ─── COLOR PALETTES ─── */
+[data-palette="a"] {
+  --optitrack: #60A5FA;
+  --optibiz: #C084FC;
+  --optirisk: #FB7185;
+  --optidocs: #34D399;
+  --optigantt: #818CF8;
+}
+[data-palette="b"] {
+  --optitrack: #38BDF8;
+  --optibiz: #A78BFA;
+  --optirisk: #F472B6;
+  --optidocs: #2DD4BF;
+  --optigantt: #7B68EE;
+}
+[data-palette="c"] {
+  --optitrack: #3ABFF8;
+  --optibiz: #E879F9;
+  --optirisk: #FB923C;
+  --optidocs: #4ADE80;
+  --optigantt: #A78BFA;
+}
+
+/* Palette D: OptiPlan Brand — navy + blue + orange/amber */
+[data-palette="d"] {
+  --optitrack: #0991F3;
+  --optibiz: #F6AE2D;
+  --optirisk: #FF7A3C;
+  --optidocs: #4395FD;
+  --optigantt: #0B3C5D;
+  --orange: #F78B0F;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  DARK SKINS — base dark themes                                */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Shared dark tokens */
+[data-theme="dark"] {
+  --border-hover: rgba(255,255,255,0.12);
+  --text-primary: #E5E7EB;
+  --text-secondary: rgba(255,255,255,0.58);
+  --text-muted: rgba(255,255,255,0.30);
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.40);
+  --shadow-card-hover: 0 8px 36px rgba(0,0,0,0.55);
+  --bar-track: rgba(255,255,255,0.06);
+  --ring-track: rgba(255,255,255,0.05);
+  --feed-hover: rgba(255,255,255,0.03);
+  --grid-line: rgba(255,255,255,0.04);
+}
+
+/* Skin 1: Indigo Night — purple-navy tint */
+[data-skin="1"][data-theme="dark"] {
+  --bg-body: #0A0E1A;
+  --bg-sidebar: #0F1328;
+  --bg-card: #141833;
+  --bg-card-hover: #1A2044;
+  --bg-input: #181E3A;
+  --border: rgba(255,255,255,0.07);
+  --gradient-body: radial-gradient(ellipse 70% 55% at 15% 8%, rgba(59,130,246,0.06) 0%, transparent 55%),
+                   radial-gradient(ellipse 55% 45% at 85% 85%, rgba(139,92,246,0.05) 0%, transparent 55%),
+                   linear-gradient(165deg, #0A0E1A 0%, #0D1228 45%, #101636 75%, #0A0E1A 100%);
+  --toggle-bg: #181E3A;
+  --toggle-knob: #F59E0B;
+  --sidebar-active: rgba(59,130,246,0.12);
+}
+
+/* Skin 2: Ocean Deep — brand navy, blue tint */
+[data-skin="2"][data-theme="dark"] {
+  --bg-body: #001528;
+  --bg-sidebar: #001D34;
+  --bg-card: #002244;
+  --bg-card-hover: #002B52;
+  --bg-input: #001F3A;
+  --border: rgba(255,255,255,0.08);
+  --gradient-body: radial-gradient(ellipse 70% 55% at 15% 8%, rgba(9,145,243,0.08) 0%, transparent 55%),
+                   radial-gradient(ellipse 55% 45% at 85% 85%, rgba(246,174,45,0.05) 0%, transparent 55%),
+                   linear-gradient(165deg, #001528 0%, #001D34 45%, #002244 75%, #001528 100%);
+  --toggle-bg: #001F3A;
+  --toggle-knob: #F6AE2D;
+  --sidebar-active: rgba(9,145,243,0.12);
+}
+
+/* Skin 3: Warm Carbon — dark with warm undertone */
+[data-skin="3"][data-theme="dark"] {
+  --bg-body: #151318;
+  --bg-sidebar: #1B181F;
+  --bg-card: #211E26;
+  --bg-card-hover: #2A262F;
+  --bg-input: #1E1B22;
+  --border: rgba(255,255,255,0.06);
+  --gradient-body: radial-gradient(ellipse 60% 50% at 20% 10%, rgba(245,158,11,0.04) 0%, transparent 50%),
+                   radial-gradient(ellipse 50% 40% at 80% 80%, rgba(239,68,68,0.03) 0%, transparent 50%),
+                   linear-gradient(165deg, #151318 0%, #1B181F 45%, #211E26 75%, #151318 100%);
+  --toggle-bg: #1E1B22;
+  --toggle-knob: #F59E0B;
+  --sidebar-active: rgba(255,255,255,0.06);
+}
+
+/* Skin 4: Graphite — neutral near-black */
+[data-skin="4"][data-theme="dark"] {
+  --bg-body: #111111;
+  --bg-sidebar: #161616;
+  --bg-card: #1C1C1C;
+  --bg-card-hover: #242424;
+  --bg-input: #1A1A1A;
+  --border: rgba(255,255,255,0.06);
+  --gradient-body: linear-gradient(165deg, #111111 0%, #141414 50%, #111111 100%);
+  --toggle-bg: #1A1A1A;
+  --toggle-knob: #FFFFFF;
+  --sidebar-active: rgba(255,255,255,0.05);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  LIGHT SKINS — base light themes                              */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Shared light tokens */
+[data-theme="light"] {
+  --border-hover: rgba(0,0,0,0.13);
+  --text-primary: #1A1E36;
+  --text-secondary: rgba(0,0,0,0.55);
+  --text-muted: rgba(0,0,0,0.32);
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 6px 24px rgba(0,0,0,0.10);
+  --bar-track: rgba(0,0,0,0.06);
+  --ring-track: rgba(0,0,0,0.06);
+  --feed-hover: rgba(0,0,0,0.02);
+  --grid-line: rgba(0,0,0,0.05);
+}
+
+/* Skin 1: Cool Mist — blue-gray tint */
+[data-skin="1"][data-theme="light"] {
+  --bg-body: #F0F2F8;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F7F8FC;
+  --bg-input: #F0F2F8;
+  --border: rgba(0,0,0,0.07);
+  --gradient-body: linear-gradient(165deg, #F0F2F8 0%, #E8EBF4 50%, #F0F2F8 100%);
+  --toggle-bg: #E2E6F0;
+  --toggle-knob: #3B82F6;
+  --sidebar-active: rgba(59,130,246,0.08);
+}
+
+/* Skin 2: Clean White — brand neutral */
+[data-skin="2"][data-theme="light"] {
+  --bg-body: #F5F5F7;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F5F6FA;
+  --bg-input: #F0F1F5;
+  --border: rgba(0,0,0,0.06);
+  --gradient-body: linear-gradient(165deg, #F5F5F7 0%, #ECEDF2 50%, #F5F5F7 100%);
+  --toggle-bg: #E4E5EA;
+  --toggle-knob: #0991F3;
+  --sidebar-active: rgba(9,145,243,0.08);
+}
+
+/* Skin 3: Warm Cream — soft warm */
+[data-skin="3"][data-theme="light"] {
+  --bg-body: #FAF7F2;
+  --bg-sidebar: #FFFDF9;
+  --bg-card: #FFFDF9;
+  --bg-card-hover: #F5F0E8;
+  --bg-input: #F2EDE5;
+  --border: rgba(120,90,50,0.08);
+  --gradient-body: linear-gradient(165deg, #FAF7F2 0%, #F2EDE5 50%, #FAF7F2 100%);
+  --toggle-bg: #EAE3D8;
+  --toggle-knob: #D97706;
+  --sidebar-active: rgba(180,120,40,0.08);
+  --text-primary: #2C2418;
+  --text-secondary: rgba(44,36,24,0.58);
+  --text-muted: rgba(44,36,24,0.35);
+}
+
+/* Skin 4: Ice — pure cold white */
+[data-skin="4"][data-theme="light"] {
+  --bg-body: #F8FAFC;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F1F5F9;
+  --bg-input: #F1F5F9;
+  --border: rgba(0,0,0,0.05);
+  --gradient-body: linear-gradient(165deg, #F8FAFC 0%, #F1F5F9 50%, #F8FAFC 100%);
+  --toggle-bg: #E2E8F0;
+  --toggle-knob: #334155;
+  --sidebar-active: rgba(0,0,0,0.04);
+  --text-primary: #0F172A;
+  --text-secondary: rgba(15,23,42,0.55);
+  --text-muted: rgba(15,23,42,0.32);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  RESET & BASE                                                 */
+/* ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font-main);
+  background: var(--gradient-body);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  LAYOUT SHELL                                                 */
+/* ═══════════════════════════════════════════════════════════════ */
+.app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: background var(--transition), border var(--transition);
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.sidebar-brand {
+  padding: 22px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-icon {
+  background: linear-gradient(135deg, var(--optitrack), var(--optigantt));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 18px rgba(59,130,246,0.3);
+}
+
+.brand-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* User area */
+.sidebar-user {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.user-avatar {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--optibiz), var(--optigantt));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  position: relative;
+}
+
+.user-avatar .notif {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 16px; height: 16px;
+  background: var(--optirisk);
+  color: #fff;
+  font-size: 9px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg-sidebar);
+}
+
+.user-info .name { font-size: 13px; font-weight: 700; }
+.user-info .role { font-size: 10px; color: var(--text-muted); }
+
+/* Nav menu */
+.nav-section-title {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 16px 20px 6px;
+  letter-spacing: 1px;
+}
+
+.nav-item {
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-item i {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.nav-item:hover {
+  color: var(--text-primary);
+  background: var(--sidebar-active);
+}
+
+.nav-item.active {
+  color: var(--optitrack);
+  background: var(--sidebar-active);
+  border-right: 3px solid var(--optitrack);
+}
+
+/* Module color indicators on nav */
+.nav-item .module-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: auto;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.sidebar-footer .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--optidocs);
+  box-shadow: 0 0 6px rgba(34,197,94,0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+
+/* ─── MAIN CONTENT ─── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Topbar */
+.topbar {
+  height: 58px;
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  transition: background var(--transition);
+}
+
+.topbar-title {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-title .sub {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topbar-search {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.topbar-search input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 12px;
+  width: 140px;
+}
+
+.topbar-search input::placeholder { color: var(--text-muted); }
+.topbar-search i { color: var(--text-muted); font-size: 12px; }
+
+.topbar-icon {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+}
+
+.topbar-icon:hover {
+  background: var(--sidebar-active);
+  color: var(--text-primary);
+}
+
+.clock {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ─── THEME TOGGLE ─── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.theme-toggle .label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.toggle-track {
+  width: 42px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--toggle-bg);
+  position: relative;
+  transition: background 0.3s;
+  border: 1px solid var(--border);
+}
+
+.toggle-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--toggle-knob);
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+[data-theme="light"] .toggle-knob { right: 21px; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  DASHBOARD                                                    */
+/* ═══════════════════════════════════════════════════════════════ */
+.dashboard {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.dashboard::-webkit-scrollbar { width: 5px; }
+.dashboard::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ─── MODULE STAT CARDS ROW ─── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+.stat-card .sc-icon {
+  font-size: 28px;
+  opacity: 0.2;
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+}
+
+.stat-card .sc-label {
+  font-size: 10px;
+  opacity: 0.85;
+  margin-bottom: 3px;
+  font-weight: 300;
+}
+
+.stat-card .sc-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-family: var(--font-mono);
+}
+
+.stat-card .sc-sub {
+  font-size: 9px;
+  opacity: 0.7;
+  margin-top: 3px;
+  font-family: var(--font-mono);
+}
+
+/* OptiPlan module gradients — driven by palette variables */
+.sc-optitrack {
+  background: linear-gradient(135deg, var(--optitrack), color-mix(in srgb, var(--optitrack) 68%, #000));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--optitrack) 35%, transparent);
+}
+.sc-optibiz {
+  background: linear-gradient(135deg, var(--optibiz), color-mix(in srgb, var(--optibiz) 68%, #000));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--optibiz) 35%, transparent);
+}
+.sc-optirisk {
+  background: linear-gradient(135deg, var(--optirisk), color-mix(in srgb, var(--optirisk) 68%, #000));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--optirisk) 35%, transparent);
+}
+.sc-optidocs {
+  background: linear-gradient(135deg, var(--optidocs), color-mix(in srgb, var(--optidocs) 68%, #000));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--optidocs) 35%, transparent);
+}
+.sc-optigantt {
+  background: linear-gradient(135deg, var(--optigantt), color-mix(in srgb, var(--optigantt) 68%, #000));
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--optigantt) 35%, transparent);
+}
+
+.stat-card .sc-module-name {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+}
+
+/* ─── MAIN GRID ─── */
+.grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 1fr 220px;
+  grid-template-rows: auto auto;
+  gap: 14px;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD BASE                                                    */
+/* ═══════════════════════════════════════════════════════════════ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+  animation: cardIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 8%, var(--border-hover) 50%, transparent 92%);
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title .tag {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding: 2px 7px;
+  background: var(--bar-track);
+  border-radius: 4px;
+}
+
+/* Stagger delays */
+.card:nth-child(1)  { animation-delay: 0.05s; }
+.card:nth-child(2)  { animation-delay: 0.10s; }
+.card:nth-child(3)  { animation-delay: 0.15s; }
+.card:nth-child(4)  { animation-delay: 0.20s; }
+.card:nth-child(5)  { animation-delay: 0.25s; }
+.card:nth-child(6)  { animation-delay: 0.30s; }
+.card:nth-child(7)  { animation-delay: 0.35s; }
+
+.stat-card:nth-child(1) { animation-delay: 0.0s; }
+.stat-card:nth-child(2) { animation-delay: 0.06s; }
+.stat-card:nth-child(3) { animation-delay: 0.12s; }
+.stat-card:nth-child(4) { animation-delay: 0.18s; }
+.stat-card:nth-child(5) { animation-delay: 0.24s; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 1: CONCENTRIC RINGS — spans 2 rows                     */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-rings {
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.rings-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rings-svg { width: 170px; height: 170px; }
+.ring-track { fill: none; stroke: var(--ring-track); }
+.ring-fill {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rings-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 10px;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.legend-pct { font-family: var(--font-mono); font-size: 11px; font-weight: 500; margin-left: 2px; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 2: DONUT                                                */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-donut { display: flex; flex-direction: column; }
+.donut-content { flex: 1; display: flex; align-items: center; gap: 16px; }
+.donut-svg-wrap { width: 115px; height: 115px; flex-shrink: 0; position: relative; }
+.donut-svg { width: 115px; height: 115px; }
+.donut-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.donut-center-val { font-size: 22px; font-weight: 700; line-height: 1; }
+.donut-center-lbl { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; }
+.donut-leg-item { display: flex; align-items: center; gap: 7px; }
+.donut-leg-dot { width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0; }
+.donut-leg-pct { font-family: var(--font-mono); font-size: 12px; font-weight: 500; min-width: 38px; direction: ltr; }
+.donut-leg-name { font-size: 10px; color: var(--text-secondary); }
+.donut-seg { transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 3: LINE CHART                                           */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-line { display: flex; flex-direction: column; }
+.line-chart-wrap { flex: 1; position: relative; min-height: 0; }
+.line-chart-svg { width: 100%; height: 100%; }
+.chart-grid-line { stroke: var(--grid-line); stroke-width: 0.5; }
+.chart-line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chart-area { opacity: 0.12; }
+.chart-dot { stroke-width: 2; }
+.line-legend { display: flex; gap: 14px; margin-top: 8px; }
+.line-leg-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-muted); }
+.line-leg-bar { width: 14px; height: 2.5px; border-radius: 2px; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 4: FEED                                                 */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-feed { grid-row: span 2; display: flex; flex-direction: column; }
+.feed-list { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.feed-item {
+  display: flex; gap: 10px; padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start; cursor: pointer; transition: background 0.2s;
+}
+.feed-item:hover { background: var(--feed-hover); }
+.feed-item:last-child { border: none; }
+.feed-avatar {
+  width: 30px; height: 30px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff;
+}
+.feed-body { flex: 1; min-width: 0; }
+.feed-name {
+  font-size: 11px; font-weight: 700; margin-bottom: 2px;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.feed-time {
+  font-size: 8px; font-family: var(--font-mono);
+  color: var(--text-muted); font-weight: 400; direction: ltr;
+}
+.feed-desc {
+  font-size: 10px; color: var(--text-muted); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.feed-badge {
+  font-size: 8px; padding: 2px 6px; border-radius: 4px;
+  font-weight: 700; margin-top: 3px; display: inline-block;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 5: SENTIMENT                                            */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-sentiment { display: flex; flex-direction: column; }
+.sentiment-body { flex: 1; display: flex; align-items: center; gap: 14px; }
+.sent-donut-wrap { width: 100px; height: 100px; flex-shrink: 0; position: relative; }
+.sent-big-num {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.sent-big-val { font-size: 22px; font-weight: 700; line-height: 1; direction: ltr; }
+.sent-big-lbl { font-size: 8px; color: var(--text-muted); margin-top: 2px; }
+.sent-legend { display: flex; flex-direction: column; gap: 7px; }
+.sent-leg-row { display: flex; align-items: center; gap: 6px; }
+.sent-leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sent-leg-pct { font-family: var(--font-mono); font-size: 12px; font-weight: 500; min-width: 36px; direction: ltr; }
+.sent-leg-name { font-size: 10px; color: var(--text-secondary); }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 6: MULTI-LINE                                           */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-multiline { grid-column: span 2; display: flex; flex-direction: column; }
+.multiline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.multiline-legend { display: flex; gap: 12px; }
+.ml-leg-item { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--text-muted); }
+.ml-leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+.multiline-svg-wrap { flex: 1; min-height: 0; }
+.multiline-svg { width: 100%; height: 100%; }
+.x-label { font-family: var(--font-mono); font-size: 8px; fill: var(--text-muted); }
+.y-label { font-family: var(--font-mono); font-size: 8px; fill: var(--text-muted); text-anchor: end; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  CARD 7: STAT BARS                                            */
+/* ═══════════════════════════════════════════════════════════════ */
+.card-stat-right { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+.stat-mini { display: flex; justify-content: space-between; align-items: baseline; }
+.stat-mini-label { font-size: 11px; color: var(--text-secondary); }
+.stat-mini-val { font-family: var(--font-mono); font-size: 17px; font-weight: 700; direction: ltr; }
+.stat-mini-bar {
+  height: 4px; background: var(--bar-track);
+  border-radius: 2px; overflow: hidden; margin-top: 4px;
+}
+.stat-mini-bar-fill {
+  height: 100%; border-radius: 2px;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  FOOTER                                                       */
+/* ═══════════════════════════════════════════════════════════════ */
+.footer {
+  height: 36px; flex-shrink: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 24px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-sidebar);
+  transition: background var(--transition);
+}
+.footer-pills { display: flex; gap: 16px; font-size: 9px; font-family: var(--font-mono); color: var(--text-muted); }
+.footer-pill { display: flex; align-items: center; gap: 5px; }
+.footer-pill .d { width: 5px; height: 5px; border-radius: 50%; }
+.footer-brand {
+  font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--text-muted); font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  ANIMATION UTILITIES                                          */
+/* ═══════════════════════════════════════════════════════════════ */
+.animated-path {
+  stroke-dasharray: 1000; stroke-dashoffset: 1000;
+  animation: drawLine 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes drawLine { to { stroke-dashoffset: 0; } }
+.animated-path-d1 { animation-delay: 0.3s; }
+.animated-path-d2 { animation-delay: 0.5s; }
+.animated-path-d3 { animation-delay: 0.7s; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/*  RESPONSIVE                                                   */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .card-rings { grid-row: auto; }
+  .card-feed { grid-row: auto; }
+  .card-multiline { grid-column: span 2; }
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+}
+/* ═══════════════════════════════════════════════════════════════ */
+/*  PALETTE SWITCHER (floating)                                  */
+/* ═══════════════════════════════════════════════════════════════ */
+.palette-switcher {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  z-index: 9999;
+  align-items: center;
+}
+
+.palette-switcher .ps-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-left: 6px;
+}
+
+.palette-btn {
+  width: 36px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-input);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.palette-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.palette-btn.active {
+  border-color: var(--optitrack);
+  color: var(--optitrack);
+  background: color-mix(in srgb, var(--optitrack) 12%, transparent);
+}
+
+.ps-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.skin-btn {
+  width: 36px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-input);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skin-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.skin-btn.active {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+  .card-multiline { grid-column: span 1; }
+}
+</style>
+</head>
+<body data-theme="dark" data-palette="d" data-skin="1">
+
+<div class="app">
+
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">OPTIPLAN</div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">
+        בע
+        <span class="notif">5</span>
+      </div>
+      <div class="user-info">
+        <div class="name">בן עקיבא</div>
+        <div class="role">מנהל פרויקט</div>
+      </div>
+    </div>
+
+    <div class="nav-section-title">מודולים</div>
+    <div class="nav-item active">
+      <i class="ti ti-layout-dashboard"></i> לוח בקרה
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-route"></i> OptiTrack
+      <div class="module-dot" style="background:var(--optitrack)"></div>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-coins"></i> OptiBiz
+      <div class="module-dot" style="background:var(--optibiz)"></div>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-shield-half-filled"></i> OptiRisk
+      <div class="module-dot" style="background:var(--optirisk)"></div>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-file-check"></i> OptiDocs
+      <div class="module-dot" style="background:var(--optidocs)"></div>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-chart-gantt"></i> OptiGantt
+      <div class="module-dot" style="background:var(--optigantt)"></div>
+    </div>
+
+    <div class="nav-section-title">כלים</div>
+    <div class="nav-item"><i class="ti ti-robot"></i> Opium AI</div>
+    <div class="nav-item"><i class="ti ti-map-pin"></i> מפת מקטעים</div>
+    <div class="nav-item"><i class="ti ti-chart-line"></i> דוחות</div>
+
+    <div class="nav-section-title">מערכת</div>
+    <div class="nav-item"><i class="ti ti-settings"></i> הגדרות</div>
+
+    <div class="sidebar-footer">
+      <span class="dot"></span>
+      <span>API 18ms · v2.4.1</span>
+    </div>
+  </nav>
+
+  <!-- ═══════════ MAIN ═══════════ -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-title">
+        מרכז בקרה
+        <span class="sub">— הארכת קו מטרו, גוש דן</span>
+      </div>
+      <div class="topbar-actions">
+        <span class="clock" id="clock">22:45</span>
+        <div class="topbar-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="חיפוש...">
+        </div>
+        <div class="topbar-icon"><i class="ti ti-bell"></i></div>
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <span class="label"><i class="ti ti-moon"></i></span>
+          <div class="toggle-track">
+            <div class="toggle-knob"></div>
+          </div>
+          <span class="label"><i class="ti ti-sun"></i></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard">
+
+      <!-- MODULE STAT CARDS -->
+      <div class="stats-row">
+        <div class="stat-card sc-optitrack">
+          <i class="ti ti-route sc-icon"></i>
+          <div class="sc-module-name">OptiTrack</div>
+          <div class="sc-label">אישורים שהושלמו</div>
+          <div class="sc-value">312</div>
+          <div class="sc-sub">+18% מהחודש שעבר</div>
+        </div>
+        <div class="stat-card sc-optibiz">
+          <i class="ti ti-coins sc-icon"></i>
+          <div class="sc-module-name">OptiBiz</div>
+          <div class="sc-label">תקציב מנוצל</div>
+          <div class="sc-value">₪1.22B</div>
+          <div class="sc-sub">68% מתוך ₪1.8B</div>
+        </div>
+        <div class="stat-card sc-optirisk">
+          <i class="ti ti-shield-half-filled sc-icon"></i>
+          <div class="sc-module-name">OptiRisk</div>
+          <div class="sc-label">סיכונים פעילים</div>
+          <div class="sc-value">23</div>
+          <div class="sc-sub">8 קריטיים</div>
+        </div>
+        <div class="stat-card sc-optidocs">
+          <i class="ti ti-file-check sc-icon"></i>
+          <div class="sc-module-name">OptiDocs</div>
+          <div class="sc-label">מסמכים מאושרים</div>
+          <div class="sc-value">847</div>
+          <div class="sc-sub">94% שלמות</div>
+        </div>
+        <div class="stat-card sc-optigantt">
+          <i class="ti ti-chart-gantt sc-icon"></i>
+          <div class="sc-module-name">OptiGantt</div>
+          <div class="sc-label">משימות פעילות</div>
+          <div class="sc-value">156</div>
+          <div class="sc-sub">22 באיחור</div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="grid">
+
+        <!-- 1. CONCENTRIC RINGS -->
+        <div class="card card-rings">
+          <div class="card-title">
+            התקדמות מקטעים
+            <span class="tag">A1–A6</span>
+          </div>
+          <div class="rings-wrap">
+            <svg class="rings-svg" viewBox="0 0 170 170">
+              <circle class="ring-track" cx="85" cy="85" r="74" stroke-width="8"/>
+              <circle class="ring-fill" cx="85" cy="85" r="74" stroke-width="8"
+                      stroke="var(--optitrack)"
+                      stroke-dasharray="464.96"
+                      stroke-dashoffset="464.96"
+                      data-target="167.39"
+                      transform="rotate(-90 85 85)"/>
+              <circle class="ring-track" cx="85" cy="85" r="62" stroke-width="8"/>
+              <circle class="ring-fill" cx="85" cy="85" r="62" stroke-width="8"
+                      stroke="var(--optidocs)"
+                      stroke-dasharray="389.56"
+                      stroke-dashoffset="389.56"
+                      data-target="85.70"
+                      transform="rotate(-90 85 85)"/>
+              <circle class="ring-track" cx="85" cy="85" r="50" stroke-width="8"/>
+              <circle class="ring-fill" cx="85" cy="85" r="50" stroke-width="8"
+                      stroke="var(--orange)"
+                      stroke-dasharray="314.16"
+                      stroke-dashoffset="314.16"
+                      data-target="150.80"
+                      transform="rotate(-90 85 85)"/>
+              <circle class="ring-track" cx="85" cy="85" r="38" stroke-width="8"/>
+              <circle class="ring-fill" cx="85" cy="85" r="38" stroke-width="8"
+                      stroke="var(--optirisk)"
+                      stroke-dasharray="238.76"
+                      stroke-dashoffset="238.76"
+                      data-target="114.60"
+                      transform="rotate(-90 85 85)"/>
+              <circle class="ring-track" cx="85" cy="85" r="26" stroke-width="8"/>
+              <circle class="ring-fill" cx="85" cy="85" r="26" stroke-width="8"
+                      stroke="var(--optibiz)"
+                      stroke-dasharray="163.36"
+                      stroke-dashoffset="163.36"
+                      data-target="49.01"
+                      transform="rotate(-90 85 85)"/>
+            </svg>
+          </div>
+          <div class="rings-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--optitrack)"></div><span class="legend-pct">64%</span> A1</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--optidocs)"></div><span class="legend-pct">78%</span> A2</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div><span class="legend-pct">52%</span> A3</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--optirisk)"></div><span class="legend-pct">52%</span> A4</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--optibiz)"></div><span class="legend-pct">70%</span> A5</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--optigantt)"></div><span class="legend-pct">45%</span> A6</div>
+          </div>
+        </div>
+
+        <!-- 2. DONUT -->
+        <div class="card card-donut">
+          <div class="card-title">סוגי אישורים</div>
+          <div class="donut-content">
+            <div class="donut-svg-wrap">
+              <svg class="donut-svg" viewBox="0 0 115 115">
+                <circle cx="57.5" cy="57.5" r="42" fill="none" stroke="var(--ring-track)" stroke-width="18"/>
+                <circle cx="57.5" cy="57.5" r="42" fill="none"
+                        stroke="var(--optitrack)" stroke-width="18"
+                        stroke-dasharray="92.36 263.89" stroke-dashoffset="0"
+                        transform="rotate(-90 57.5 57.5)" class="donut-seg"/>
+                <circle cx="57.5" cy="57.5" r="42" fill="none"
+                        stroke="var(--optidocs)" stroke-width="18"
+                        stroke-dasharray="65.97 263.89" stroke-dashoffset="-92.36"
+                        transform="rotate(-90 57.5 57.5)" class="donut-seg"/>
+                <circle cx="57.5" cy="57.5" r="42" fill="none"
+                        stroke="var(--orange)" stroke-width="18"
+                        stroke-dasharray="58.06 263.89" stroke-dashoffset="-158.33"
+                        transform="rotate(-90 57.5 57.5)" class="donut-seg"/>
+                <circle cx="57.5" cy="57.5" r="42" fill="none"
+                        stroke="var(--optirisk)" stroke-width="18"
+                        stroke-dasharray="47.50 263.89" stroke-dashoffset="-216.39"
+                        transform="rotate(-90 57.5 57.5)" class="donut-seg"/>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-center-val">312</div>
+                <div class="donut-center-lbl">סה״כ</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-leg-item"><div class="donut-leg-dot" style="background:var(--optitrack)"></div><span class="donut-leg-pct" style="color:var(--optitrack)">35%</span><span class="donut-leg-name">עירייה</span></div>
+              <div class="donut-leg-item"><div class="donut-leg-dot" style="background:var(--optidocs)"></div><span class="donut-leg-pct" style="color:var(--optidocs)">25%</span><span class="donut-leg-name">תקשורת</span></div>
+              <div class="donut-leg-item"><div class="donut-leg-dot" style="background:var(--orange)"></div><span class="donut-leg-pct" style="color:var(--orange)">22%</span><span class="donut-leg-name">חשמל</span></div>
+              <div class="donut-leg-item"><div class="donut-leg-dot" style="background:var(--optirisk)"></div><span class="donut-leg-pct" style="color:var(--optirisk)">18%</span><span class="donut-leg-name">מים</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. LINE CHART -->
+        <div class="card card-line">
+          <div class="card-title">
+            מגמת ביצוע שבועית
+            <span class="tag">שבועות 1–8</span>
+          </div>
+          <div class="line-chart-wrap">
+            <svg class="line-chart-svg" viewBox="0 0 260 110" preserveAspectRatio="none">
+              <line class="chart-grid-line" x1="0" y1="27" x2="260" y2="27"/>
+              <line class="chart-grid-line" x1="0" y1="55" x2="260" y2="55"/>
+              <line class="chart-grid-line" x1="0" y1="82" x2="260" y2="82"/>
+              <text class="y-label" x="18" y="15">100%</text>
+              <text class="y-label" x="18" y="58">50%</text>
+              <text class="y-label" x="18" y="100">0%</text>
+              <polyline class="chart-line animated-path animated-path-d1" stroke="var(--optitrack)"
+                        points="30,75 62,60 94,68 126,52 158,40 190,35 222,28 250,22"/>
+              <polygon class="chart-area" fill="var(--optitrack)"
+                       points="30,75 62,60 94,68 126,52 158,40 190,35 222,28 250,22 250,100 30,100"/>
+              <polyline class="chart-line animated-path animated-path-d2" stroke="var(--optirisk)"
+                        points="30,85 62,78 94,82 126,70 158,75 190,62 222,65 250,55"/>
+              <circle class="chart-dot" cx="250" cy="22" r="3" fill="var(--optitrack)" stroke="var(--bg-card)" stroke-width="2"/>
+              <circle class="chart-dot" cx="250" cy="55" r="3" fill="var(--optirisk)" stroke="var(--bg-card)" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="line-legend">
+            <div class="line-leg-item"><div class="line-leg-bar" style="background:var(--optitrack)"></div>ביצוע</div>
+            <div class="line-leg-item"><div class="line-leg-bar" style="background:var(--optirisk)"></div>חריגות</div>
+          </div>
+        </div>
+
+        <!-- 4. FEED -->
+        <div class="card card-feed">
+          <div class="card-title">
+            עדכונים אחרונים
+            <span class="tag">LIVE</span>
+          </div>
+          <div class="feed-list">
+            <div class="feed-item">
+              <div class="feed-avatar" style="background:var(--optitrack)">דר</div>
+              <div class="feed-body">
+                <div class="feed-name">דוד רוזנברג <span class="feed-time">3 דק׳</span></div>
+                <div class="feed-desc">אישור עירייה למקטע A2 התקבל — ניתן להתחיל ביצוע שלב ב׳</div>
+                <div class="feed-badge" style="background:rgba(34,197,94,0.15);color:var(--optidocs);">אושר ✓</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-avatar" style="background:var(--optirisk)">מכ</div>
+              <div class="feed-body">
+                <div class="feed-name">מיכל כהן <span class="feed-time">12 דק׳</span></div>
+                <div class="feed-desc">חריגת לוח זמנים במקטע A5 — נדרש תיאום מחדש עם בזק</div>
+                <div class="feed-badge" style="background:rgba(239,68,68,0.15);color:var(--optirisk);">דחוף</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-avatar" style="background:var(--optibiz)">אל</div>
+              <div class="feed-body">
+                <div class="feed-name">אלון לוי <span class="feed-time">28 דק׳</span></div>
+                <div class="feed-desc">Opium AI זיהה צוואר בקבוק בתיאום חברת חשמל — המלצה נשלחה</div>
+                <div class="feed-badge" style="background:rgba(139,92,246,0.15);color:var(--optibiz);">AI</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-avatar" style="background:var(--optidocs)">שב</div>
+              <div class="feed-body">
+                <div class="feed-name">שרה בנימין <span class="feed-time">45 דק׳</span></div>
+                <div class="feed-desc">הושלם תיאום תשתיות מים מקטע A3 — ממתין לאישור סופי</div>
+                <div class="feed-badge" style="background:rgba(59,130,246,0.15);color:var(--optitrack);">בהמתנה</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-avatar" style="background:var(--optigantt)">יע</div>
+              <div class="feed-body">
+                <div class="feed-name">יעל עמית <span class="feed-time">1 שעה</span></div>
+                <div class="feed-desc">עדכון תקציבי Q1 — חסכון של 12% מול תחזית מקורית</div>
+                <div class="feed-badge" style="background:rgba(34,197,94,0.15);color:var(--optidocs);">תקציב ✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. SENTIMENT -->
+        <div class="card card-sentiment">
+          <div class="card-title">סטטוס אישורים</div>
+          <div class="sentiment-body">
+            <div class="sent-donut-wrap">
+              <svg viewBox="0 0 100 100" width="100" height="100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="var(--ring-track)" stroke-width="12"/>
+                <circle cx="50" cy="50" r="38" fill="none"
+                        stroke="var(--optidocs)" stroke-width="12"
+                        stroke-dasharray="99.78 238.76" stroke-dashoffset="0"
+                        transform="rotate(-90 50 50)"/>
+                <circle cx="50" cy="50" r="38" fill="none"
+                        stroke="var(--orange)" stroke-width="12"
+                        stroke-dasharray="91.92 238.76" stroke-dashoffset="-99.78"
+                        transform="rotate(-90 50 50)"/>
+                <circle cx="50" cy="50" r="38" fill="none"
+                        stroke="var(--optirisk)" stroke-width="12"
+                        stroke-dasharray="47.04 238.76" stroke-dashoffset="-191.70"
+                        transform="rotate(-90 50 50)"/>
+              </svg>
+              <div class="sent-big-num">
+                <div class="sent-big-val" style="color:var(--orange)">38.5<span style="font-size:12px;">%</span></div>
+                <div class="sent-big-lbl">ממתינים</div>
+              </div>
+            </div>
+            <div class="sent-legend">
+              <div class="sent-leg-row"><div class="sent-leg-dot" style="background:var(--orange)"></div><span class="sent-leg-pct" style="color:var(--orange)">38.5%</span><span class="sent-leg-name">ממתינים</span></div>
+              <div class="sent-leg-row"><div class="sent-leg-dot" style="background:var(--optidocs)"></div><span class="sent-leg-pct" style="color:var(--optidocs)">41.8%</span><span class="sent-leg-name">אושרו</span></div>
+              <div class="sent-leg-row"><div class="sent-leg-dot" style="background:var(--optirisk)"></div><span class="sent-leg-pct" style="color:var(--optirisk)">19.7%</span><span class="sent-leg-name">נדחו</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. MULTI-LINE -->
+        <div class="card card-multiline">
+          <div class="multiline-header">
+            <div class="card-title" style="margin:0;">קצב אישורים — חודשי</div>
+            <div class="multiline-legend">
+              <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--optitrack)"></div>עירייה</div>
+              <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--optidocs)"></div>תקשורת</div>
+              <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--orange)"></div>חשמל</div>
+              <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--optirisk)"></div>מים</div>
+            </div>
+          </div>
+          <div class="multiline-svg-wrap">
+            <svg class="multiline-svg" viewBox="0 0 480 130" preserveAspectRatio="none">
+              <line class="chart-grid-line" x1="30" y1="15" x2="470" y2="15"/>
+              <line class="chart-grid-line" x1="30" y1="45" x2="470" y2="45"/>
+              <line class="chart-grid-line" x1="30" y1="75" x2="470" y2="75"/>
+              <line class="chart-grid-line" x1="30" y1="105" x2="470" y2="105"/>
+              <text class="x-label" x="60" y="125">ספט</text>
+              <text class="x-label" x="122" y="125">אוק</text>
+              <text class="x-label" x="184" y="125">נוב</text>
+              <text class="x-label" x="246" y="125">דצמ</text>
+              <text class="x-label" x="308" y="125">ינו</text>
+              <text class="x-label" x="370" y="125">פבר</text>
+              <text class="x-label" x="432" y="125">מרץ</text>
+              <text class="y-label" x="26" y="19">350</text>
+              <text class="y-label" x="26" y="48">250</text>
+              <text class="y-label" x="26" y="78">150</text>
+              <text class="y-label" x="26" y="108">50</text>
+              <polyline class="chart-line animated-path animated-path-d1" stroke="var(--optitrack)"
+                        points="60,85 122,70 184,62 246,55 308,42 370,35 432,25"/>
+              <polyline class="chart-line animated-path animated-path-d2" stroke="var(--optidocs)"
+                        points="60,90 122,82 184,78 246,65 308,58 370,50 432,42"/>
+              <polyline class="chart-line animated-path animated-path-d2" stroke="var(--orange)"
+                        points="60,95 122,92 184,85 246,80 308,72 370,68 432,58"/>
+              <polyline class="chart-line animated-path animated-path-d3" stroke="var(--optirisk)"
+                        points="60,100 122,98 184,95 246,88 308,82 370,78 432,72"/>
+              <circle cx="432" cy="25" r="3" fill="var(--optitrack)" stroke="var(--bg-card)" stroke-width="2"/>
+              <circle cx="432" cy="42" r="3" fill="var(--optidocs)" stroke="var(--bg-card)" stroke-width="2"/>
+              <circle cx="432" cy="58" r="3" fill="var(--orange)" stroke="var(--bg-card)" stroke-width="2"/>
+              <circle cx="432" cy="72" r="3" fill="var(--optirisk)" stroke="var(--bg-card)" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 7. STAT BARS -->
+        <div class="card card-stat-right">
+          <div class="card-title" style="margin-bottom:8px;">מדדי ביצוע</div>
+          <div class="stat-mini">
+            <span class="stat-mini-label">תקציב מנוצל</span>
+            <span class="stat-mini-val" style="color:var(--optidocs)">68%</span>
+          </div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-bar-fill" style="background:var(--optidocs);" data-width="68"></div>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-label">לוח זמנים</span>
+            <span class="stat-mini-val" style="color:var(--orange)">52%</span>
+          </div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-bar-fill" style="background:var(--orange);" data-width="52"></div>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-label">קבלנים פעילים</span>
+            <span class="stat-mini-val" style="color:var(--optitrack)">27</span>
+          </div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-bar-fill" style="background:var(--optitrack);" data-width="77"></div>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-label">חריגות פתוחות</span>
+            <span class="stat-mini-val" style="color:var(--optirisk)">6</span>
+          </div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-bar-fill" style="background:var(--optirisk);" data-width="18"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-pills">
+        <div class="footer-pill"><div class="d" style="background:var(--optidocs)"></div> API 18ms</div>
+        <div class="footer-pill"><div class="d" style="background:var(--optitrack)"></div> v2.4.1</div>
+        <div class="footer-pill">312 אישורים · 27 קבלנים · 6 מקטעים</div>
+      </div>
+      <div class="footer-brand">OPTIPLAN CONFERENCE 2026</div>
+    </footer>
+
+  </div>
+</div>
+
+<!-- DESIGN SWITCHER -->
+<div class="palette-switcher">
+  <span class="ps-label">COLORS</span>
+  <button class="palette-btn" data-pal="a">A</button>
+  <button class="palette-btn" data-pal="b">B</button>
+  <button class="palette-btn" data-pal="c">C</button>
+  <button class="palette-btn active" data-pal="d">D</button>
+  <div class="ps-divider"></div>
+  <span class="ps-label">SKIN</span>
+  <button class="skin-btn active" data-skin="1">1</button>
+  <button class="skin-btn" data-skin="2">2</button>
+  <button class="skin-btn" data-skin="3">3</button>
+  <button class="skin-btn" data-skin="4">4</button>
+</div>
+
+<script>
+// Palette Switcher
+document.querySelectorAll('.palette-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.body.setAttribute('data-palette', btn.dataset.pal);
+    document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Skin Switcher
+document.querySelectorAll('.skin-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.body.setAttribute('data-skin', btn.dataset.skin);
+    document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Clock
+function tick() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit', hour12:false });
+}
+tick(); setInterval(tick, 30000);
+
+// Theme Toggle
+function toggleTheme() {
+  const body = document.body;
+  const current = body.getAttribute('data-theme');
+  body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+
+// Animate on load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.ring-fill').forEach(el => {
+      el.style.strokeDashoffset = el.dataset.target;
+    });
+    document.querySelectorAll('.stat-mini-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 400);
+});
+
+// Nav item click
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

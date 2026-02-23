@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #7c4dff, #ff4b8b, #4d96ff);
+            --dash-bg-dark: #27294d;
+            --dash-bg-light: #f5f6fa;
+            --sidebar-bg: #212344;
+            --card-bg: #32355d;
+            --text-light: #ffffff;
+            --text-muted: #8b8ea5;
+            --text-dark: #2d3436;
+            --red: #ff5e78;
+            --green: #4ade80;
+            --blue: #60a5fa;
+            --border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Main Dashboard Container */
+        .dashboard-container {
+            width: 1200px;
+            height: 750px;
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            background: var(--dash-bg-dark);
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 200px;
+            background: var(--sidebar-bg);
+            padding: 30px 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            object-fit: cover;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--red);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--sidebar-bg);
+        }
+
+        .user-profile h3 {
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-menu li {
+            padding: 12px 30px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu li i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-menu li:hover, .nav-menu li.active {
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--text-light);
+        }
+
+        .settings-link {
+            margin-top: auto;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .section-header h2 {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .chart-controls span {
+            cursor: pointer;
+        }
+
+        .chart-controls span.active {
+            color: var(--red);
+        }
+
+        .chart-container {
+            height: 180px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Wallet Cards */
+        .wallet-cards {
+            display: flex;
+            gap: 20px;
+        }
+
+        .card {
+            flex: 1;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h4 {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .card .amount {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card .crypto-amount {
+            font-size: 10px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .card i {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            font-size: 40px;
+            opacity: 0.2;
+        }
+
+        .card.bitcoin {
+            background: var(--red);
+            box-shadow: 0 10px 20px rgba(255, 94, 120, 0.3);
+        }
+
+        .card.ethereum {
+            background: var(--green);
+            box-shadow: 0 10px 20px rgba(74, 222, 128, 0.3);
+        }
+
+        .card.dash {
+            background: var(--blue);
+            box-shadow: 0 10px 20px rgba(96, 165, 250, 0.3);
+        }
+
+        /* Table */
+        .crypto-table {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-muted);
+            font-weight: 400;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .mini-chart {
+            width: 40px;
+            height: 15px;
+        }
+
+        /* --- Right Panel --- */
+        .right-panel {
+            width: 320px;
+            background: var(--dash-bg-light);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dash-bg-dark);
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            background: var(--dash-bg-dark);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel-section h3 {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .rate-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .rate-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .rate-item:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .rate-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .rate-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .rate-icon.btc { background: var(--red); box-shadow: 0 5px 15px rgba(255, 94, 120, 0.4); }
+        .rate-icon.eth { background: var(--green); box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
+        .rate-icon.dash { background: var(--blue); box-shadow: 0 5px 15px rgba(96, 165, 250, 0.4); }
+
+        .rate-price {
+            font-weight: 500;
+        }
+        
+        .rate-price i {
+            color: var(--red);
+            margin-left: 5px;
+            font-size: 10px;
+        }
+        .rate-price.up i {
+            color: var(--green);
+            transform: rotate(180deg);
+        }
+
+        .stats-donut-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+        }
+
+        .stats-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .stats-center-text i {
+            color: var(--red);
+            font-size: 10px;
+        }
+
+        .progress-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--text-dark);
+        }
+
+        .bar-bg {
+            flex: 1;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="avatar-container">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="User Avatar">
+                    <span class="notification-badge">3</span>
+                </div>
+                <h3>Robert Smith</h3>
+            </div>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li class="active"><i class="fa-solid fa-border-all"></i> Dashboard</li>
+                <li><i class="fa-solid fa-arrows-rotate"></i> Buy / Sell</li>
+                <li><i class="fa-regular fa-user"></i> Profile</li>
+                <li><i class="fa-solid fa-money-bill-transfer"></i> Trans</li>
+                <li><i class="fa-solid fa-chart-line"></i> Stats</li>
+                <li><i class="fa-solid fa-clock-rotate-left"></i> History</li>
+                <li class="settings-link"><i class="fa-solid fa-gear"></i> Settings</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            
+            <section>
+                <div class="section-header">
+                    <h2>Exchange</h2>
+                    <div class="chart-controls">
+                        <span class="active">Bitcoin</span>
+                        <span>Ethereum</span>
+                        <span>Dash</span>
+                        <span>2017 <i class="fa-solid fa-caret-down"></i></span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </section>
+
+            <section>
+                <div class="section-header">
+                    <h2>Wallet balance</h2>
+                </div>
+                <div class="wallet-cards">
+                    <div class="card bitcoin">
+                        <h4>Bitcoin</h4>
+                        <div class="amount">$1000</div>
+                        <div class="crypto-amount">0.0085641625 BTC</div>
+                        <i class="fa-brands fa-btc"></i>
+                    </div>
+                    <div class="card ethereum">
+                        <h4>Ethereum</h4>
+                        <div class="amount">$1000</div>
+                        <div class="crypto-amount">1.5 ETH</div>
+                        <i class="fa-brands fa-ethereum"></i>
+                    </div>
+                    <div class="card dash">
+                        <h4>Dash</h4>
+                        <div class="amount">$1000</div>
+                        <div class="crypto-amount">3.01 DASH</div>
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="section-header">
+                    <h2>Price and changes</h2>
+                </div>
+                <div class="crypto-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cryptos name</th>
+                                <th>Price</th>
+                                <th>Changes</th>
+                                <th>Stats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bitcoin</td>
+                                <td>$8,282.89</td>
+                                <td>-2.70% <i class="fa-solid fa-caret-down" style="color:var(--red)"></i></td>
+                                <td><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10'><path d='M0,5 Q5,10 10,5 T20,5 T30,0 T40,8' fill='none' stroke='%23ff5e78' stroke-width='2'/></svg>" class="mini-chart"></td>
+                            </tr>
+                            <tr>
+                                <td>Ethereum</td>
+                                <td>$8,282.89</td>
+                                <td>-2.70% <i class="fa-solid fa-caret-down" style="color:var(--red)"></i></td>
+                                <td><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10'><path d='M0,8 Q5,0 10,5 T20,2 T30,8 T40,5' fill='none' stroke='%234ade80' stroke-width='2'/></svg>" class="mini-chart"></td>
+                            </tr>
+                            <tr>
+                                <td>Dash</td>
+                                <td>$8,282.89</td>
+                                <td>-2.70% <i class="fa-solid fa-caret-down" style="color:var(--red)"></i></td>
+                                <td><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10'><path d='M0,5 Q5,10 10,5 T20,5 T30,0 T40,8' fill='none' stroke='%2360a5fa' stroke-width='2'/></svg>" class="mini-chart"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <aside class="right-panel">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+                cryptodesk
+            </div>
+
+            <div class="panel-section">
+                <h3>Todays Rate</h3>
+                <div class="rate-list">
+                    <div class="rate-item">
+                        <div class="rate-left">
+                            <div class="rate-icon btc"><i class="fa-brands fa-btc"></i></div>
+                            <span>Bitcoin</span>
+                        </div>
+                        <span class="rate-price">$8,282.89 <i class="fa-solid fa-caret-down"></i></span>
+                    </div>
+                    <div class="rate-item">
+                        <div class="rate-left">
+                            <div class="rate-icon eth"><i class="fa-brands fa-ethereum"></i></div>
+                            <span>Ethereum</span>
+                        </div>
+                        <span class="rate-price up">$692.61 <i class="fa-solid fa-caret-down"></i></span>
+                    </div>
+                    <div class="rate-item">
+                        <div class="rate-left">
+                            <div class="rate-icon dash"><i class="fa-solid fa-bolt"></i></div>
+                            <span>Dash</span>
+                        </div>
+                        <span class="rate-price">$391.95 <i class="fa-solid fa-caret-down"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3>Statistics</h3>
+                <div class="stats-donut-container">
+                    <canvas id="donutChart"></canvas>
+                    <div class="stats-center-text">49% <i class="fa-solid fa-caret-down"></i></div>
+                </div>
+
+                <div class="progress-bars">
+                    <div class="progress-item">
+                        <span>35%</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width: 35%; background: var(--blue);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <span>20%</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width: 20%; background: var(--green);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <span>8%</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width: 8%; background: var(--red);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        // --- 1. Sidebar Nav Click Logic ---
+        const navItems = document.querySelectorAll('#nav-menu li');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // --- 2. Chart.js Main Line Chart ---
+        const ctxMain = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctxMain, {
+            type: 'line',
+            data: {
+                labels: ['FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
+                datasets: [{
+                    label: 'Bitcoin Exchange',
+                    data: [12, 10, 15, 11, 16, 10, 14, 11, 16, 22],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    tension: 0.4, // smooth curves
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#ff5e78'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#ff5e78',
+                        padding: 10,
+                        displayColors: false,
+                        callbacks: {
+                            label: function() { return '$1700.89'; }, // mockup value
+                            title: function() { return ''; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: '#8b8ea5', font: { size: 10 } }
+                    },
+                    y: {
+                        display: false, // hiding y axis completely
+                        min: 5
+                    }
+                }
+            }
+        });
+
+        // --- 3. Chart.js Donut Chart ---
+        const ctxDonut = document.getElementById('donutChart').getContext('2d');
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bitcoin', 'Ethereum', 'Dash', 'Empty'],
+                datasets: [{
+                    data: [35, 20, 8, 37],
+                    backgroundColor: [
+                        '#60a5fa', // Blue
+                        '#4ade80', // Green
+                        '#ff5e78', // Red
+                        'transparent'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '85%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

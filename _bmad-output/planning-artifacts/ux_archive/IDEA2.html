@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Admin Dashboard Rebuild</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #171926;
+            --bg-sidebar: #1e2235;
+            --bg-card: #272c41;
+            --bg-card-hover: #2d334a;
+            --text-main: #f0f0f0;
+            --text-muted: #7b839f;
+            --border-color: #353b54;
+            
+            --color-pink: #ff3c6e;
+            --color-blue: #23b7e5;
+            --color-yellow: #fad732;
+            --color-green: #37c87a;
+            --color-purple: #9258ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .brand {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-profile {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #eee;
+        }
+        
+        .user-info {
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .quick-actions i {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .quick-actions i:hover {
+            color: white;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar { width: 4px; }
+        .nav-menu::-webkit-scrollbar-thumb { background: #454d6e; border-radius: 4px; }
+
+        .menu-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 15px 20px 5px;
+            font-weight: 600;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .menu-item:hover {
+            color: white;
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .menu-item.active {
+            color: var(--color-blue);
+        }
+
+        .submenu {
+            background-color: rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .submenu.open {
+            display: block;
+        }
+
+        .submenu .menu-item {
+            padding-left: 50px;
+            font-size: 0.85rem;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Topbar */
+        .topbar {
+            height: 70px;
+            background-color: var(--bg-sidebar);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left i, .topbar-right i {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        .topbar-left i:hover, .topbar-right i:hover {
+            color: white;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            color: white;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background-color: var(--bg-card-hover);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        /* Top Row Cards */
+        .overview-card, .team-card {
+            grid-column: span 3;
+            height: 320px;
+        }
+
+        /* Radial Chart CSS Approximation */
+        .radial-chart-container {
+            position: relative;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .radial-labels {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 0.75rem;
+            text-align: right;
+        }
+        
+        .radial-labels span:nth-child(1) { color: var(--color-pink); }
+        .radial-labels span:nth-child(2) { color: var(--color-blue); }
+        .radial-labels span:nth-child(3) { color: var(--color-yellow); }
+        .radial-labels span:nth-child(4) { color: var(--color-green); }
+
+        .svg-radial {
+            transform: rotate(-90deg);
+            width: 200px;
+            height: 200px;
+        }
+        .svg-radial circle {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+        }
+        .bg-circle { stroke: #353b54; }
+
+        /* Team Overview */
+        .team-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 220px;
+            padding-top: 20px;
+        }
+
+        .team-bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 18%;
+        }
+
+        .team-avatar {
+            width: 35px;
+            height: 35px;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin-bottom: -15px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--bg-card);
+        }
+
+        .bar-fill {
+            width: 100%;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 10px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: height 0.5s ease;
+        }
+
+        .bar-john { height: 140px; background-color: var(--color-green); }
+        .bar-damon { height: 200px; background-color: var(--color-yellow); }
+        .bar-patrick { height: 160px; background-color: var(--color-blue); }
+        .bar-mark { height: 100px; background-color: var(--color-pink); }
+
+        /* Middle Row Cards */
+        .stat-card {
+            grid-column: span 2;
+            border-radius: 12px;
+            color: white;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-card i {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .bg-pink { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+        .bg-blue { background: linear-gradient(135deg, #36d1dc, #5b86e5); }
+        .bg-green { background: linear-gradient(135deg, #11998e, #38ef7d); }
+
+        /* Bottom Row Cards */
+        .bottom-card {
+            grid-column: span 3;
+            height: 350px;
+        }
+
+        .slider-control {
+            width: 100%;
+            height: 4px;
+            background-color: var(--border-color);
+            margin: 10px 0 30px;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .slider-control::before, .slider-control::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-control::before { left: 0; }
+        .slider-control::after { right: 0; }
+        
+        /* Circular Bar Chart Simulation */
+        .revenue-chart {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .circle-bar {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            width: 15px;
+            border-radius: 10px;
+        }
+
+        /* Scatter Plot Simulation */
+        .scatter-chart {
+            height: 220px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-left: 30px;
+        }
+
+        .y-axis {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .scatter-line {
+            width: 2px;
+            background-color: var(--border-color);
+            position: relative;
+        }
+
+        .scatter-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            left: -3px;
+        }
+
+        .dot-purple { background-color: var(--color-purple); }
+        .dot-green { background-color: var(--color-green); }
+
+        /* Floating action button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-yellow);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(250, 215, 50, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .overview-card, .team-card, .bottom-card { grid-column: span 6; }
+            .stat-card { grid-column: span 3; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); position: absolute; z-index: 100; height: 100%; }
+            .stat-card { grid-column: span 6; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-chart-pie"></i> Power BIAdmin
+        </div>
+        
+        <div class="user-profile">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Johen" alt="User Avatar">
+            <div class="user-info">
+                <div>Johen Doe <i class="fa-solid fa-caret-down" style="font-size: 0.8em;"></i></div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <i class="fa-solid fa-search"></i>
+            <i class="fa-regular fa-bell"></i>
+            <i class="fa-regular fa-comment"></i>
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
+
+        <div class="nav-menu">
+            <div class="menu-item" onclick="toggleSubmenu('dashboardMenu')" style="justify-content: space-between;">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <i class="fa-solid fa-border-all"></i> Dashboard
+                </div>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i>
+            </div>
+            
+            <div class="submenu open" id="dashboardMenu">
+                <div class="menu-item"><i class="fa-regular fa-circle" style="font-size: 0.4rem;"></i> Dashboard 1</div>
+                <div class="menu-item"><i class="fa-regular fa-circle" style="font-size: 0.4rem;"></i> Dashboard 2</div>
+                <div class="menu-item active"><i class="fa-solid fa-circle" style="font-size: 0.4rem;"></i> Dashboard 3</div>
+                <div class="menu-item"><i class="fa-regular fa-circle" style="font-size: 0.4rem;"></i> Dashboard 4</div>
+                <div class="menu-item"><i class="fa-regular fa-circle" style="font-size: 0.4rem;"></i> Dashboard 5</div>
+            </div>
+
+            <div class="menu-item">
+                <i class="fa-solid fa-grip"></i> Apps & Pages <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i>
+            </div>
+
+            <div class="menu-category">USER INTERFACE</div>
+            <div class="menu-item"><i class="fa-solid fa-pen-ruler"></i> Utilities <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+            <div class="menu-item"><i class="fa-solid fa-puzzle-piece"></i> Components <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+            <div class="menu-item"><i class="fa-solid fa-table-list"></i> Forms & Tables <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+            <div class="menu-item"><i class="fa-solid fa-chart-line"></i> Charts <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+            <div class="menu-item"><i class="fa-solid fa-lock"></i> Login & Error <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+
+            <div class="menu-category">COLLECTIONS</div>
+            <div class="menu-item"><i class="fa-solid fa-layer-group"></i> Widgets <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+            <div class="menu-item"><i class="fa-solid fa-window-restore"></i> Modals <i class="fa-solid fa-chevron-right" style="margin-left: auto; font-size: 0.7rem;"></i></div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <i class="fa-solid fa-expand" onclick="toggleSidebar()"></i>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search">
+                    <i class="fa-solid fa-search"></i>
+                </div>
+                <i class="fa-regular fa-bell"></i>
+                <i class="fa-regular fa-user"></i>
+                <i class="fa-solid fa-braille"></i>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            
+            <div class="card overview-card">
+                <div class="card-title">Overview</div>
+                <div class="radial-chart-container">
+                    <div class="radial-labels">
+                        <span>Human Resources</span>
+                        <span>Distribution</span>
+                        <span>Marketing</span>
+                        <span>Research</span>
+                    </div>
+                    <svg class="svg-radial" viewBox="0 0 120 120">
+                        <circle class="bg-circle" cx="60" cy="60" r="50"></circle>
+                        <circle class="bg-circle" cx="60" cy="60" r="35"></circle>
+                        <circle class="bg-circle" cx="60" cy="60" r="20"></circle>
+                        
+                        <circle cx="60" cy="60" r="50" stroke="var(--color-pink)" stroke-dasharray="314" stroke-dashoffset="100"></circle>
+                        <circle cx="60" cy="60" r="35" stroke="var(--color-blue)" stroke-dasharray="219" stroke-dashoffset="60"></circle>
+                        <circle cx="60" cy="60" r="20" stroke="var(--color-yellow)" stroke-dasharray="125" stroke-dashoffset="20"></circle>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="card team-card">
+                <div class="card-title">Team Overview</div>
+                <div class="team-bars">
+                    <div class="team-bar-col">
+                        <div class="team-avatar">👨</div>
+                        <div class="bar-fill bar-john">John</div>
+                    </div>
+                    <div class="team-bar-col">
+                        <div class="team-avatar">🧔</div>
+                        <div class="bar-fill bar-damon">Damon</div>
+                    </div>
+                    <div class="team-bar-col">
+                        <div class="team-avatar">👦</div>
+                        <div class="bar-fill bar-patrick">Patrick</div>
+                    </div>
+                    <div class="team-bar-col">
+                        <div class="team-avatar">👱‍♂️</div>
+                        <div class="bar-fill bar-mark">Mark</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card stat-card bg-pink" onclick="alert('Shopping Cart Clicked!')">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <h3>Shopping Cart</h3>
+                <p>Duis, Faucibus, Lorem, Vitae</p>
+            </div>
+
+            <div class="card stat-card bg-blue" onclick="alert('Apartments Clicked!')">
+                <i class="fa-solid fa-building"></i>
+                <h3>Apartamentos</h3>
+                <p>Duis, Faucibus, Lorem, Vitae</p>
+            </div>
+
+            <div class="card stat-card bg-green" onclick="alert('Sales Stats Clicked!')">
+                <i class="fa-solid fa-chart-column"></i>
+                <h3>Sales Stats</h3>
+                <p>70% Up for 2019</p>
+            </div>
+
+            <div class="card bottom-card">
+                <div class="card-title">Revenue</div>
+                <div class="slider-control"></div>
+                <div class="revenue-chart" id="revenueContainer">
+                    </div>
+            </div>
+
+            <div class="card bottom-card">
+                <div class="card-title">Country Overview</div>
+                <div class="slider-control"></div>
+                <div class="scatter-chart">
+                    <div class="y-axis">
+                        <span>110</span><span>105</span><span>100</span><span>95</span><span>90</span>
+                    </div>
+                    <div class="scatter-data" id="scatterContainer" style="display: flex; width: 100%; height: 100%; justify-content: space-around; padding-left: 20px;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="fab" onclick="alert('Action button triggered!')">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <script>
+        // Toggle Sidebar Submenu
+        function toggleSubmenu(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+
+        // Generate Circular Bar Chart for Revenue
+        const revenueContainer = document.getElementById('revenueContainer');
+        const colors = ['#37c87a', '#23b7e5', '#ff3c6e', '#9258ff', '#fad732'];
+        
+        for (let i = 0; i < 24; i++) {
+            // Leave a gap at the bottom
+            if (i > 8 && i < 15) continue; 
+            
+            const bar = document.createElement('div');
+            bar.className = 'circle-bar';
+            
+            // Randomize height and color to mimic the image
+            const height = Math.floor(Math.random() * 60) + 20;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            bar.style.height = `${height}px`;
+            bar.style.backgroundColor = color;
+            bar.style.transform = `rotate(${i * 15}deg) translateY(-80px)`;
+            
+            revenueContainer.appendChild(bar);
+        }
+
+        // Generate Scatter Plot for Country Overview
+        const scatterContainer = document.getElementById('scatterContainer');
+        for (let i = 0; i < 20; i++) {
+            const line = document.createElement('div');
+            line.className = 'scatter-line';
+            
+            // Randomize height (20% to 90%)
+            const height = Math.floor(Math.random() * 70) + 20;
+            line.style.height = `${height}%`;
+            
+            // Add dots
+            const dot1 = document.createElement('div');
+            dot1.className = 'scatter-dot dot-purple';
+            dot1.style.top = '0';
+            
+            const dot2 = document.createElement('div');
+            dot2.className = 'scatter-dot dot-green';
+            dot2.style.bottom = `${Math.floor(Math.random() * 50)}%`;
+            
+            line.appendChild(dot1);
+            line.appendChild(dot2);
+            scatterContainer.appendChild(line);
+        }
+
+        // Simple Mobile Sidebar Toggle (for standard view)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if(sidebar.style.transform === 'translateX(-100%)') {
+                sidebar.style.transform = 'translateX(0)';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        }
+    </script>
+</body>
+</html>

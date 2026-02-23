@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+<title>OptiPlan — מרכז בקרה</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+:root {
+  /* Deep navy palette */
+  --bg-base: #0b1022;
+  --bg-card: #131a36;
+  --bg-card-light: #1a2345;
+  --bg-card-hover: #1e2a50;
+  --border-card: rgba(255,255,255,0.06);
+  --border-card-light: rgba(255,255,255,0.09);
+  
+  --text-white: #edf0f7;
+  --text-secondary: rgba(255,255,255,0.55);
+  --text-muted: rgba(255,255,255,0.30);
+  
+  --blue: #4a90f7;
+  --green: #2dd4a0;
+  --red: #f75a5a;
+  --orange: #f7a84a;
+  --purple: #9b6bf7;
+  --yellow: #f7d94a;
+  --cyan: #4ad4f7;
+  --pink: #f74a9b;
+  
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-card-hover: 0 8px 40px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+  
+  --radius: 12px;
+  --font-he: 'Heebo', sans-serif;
+  --font-en: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width: 1024px;
+  height: 768px;
+  overflow: hidden;
+  font-family: var(--font-he);
+  background: var(--bg-base);
+  color: var(--text-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════ BACKGROUND ══════════ */
+body {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(74,144,247,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(155,107,247,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(45,212,160,0.03) 0%, transparent 50%),
+    linear-gradient(170deg, #0b1022 0%, #0e1430 40%, #111838 70%, #0b1022 100%);
+}
+
+/* ══════════ DASHBOARD SHELL ══════════ */
+.dashboard {
+  width: 1024px;
+  height: 768px;
+  padding: 16px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ══════════ HEADER ══════════ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-badge {
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 20px rgba(74,144,247,0.3);
+  font-family: var(--font-en);
+}
+.brand-title {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(45,212,160,0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.8); }
+}
+
+/* ══════════ CARD GRID ══════════ */
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 260px 1fr 1fr 200px;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px;
+  min-height: 0;
+}
+
+/* ══════════ CARD BASE ══════════ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-card-light);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 10%, rgba(255,255,255,0.06) 50%, transparent 90%);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-title .tag {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding: 2px 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+}
+
+/* ══════════ STAGGER DELAYS ══════════ */
+.card:nth-child(1)  { animation-delay: 0.05s; }
+.card:nth-child(2)  { animation-delay: 0.10s; }
+.card:nth-child(3)  { animation-delay: 0.15s; }
+.card:nth-child(4)  { animation-delay: 0.20s; }
+.card:nth-child(5)  { animation-delay: 0.25s; }
+.card:nth-child(6)  { animation-delay: 0.30s; }
+.card:nth-child(7)  { animation-delay: 0.35s; }
+.card:nth-child(8)  { animation-delay: 0.40s; }
+
+/* ══════════ CARD 1: CONCENTRIC RINGS — spans 2 rows ══════════ */
+.card-rings {
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+}
+.rings-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.rings-svg {
+  width: 160px;
+  height: 160px;
+}
+.ring-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.05);
+}
+.ring-fill {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rings-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  margin-top: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+.legend-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-pct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-white);
+  margin-left: 2px;
+}
+
+/* ══════════ CARD 2: DONUT — Media Types style ══════════ */
+.card-donut {
+  display: flex;
+  flex-direction: column;
+}
+.donut-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.donut-svg-wrap {
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  position: relative;
+}
+.donut-svg { width: 110px; height: 110px; }
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.donut-center-val {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+.donut-center-lbl {
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.donut-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.donut-leg-dot {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.donut-leg-pct {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 38px;
+  direction: ltr;
+}
+.donut-leg-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* ══════════ CARD 3: STATISTICAL FIGURE — Line chart ══════════ */
+.card-line {
+  display: flex;
+  flex-direction: column;
+}
+.line-chart-wrap {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+.line-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+.chart-grid-line {
+  stroke: rgba(255,255,255,0.04);
+  stroke-width: 0.5;
+}
+.chart-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-area {
+  opacity: 0.1;
+}
+.chart-dot {
+  stroke-width: 2;
+  stroke: var(--bg-card);
+}
+.line-legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.line-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.line-leg-bar {
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* ══════════ CARD 4: SENTIMENT — Big number donut ══════════ */
+.card-sentiment {
+  display: flex;
+  flex-direction: column;
+}
+.sentiment-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sent-donut-wrap {
+  width: 100px; height: 100px;
+  flex-shrink: 0;
+  position: relative;
+}
+.sent-big-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.sent-big-val {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  direction: ltr;
+}
+.sent-big-lbl {
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.sent-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sent-leg-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sent-leg-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.sent-leg-pct {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 36px;
+  direction: ltr;
+}
+.sent-leg-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* ══════════ CARD 5: MULTI-LINE CHART — spans 2 cols ══════════ */
+.card-multiline {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+}
+.multiline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.multiline-legend {
+  display: flex;
+  gap: 10px;
+}
+.ml-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.ml-leg-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.multiline-svg-wrap {
+  flex: 1;
+  min-height: 0;
+}
+.multiline-svg {
+  width: 100%;
+  height: 100%;
+}
+.x-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: var(--text-muted);
+}
+.y-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: var(--text-muted);
+  text-anchor: end;
+}
+
+/* ══════════ CARD 6: FEED / UPDATES — right side spans 2 rows ══════════ */
+.card-feed {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+}
+.feed-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+.feed-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: flex-start;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.feed-item:hover {
+  background: rgba(255,255,255,0.02);
+}
+.feed-item:last-child { border: none; }
+.feed-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+.feed-body {
+  flex: 1;
+  min-width: 0;
+}
+.feed-name {
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.feed-time {
+  font-size: 8px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-weight: 400;
+  direction: ltr;
+}
+.feed-desc {
+  font-size: 9px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.feed-badge {
+  font-size: 8px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+  margin-top: 3px;
+  display: inline-block;
+}
+
+/* ══════════ CARD 7: SIDEBAR STAT CARD ══════════ */
+.card-stat-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.stat-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.stat-mini-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+.stat-mini-val {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 500;
+  direction: ltr;
+}
+.stat-mini-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+.stat-mini-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+}
+
+/* ══════════ FOOTER ══════════ */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.footer-left {
+  display: flex;
+  gap: 14px;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+.footer-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.footer-pill .d {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+}
+.footer-brand {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+/* ══════════ ANIMATION UTILITIES ══════════ */
+.animated-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+.animated-path-d1 { animation-delay: 0.3s; }
+.animated-path-d2 { animation-delay: 0.5s; }
+.animated-path-d3 { animation-delay: 0.7s; }
+
+/* Donut segment animation */
+.donut-seg {
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-badge">OPTIPLAN</div>
+      <div class="brand-title">מרכז בקרה — קו ירוק תל אביב</div>
+    </div>
+    <div class="header-meta">
+      <div class="live-dot"></div>
+      <span id="clock">22:45</span>
+      <span>עדכון שוטף</span>
+    </div>
+  </header>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- ═══ 1. CONCENTRIC RINGS — מקטעים (spans 2 rows) ═══ -->
+    <div class="card card-rings">
+      <div class="card-title">
+        התקדמות מקטעים
+        <span class="tag">A1–A6</span>
+      </div>
+      <div class="rings-wrap">
+        <svg class="rings-svg" viewBox="0 0 160 160">
+          <!-- A1 ring -->
+          <circle class="ring-track" cx="80" cy="80" r="70" stroke-width="8"/>
+          <circle class="ring-fill" cx="80" cy="80" r="70" stroke-width="8"
+                  stroke="var(--blue)"
+                  stroke-dasharray="439.82"
+                  stroke-dashoffset="439.82"
+                  data-target="158.34"
+                  transform="rotate(-90 80 80)"
+                  filter="url(#glowBlue)"/>
+          <!-- A2 ring -->
+          <circle class="ring-track" cx="80" cy="80" r="58" stroke-width="8"/>
+          <circle class="ring-fill" cx="80" cy="80" r="58" stroke-width="8"
+                  stroke="var(--green)"
+                  stroke-dasharray="364.42"
+                  stroke-dashoffset="364.42"
+                  data-target="80.17"
+                  transform="rotate(-90 80 80)"/>
+          <!-- A3 ring -->
+          <circle class="ring-track" cx="80" cy="80" r="46" stroke-width="8"/>
+          <circle class="ring-fill" cx="80" cy="80" r="46" stroke-width="8"
+                  stroke="var(--orange)"
+                  stroke-dasharray="289.03"
+                  stroke-dashoffset="289.03"
+                  data-target="138.73"
+                  transform="rotate(-90 80 80)"/>
+          <!-- A4 ring -->
+          <circle class="ring-track" cx="80" cy="80" r="34" stroke-width="8"/>
+          <circle class="ring-fill" cx="80" cy="80" r="34" stroke-width="8"
+                  stroke="var(--red)"
+                  stroke-dasharray="213.63"
+                  stroke-dashoffset="213.63"
+                  data-target="102.54"
+                  transform="rotate(-90 80 80)"/>
+          <!-- A5 ring -->
+          <circle class="ring-track" cx="80" cy="80" r="22" stroke-width="8"/>
+          <circle class="ring-fill" cx="80" cy="80" r="22" stroke-width="8"
+                  stroke="var(--purple)"
+                  stroke-dasharray="138.23"
+                  stroke-dashoffset="138.23"
+                  data-target="41.47"
+                  transform="rotate(-90 80 80)"/>
+          <defs>
+            <filter id="glowBlue">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+        </svg>
+      </div>
+      <div class="rings-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--blue)"></div>
+          <span class="legend-pct">64%</span> A1
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--green)"></div>
+          <span class="legend-pct">78%</span> A2
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--orange)"></div>
+          <span class="legend-pct">52%</span> A3
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--red)"></div>
+          <span class="legend-pct">52%</span> A4
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--purple)"></div>
+          <span class="legend-pct">70%</span> A5
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--cyan)"></div>
+          <span class="legend-pct">45%</span> A6
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 2. DONUT — סוגי אישורים ═══ -->
+    <div class="card card-donut">
+      <div class="card-title">סוגי אישורים</div>
+      <div class="donut-content">
+        <div class="donut-svg-wrap">
+          <svg class="donut-svg" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="18"/>
+            <!-- Segment 1: Municipality 35% -->
+            <circle cx="55" cy="55" r="40" fill="none"
+                    stroke="var(--blue)" stroke-width="18"
+                    stroke-dasharray="87.96 251.33" stroke-dashoffset="0"
+                    transform="rotate(-90 55 55)" class="donut-seg"/>
+            <!-- Segment 2: Telecom 25% -->
+            <circle cx="55" cy="55" r="40" fill="none"
+                    stroke="var(--green)" stroke-width="18"
+                    stroke-dasharray="62.83 251.33" stroke-dashoffset="-87.96"
+                    transform="rotate(-90 55 55)" class="donut-seg"/>
+            <!-- Segment 3: Electric 22% -->
+            <circle cx="55" cy="55" r="40" fill="none"
+                    stroke="var(--orange)" stroke-width="18"
+                    stroke-dasharray="55.29 251.33" stroke-dashoffset="-150.80"
+                    transform="rotate(-90 55 55)" class="donut-seg"/>
+            <!-- Segment 4: Water 18% -->
+            <circle cx="55" cy="55" r="40" fill="none"
+                    stroke="var(--red)" stroke-width="18"
+                    stroke-dasharray="45.24 251.33" stroke-dashoffset="-206.09"
+                    transform="rotate(-90 55 55)" class="donut-seg"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-val">312</div>
+            <div class="donut-center-lbl">סה״כ</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="donut-leg-item">
+            <div class="donut-leg-dot" style="background:var(--blue)"></div>
+            <span class="donut-leg-pct" style="color:var(--blue)">35%</span>
+            <span class="donut-leg-name">עירייה</span>
+          </div>
+          <div class="donut-leg-item">
+            <div class="donut-leg-dot" style="background:var(--green)"></div>
+            <span class="donut-leg-pct" style="color:var(--green)">25%</span>
+            <span class="donut-leg-name">תקשורת</span>
+          </div>
+          <div class="donut-leg-item">
+            <div class="donut-leg-dot" style="background:var(--orange)"></div>
+            <span class="donut-leg-pct" style="color:var(--orange)">22%</span>
+            <span class="donut-leg-name">חשמל</span>
+          </div>
+          <div class="donut-leg-item">
+            <div class="donut-leg-dot" style="background:var(--red)"></div>
+            <span class="donut-leg-pct" style="color:var(--red)">18%</span>
+            <span class="donut-leg-name">מים</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 3. LINE CHART — מגמת ביצוע ═══ -->
+    <div class="card card-line">
+      <div class="card-title">
+        מגמת ביצוע שבועית
+        <span class="tag">שבועות 1–8</span>
+      </div>
+      <div class="line-chart-wrap">
+        <svg class="line-chart-svg" viewBox="0 0 260 110" preserveAspectRatio="none">
+          <!-- Grid -->
+          <line class="chart-grid-line" x1="0" y1="27" x2="260" y2="27"/>
+          <line class="chart-grid-line" x1="0" y1="55" x2="260" y2="55"/>
+          <line class="chart-grid-line" x1="0" y1="82" x2="260" y2="82"/>
+          <!-- Y labels -->
+          <text class="y-label" x="18" y="15">100%</text>
+          <text class="y-label" x="18" y="58">50%</text>
+          <text class="y-label" x="18" y="100">0%</text>
+          <!-- Blue line: completion rate -->
+          <polyline class="chart-line animated-path animated-path-d1"
+                    stroke="var(--blue)"
+                    points="30,75 62,60 94,68 126,52 158,40 190,35 222,28 250,22"/>
+          <polygon class="chart-area" fill="var(--blue)"
+                   points="30,75 62,60 94,68 126,52 158,40 190,35 222,28 250,22 250,100 30,100"/>
+          <!-- Red line: issues -->
+          <polyline class="chart-line animated-path animated-path-d2"
+                    stroke="var(--red)"
+                    points="30,85 62,78 94,82 126,70 158,75 190,62 222,65 250,55"/>
+          <!-- Dots -->
+          <circle class="chart-dot" cx="250" cy="22" r="3" fill="var(--blue)" stroke="var(--bg-card)"/>
+          <circle class="chart-dot" cx="250" cy="55" r="3" fill="var(--red)" stroke="var(--bg-card)"/>
+        </svg>
+      </div>
+      <div class="line-legend">
+        <div class="line-leg-item">
+          <div class="line-leg-bar" style="background:var(--blue)"></div>
+          ביצוע
+        </div>
+        <div class="line-leg-item">
+          <div class="line-leg-bar" style="background:var(--red)"></div>
+          חריגות
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 4. SIDEBAR: FEED — spans 2 rows ═══ -->
+    <div class="card card-feed">
+      <div class="card-title">
+        עדכונים אחרונים
+        <span class="tag">LIVE</span>
+      </div>
+      <div class="feed-list">
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:var(--blue)">דר</div>
+          <div class="feed-body">
+            <div class="feed-name">דוד רוזנברג <span class="feed-time">3 דק׳</span></div>
+            <div class="feed-desc">אישור עירייה למקטע A2 התקבל — ניתן להתחיל ביצוע שלב ב׳</div>
+            <div class="feed-badge" style="background:rgba(45,212,160,0.15);color:var(--green);">אושר ✓</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:var(--orange)">מכ</div>
+          <div class="feed-body">
+            <div class="feed-name">מיכל כהן <span class="feed-time">12 דק׳</span></div>
+            <div class="feed-desc">חריגת לוח זמנים במקטע A5 — נדרש תיאום מחדש עם בזק</div>
+            <div class="feed-badge" style="background:rgba(247,88,88,0.15);color:var(--red);">דחוף</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:var(--purple)">אל</div>
+          <div class="feed-body">
+            <div class="feed-name">אלון לוי <span class="feed-time">28 דק׳</span></div>
+            <div class="feed-desc">Opium AI זיהה צוואר בקבוק בתיאום חברת חשמל — המלצה נשלחה</div>
+            <div class="feed-badge" style="background:rgba(155,107,247,0.15);color:var(--purple);">AI</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:var(--green)">שב</div>
+          <div class="feed-body">
+            <div class="feed-name">שרה בנימין <span class="feed-time">45 דק׳</span></div>
+            <div class="feed-desc">הושלם תיאום תשתיות מים מקטע A3 — ממתין לאישור סופי</div>
+            <div class="feed-badge" style="background:rgba(74,144,247,0.15);color:var(--blue);">בהמתנה</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:var(--cyan)">יע</div>
+          <div class="feed-body">
+            <div class="feed-name">יעל עמית <span class="feed-time">1 שעה</span></div>
+            <div class="feed-desc">עדכון תקציבי Q1 — חסכון של 12% מול תחזית מקורית</div>
+            <div class="feed-badge" style="background:rgba(45,212,160,0.15);color:var(--green);">תקציב ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 5. SENTIMENT / STATUS — Big number ═══ -->
+    <div class="card card-sentiment">
+      <div class="card-title">סטטוס אישורים</div>
+      <div class="sentiment-body">
+        <div class="sent-donut-wrap">
+          <svg viewBox="0 0 100 100" width="100" height="100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="12"/>
+            <!-- Approved 41.8% green -->
+            <circle cx="50" cy="50" r="38" fill="none"
+                    stroke="var(--green)" stroke-width="12"
+                    stroke-dasharray="99.78 238.76" stroke-dashoffset="0"
+                    transform="rotate(-90 50 50)"/>
+            <!-- Pending 38.5% orange -->
+            <circle cx="50" cy="50" r="38" fill="none"
+                    stroke="var(--orange)" stroke-width="12"
+                    stroke-dasharray="91.92 238.76" stroke-dashoffset="-99.78"
+                    transform="rotate(-90 50 50)"/>
+            <!-- Rejected 19.7% red -->
+            <circle cx="50" cy="50" r="38" fill="none"
+                    stroke="var(--red)" stroke-width="12"
+                    stroke-dasharray="47.04 238.76" stroke-dashoffset="-191.70"
+                    transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="sent-big-num">
+            <div class="sent-big-val" style="color:var(--orange)">38.5<span style="font-size:12px;">%</span></div>
+            <div class="sent-big-lbl">ממתינים</div>
+          </div>
+        </div>
+        <div class="sent-legend">
+          <div class="sent-leg-row">
+            <div class="sent-leg-dot" style="background:var(--orange)"></div>
+            <span class="sent-leg-pct" style="color:var(--orange)">38.5%</span>
+            <span class="sent-leg-name">ממתינים</span>
+          </div>
+          <div class="sent-leg-row">
+            <div class="sent-leg-dot" style="background:var(--green)"></div>
+            <span class="sent-leg-pct" style="color:var(--green)">41.8%</span>
+            <span class="sent-leg-name">אושרו</span>
+          </div>
+          <div class="sent-leg-row">
+            <div class="sent-leg-dot" style="background:var(--red)"></div>
+            <span class="sent-leg-pct" style="color:var(--red)">19.7%</span>
+            <span class="sent-leg-name">נדחו</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 6. MULTI-LINE CHART — spans 2 cols ═══ -->
+    <div class="card card-multiline">
+      <div class="multiline-header">
+        <div class="card-title" style="margin:0;">קצב אישורים — חודשי</div>
+        <div class="multiline-legend">
+          <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--blue)"></div>עירייה</div>
+          <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--green)"></div>תקשורת</div>
+          <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--orange)"></div>חשמל</div>
+          <div class="ml-leg-item"><div class="ml-leg-dot" style="background:var(--red)"></div>מים</div>
+        </div>
+      </div>
+      <div class="multiline-svg-wrap">
+        <svg class="multiline-svg" viewBox="0 0 480 130" preserveAspectRatio="none">
+          <!-- Grid -->
+          <line class="chart-grid-line" x1="30" y1="15" x2="470" y2="15"/>
+          <line class="chart-grid-line" x1="30" y1="45" x2="470" y2="45"/>
+          <line class="chart-grid-line" x1="30" y1="75" x2="470" y2="75"/>
+          <line class="chart-grid-line" x1="30" y1="105" x2="470" y2="105"/>
+          <!-- X labels -->
+          <text class="x-label" x="60" y="125">ספט</text>
+          <text class="x-label" x="122" y="125">אוק</text>
+          <text class="x-label" x="184" y="125">נוב</text>
+          <text class="x-label" x="246" y="125">דצמ</text>
+          <text class="x-label" x="308" y="125">ינו</text>
+          <text class="x-label" x="370" y="125">פבר</text>
+          <text class="x-label" x="432" y="125">מרץ</text>
+          <!-- Y labels -->
+          <text class="y-label" x="26" y="19">350</text>
+          <text class="y-label" x="26" y="48">250</text>
+          <text class="y-label" x="26" y="78">150</text>
+          <text class="y-label" x="26" y="108">50</text>
+          <!-- Blue: Municipality -->
+          <polyline class="chart-line animated-path animated-path-d1" stroke="var(--blue)"
+                    points="60,85 122,70 184,62 246,55 308,42 370,35 432,25"/>
+          <!-- Green: Telecom -->
+          <polyline class="chart-line animated-path animated-path-d2" stroke="var(--green)"
+                    points="60,90 122,82 184,78 246,65 308,58 370,50 432,42"/>
+          <!-- Orange: Electric -->
+          <polyline class="chart-line animated-path animated-path-d2" stroke="var(--orange)"
+                    points="60,95 122,92 184,85 246,80 308,72 370,68 432,58"/>
+          <!-- Red: Water -->
+          <polyline class="chart-line animated-path animated-path-d3" stroke="var(--red)"
+                    points="60,100 122,98 184,95 246,88 308,82 370,78 432,72"/>
+          <!-- End dots -->
+          <circle cx="432" cy="25" r="3" fill="var(--blue)" stroke="var(--bg-card)" stroke-width="2"/>
+          <circle cx="432" cy="42" r="3" fill="var(--green)" stroke="var(--bg-card)" stroke-width="2"/>
+          <circle cx="432" cy="58" r="3" fill="var(--orange)" stroke="var(--bg-card)" stroke-width="2"/>
+          <circle cx="432" cy="72" r="3" fill="var(--red)" stroke="var(--bg-card)" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ═══ 7. RIGHT SIDEBAR STATS ═══ -->
+    <div class="card card-stat-right">
+      <div class="card-title" style="margin-bottom:6px;">מדדי ביצוע</div>
+
+      <div class="stat-mini">
+        <span class="stat-mini-label">תקציב מנוצל</span>
+        <span class="stat-mini-val" style="color:var(--green)">68%</span>
+      </div>
+      <div class="stat-mini-bar">
+        <div class="stat-mini-bar-fill" style="background:var(--green);" data-width="68"></div>
+      </div>
+
+      <div class="stat-mini">
+        <span class="stat-mini-label">לוח זמנים</span>
+        <span class="stat-mini-val" style="color:var(--orange)">52%</span>
+      </div>
+      <div class="stat-mini-bar">
+        <div class="stat-mini-bar-fill" style="background:var(--orange);" data-width="52"></div>
+      </div>
+
+      <div class="stat-mini">
+        <span class="stat-mini-label">קבלנים פעילים</span>
+        <span class="stat-mini-val" style="color:var(--blue)">27</span>
+      </div>
+      <div class="stat-mini-bar">
+        <div class="stat-mini-bar-fill" style="background:var(--blue);" data-width="77"></div>
+      </div>
+
+      <div class="stat-mini">
+        <span class="stat-mini-label">חריגות פתוחות</span>
+        <span class="stat-mini-val" style="color:var(--red)">6</span>
+      </div>
+      <div class="stat-mini-bar">
+        <div class="stat-mini-bar-fill" style="background:var(--red);" data-width="18"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      <div class="footer-pill"><div class="d" style="background:var(--green)"></div> API 18ms</div>
+      <div class="footer-pill"><div class="d" style="background:var(--blue)"></div> v2.4.1</div>
+      <div class="footer-pill">312 אישורים · 27 קבלנים · 6 מקטעים</div>
+    </div>
+    <div class="footer-brand">OPTIPLAN CONFERENCE 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// Clock
+function tick() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit', hour12:false });
+}
+tick(); setInterval(tick, 30000);
+
+// Animate on load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    // Concentric rings
+    document.querySelectorAll('.ring-fill').forEach(el => {
+      el.style.strokeDashoffset = el.dataset.target;
+    });
+    // Mini bars
+    document.querySelectorAll('.stat-mini-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 400);
+});
+</script>
+
+</body>
+</html>
