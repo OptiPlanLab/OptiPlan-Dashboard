@@ -613,9 +613,9 @@
       pointer-events: none;
       opacity: 0.4;
       background:
-        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(9,145,243,0.05) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(246,174,45,0.04) 0%, transparent 55%),
-        radial-gradient(ellipse 40% 35% at 50% 50%, rgba(67,149,253,0.03) 0%, transparent 50%);
+        radial-gradient(ellipse 60% 50% at 20% 20%, color-mix(in srgb, var(--optitrack) 5%, transparent) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, color-mix(in srgb, var(--optibiz) 4%, transparent) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 35% at 50% 50%, color-mix(in srgb, var(--optidocs) 3%, transparent) 0%, transparent 50%);
       background-size: 200% 200%;
       animation: ambient-gradient 20s ease-in-out infinite;
       will-change: background-position;
@@ -732,6 +732,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
     }
@@ -1624,8 +1625,8 @@
     function executeIdleReset() {
       var currentLayer = OptiPlan.state.currentLayer;
 
-      if (currentLayer === 'overview') {
-        // Already in overview — nothing to reset
+      if (currentLayer === 'overview' || currentLayer === 'idle') {
+        // Already at rest — nothing to reset
         return;
       }
 
@@ -1637,11 +1638,11 @@
 
       if (currentLayer === 'module-expand') {
         OptiPlan.state.transition('overview');
+        console.log('[OptiPlan Idle] Auto-reset from module-expand to overview');
       } else if (currentLayer === 'card-flip') {
         OptiPlan.state.transition('overview');
+        console.log('[OptiPlan Idle] Auto-reset from card-flip to overview');
       }
-
-      console.log('[OptiPlan Idle] Auto-reset to overview');
     }
 
     function handleActivityReset() {
@@ -1650,6 +1651,23 @@
       }
       OptiPlan.state._idleTimer = setTimeout(executeIdleReset, IDLE_TIMEOUT_MS);
     }
+
+    OptiPlan.components.idleReset = {
+      init: function() {
+        document.addEventListener('touchstart', handleActivityReset, { passive: true });
+        document.addEventListener('click', handleActivityReset, { passive: true });
+        handleActivityReset();
+      },
+
+      destroy: function() {
+        document.removeEventListener('touchstart', handleActivityReset);
+        document.removeEventListener('click', handleActivityReset);
+        if (OptiPlan.state._idleTimer) {
+          clearTimeout(OptiPlan.state._idleTimer);
+          OptiPlan.state._idleTimer = null;
+        }
+      }
+    };
 
     // ================================================================
     // SECTION: Initialization
@@ -1677,9 +1695,7 @@
       OptiPlan.components.statCards.init();
 
       // Idle auto-reset
-      document.addEventListener('touchstart', handleActivityReset, { passive: true });
-      document.addEventListener('click', handleActivityReset, { passive: true });
-      handleActivityReset();
+      OptiPlan.components.idleReset.init();
     };
 
     document.addEventListener('DOMContentLoaded', OptiPlan.init.bind(OptiPlan));

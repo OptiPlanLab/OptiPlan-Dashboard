@@ -43,19 +43,19 @@ development_status:
   # All epics, stories, and retrospectives in order
 
   # ─── Epic 1: Live Dashboard Shell ───────────────────────────────────────────
-  epic-1: in-progress
+  epic-1: done
   1-1-html-scaffold-design-system-foundation: done
   1-2-hardcoded-project-data-model: done
   1-3-sidebar-navigation-topbar: done
   1-4-hero-gauges-animated-svg-rings: done
   1-5-module-stat-cards-front-face: done
-  1-6-idle-ambient-animation-ai-agent-indicator: review
+  1-6-idle-ambient-animation-ai-agent-indicator: done
   epic-1-retrospective: optional
 
   # ─── Epic 2: Module Exploration ─────────────────────────────────────────────
   epic-2: in-progress
-  2-1-card-flip-interaction-kpi-back-face-layer-2: ready-for-dev
-  2-2-module-expansion-overlay-container-layer-3: backlog
+  2-1-card-flip-interaction-kpi-back-face-layer-2: in-progress
+  2-2-module-expansion-overlay-container-layer-3: ready-for-dev
   2-3-optitrack-module-permit-matrix-activity-feed: backlog
   2-4-optibiz-module-cash-flow-chart-financial-kpis: backlog
   2-5-optirisk-module-risk-heat-map-top-risks-table: backlog

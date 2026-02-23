@@ -1,6 +1,6 @@
 # Story 1.6: Idle Ambient Animation & AI Agent Indicator
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -507,9 +507,15 @@ No debug issues encountered. Clean implementation.
 ### Change Log
 
 - 2026-02-23: Story 1.6 implementation complete — ambient gradient animation, AI agent indicator, idle auto-reset timer
+- 2026-02-23: Code review fixes applied (3 HIGH, 3 MEDIUM):
+  - H1/H2: Fixed `executeIdleReset()` — added `'idle'` to early-return guard, moved console.log inside transition branches to prevent misleading logs
+  - H3: Wrapped idle timer in `OptiPlan.components.idleReset` component with proper `init()`/`destroy()` pattern for listener cleanup
+  - M1: Replaced hardcoded `rgba()` gradient colors with `color-mix(in srgb, var(--module) N%, transparent)` to use CSS custom properties
+  - M2: Added `animation-iteration-count: 1 !important` to `prefers-reduced-motion` media query per UX spec reference
+  - M3: Noted as codebase-wide convention (global named handler functions) — consistent with existing patterns, deferred to future refactor
 
 ### File List
 
-- index.html (modified) — Added ambient background CSS, AI indicator HTML/CSS, keyframes (ai-pulse, ambient-gradient), idle auto-reset JS, event listener wiring in init
+- index.html (modified) — Added ambient background CSS, AI indicator HTML/CSS, keyframes (ai-pulse, ambient-gradient), idle auto-reset JS with idleReset component pattern, event listener wiring in init
 - _bmad-output/implementation-artifacts/sprint-status.yaml (modified) — Status updated to in-progress then review
-- _bmad-output/implementation-artifacts/1-6-idle-ambient-animation-ai-agent-indicator.md (modified) — Tasks marked complete, dev agent record updated
+- _bmad-output/implementation-artifacts/1-6-idle-ambient-animation-ai-agent-indicator.md (modified) — Tasks marked complete, dev agent record updated, code review fixes documented
