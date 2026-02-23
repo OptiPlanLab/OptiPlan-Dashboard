@@ -46,8 +46,8 @@ development_status:
   epic-1: in-progress
   1-1-html-scaffold-design-system-foundation: done
   1-2-hardcoded-project-data-model: done
-  1-3-sidebar-navigation-topbar: backlog
-  1-4-hero-gauges-animated-svg-rings: backlog
+  1-3-sidebar-navigation-topbar: review
+  1-4-hero-gauges-animated-svg-rings: ready-for-dev
   1-5-module-stat-cards-front-face: backlog
   1-6-idle-ambient-animation-ai-agent-indicator: backlog
   epic-1-retrospective: optional

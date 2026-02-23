@@ -60,6 +60,10 @@
       --optirisk: #FF7A3C;
       --optidocs: #4395FD;
       --optigantt: #0B3C5D;
+
+      /* Status Colors */
+      --status-online: #22C55E;
+      --status-online-glow: rgba(34,197,94,0.5);
     }
 
     [data-theme="dark"] {
@@ -219,8 +223,249 @@
     }
 
     /* ================================================================ */
+    /* SECTION: Component — Sidebar Content                              */
+    /* ================================================================ */
+
+    .sidebar__brand {
+      padding: var(--gap) var(--gap);
+      display: flex;
+      justify-content: center;
+    }
+
+    .sidebar__brand-pill {
+      display: inline-block;
+      padding: 4px 14px;
+      background: linear-gradient(135deg, var(--optitrack), var(--optibiz));
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--bg-body);
+    }
+
+    .sidebar__avatar {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: var(--gap-sm) var(--gap);
+      margin-bottom: var(--gap-sm);
+    }
+
+    .sidebar__avatar-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--optitrack);
+      color: var(--bg-body);
+      font-family: var(--font-main);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar__avatar-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar__avatar-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: var(--font-main);
+    }
+
+    .sidebar__avatar-role {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-family: var(--font-main);
+    }
+
+    .sidebar__nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 var(--gap-sm);
+    }
+
+    .sidebar__section-label {
+      display: block;
+      padding: var(--gap) var(--gap-sm) 4px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    .sidebar__nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      min-height: 44px;
+      padding: 0 var(--gap-sm);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition),
+                  border-color var(--transition);
+      border-inline-start: 3px solid transparent;
+      touch-action: manipulation;
+    }
+
+    .sidebar__nav-item--active {
+      border-inline-start: 3px solid var(--optitrack);
+      background: var(--sidebar-active);
+      color: var(--text-primary);
+    }
+
+    .sidebar__nav-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .sidebar__nav-label {
+      font-family: var(--font-main);
+      font-size: 13px;
+      flex: 1;
+    }
+
+    .sidebar__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .sidebar__footer {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: var(--gap-sm) var(--gap);
+      border-top: 1px solid var(--border);
+    }
+
+    .sidebar__footer-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-online);
+      box-shadow: 0 0 6px var(--status-online-glow);
+      animation: sidebar-pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .sidebar__footer-api,
+    .sidebar__footer-version {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sidebar__footer-version {
+      margin-inline-start: auto;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — Topbar Content                               */
+    /* ================================================================ */
+
+    .topbar__title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .topbar__title {
+      font-family: var(--font-main);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .topbar__subtitle {
+      font-family: var(--font-main);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .topbar__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+      margin-inline-start: auto;
+    }
+
+    .topbar__clock {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .topbar__search {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: 6px 12px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-family: var(--font-main);
+      font-size: 13px;
+      cursor: default;
+    }
+
+    .topbar__search-icon {
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .topbar__search-text {
+      color: var(--text-muted);
+      font-family: var(--font-main);
+      font-size: 13px;
+    }
+
+    .topbar__bell {
+      position: relative;
+      font-size: 20px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .topbar__bell-badge {
+      position: absolute;
+      top: -2px;
+      inset-inline-end: -2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--optirisk);
+    }
+
+    /* ================================================================ */
     /* SECTION: Animations & Keyframes                                   */
     /* ================================================================ */
+
+    @keyframes sidebar-pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 6px var(--status-online-glow);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.15);
+        box-shadow: 0 0 10px var(--status-online-glow);
+      }
+    }
 
     /* Placeholder — populated by future stories */
 
@@ -310,8 +555,79 @@
 <body data-theme="dark" data-palette="d" data-skin="1">
   <!-- data-palette and data-skin reserved for future story variants (palettes A-C, skins 2+) -->
 
-  <!-- Sidebar: structural container (content added in Story 1.3) -->
+  <!-- Sidebar -->
   <aside class="sidebar" aria-label="ניווט ראשי">
+    <!-- Brand Badge -->
+    <div class="sidebar__brand">
+      <span class="sidebar__brand-pill">OPTIPLAN</span>
+    </div>
+
+    <!-- User Avatar -->
+    <div class="sidebar__avatar">
+      <div class="sidebar__avatar-circle">בע</div>
+      <div class="sidebar__avatar-info">
+        <span class="sidebar__avatar-name">בן עקיבא</span>
+        <span class="sidebar__avatar-role">מנהל פרויקט</span>
+      </div>
+    </div>
+
+    <!-- Navigation: Modules -->
+    <nav class="sidebar__nav">
+      <span class="sidebar__section-label">מודולים</span>
+      <a class="sidebar__nav-item sidebar__nav-item--active" data-module="dashboard" href="#" role="button">
+        <i class="ti ti-dashboard sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">לוח בקרה</span>
+        <span class="sidebar__dot" style="background: var(--optitrack)"></span>
+      </a>
+      <a class="sidebar__nav-item" data-module="optitrack" href="#" role="button">
+        <i class="ti ti-chart-dots-3 sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">OptiTrack — תיאומים</span>
+        <span class="sidebar__dot" style="background: var(--optitrack)"></span>
+      </a>
+      <a class="sidebar__nav-item" data-module="optibiz" href="#" role="button">
+        <i class="ti ti-chart-bar sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">OptiBiz — פיננסי</span>
+        <span class="sidebar__dot" style="background: var(--optibiz)"></span>
+      </a>
+      <a class="sidebar__nav-item" data-module="optirisk" href="#" role="button">
+        <i class="ti ti-shield-check sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">OptiRisk — סיכונים</span>
+        <span class="sidebar__dot" style="background: var(--optirisk)"></span>
+      </a>
+      <a class="sidebar__nav-item" data-module="optidocs" href="#" role="button">
+        <i class="ti ti-file-text sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">OptiDocs — מסמכים</span>
+        <span class="sidebar__dot" style="background: var(--optidocs)"></span>
+      </a>
+      <a class="sidebar__nav-item" data-module="optigantt" href="#" role="button">
+        <i class="ti ti-calendar-event sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">OptiGantt — לוח זמנים</span>
+        <span class="sidebar__dot" style="background: var(--optigantt)"></span>
+      </a>
+
+      <!-- Tools Section -->
+      <span class="sidebar__section-label">כלים</span>
+      <a class="sidebar__nav-item" data-module="opium-ai" href="#" role="button">
+        <i class="ti ti-robot sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">Opium AI</span>
+      </a>
+      <a class="sidebar__nav-item" data-module="section-map" href="#" role="button">
+        <i class="ti ti-map sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">מפת קטעים</span>
+      </a>
+      <a class="sidebar__nav-item" data-module="reports" href="#" role="button">
+        <i class="ti ti-report sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">דוחות</span>
+      </a>
+
+      <!-- System Section -->
+      <span class="sidebar__section-label">מערכת</span>
+      <a class="sidebar__nav-item" data-module="settings" href="#" role="button">
+        <i class="ti ti-settings sidebar__nav-icon"></i>
+        <span class="sidebar__nav-label">הגדרות</span>
+      </a>
+    </nav>
+
     <!-- Theme Toggle -->
     <div class="theme-toggle" id="themeToggle" role="button" aria-label="החלפת ערכת נושא" tabindex="0">
       <div class="theme-toggle__track" aria-hidden="true">
@@ -319,14 +635,34 @@
       </div>
       <span class="theme-toggle__label">ערכת נושא</span>
     </div>
-    <!-- Additional sidebar content added in Story 1.3 -->
+
+    <!-- Footer -->
+    <div class="sidebar__footer">
+      <span class="sidebar__footer-dot"></span>
+      <span class="sidebar__footer-api">API 18ms</span>
+      <span class="sidebar__footer-version">v2.4.1</span>
+    </div>
   </aside>
 
   <!-- Main content area -->
   <div class="main-content">
-    <!-- Topbar: structural container (content added in Story 1.3) -->
+    <!-- Topbar -->
     <header class="topbar" aria-label="סרגל עליון">
-      <!-- Topbar content added in Story 1.3 -->
+      <div class="topbar__title-block">
+        <span class="topbar__title">מרכז בקרה</span>
+        <span class="topbar__subtitle">הרחבת קו מטרו, גוש דן</span>
+      </div>
+      <div class="topbar__actions">
+        <span class="topbar__clock" id="topbarClock"></span>
+        <div class="topbar__search">
+          <i class="ti ti-search topbar__search-icon"></i>
+          <span class="topbar__search-text">חיפוש...</span>
+        </div>
+        <div class="topbar__bell">
+          <i class="ti ti-bell"></i>
+          <span class="topbar__bell-badge"></span>
+        </div>
+      </div>
     </header>
 
     <!-- Primary content region (hero gauges, stat cards etc. added in Stories 1.4–1.5) -->
@@ -348,7 +684,7 @@
     const MAX_CHAT_HISTORY = 5;
 
     // ================================================================
-    // SECTION: Data Constants (stubs — populated in Story 1.2)
+    // SECTION: Data Constants
     // ================================================================
 
     const PROJECT_DATA = {
@@ -472,7 +808,7 @@
         { id: 'a3', name: 'רמת גן – בני ברק', plannedStart: '2023-07-01', plannedEnd: '2025-12-31', actualStart: '2023-08-01', actualEnd: null, progress: 52 },
         { id: 'a4', name: 'בני ברק – פתח תקווה', plannedStart: '2024-01-01', plannedEnd: '2026-06-30', actualStart: '2024-03-01', actualEnd: null, progress: 31 },
         { id: 'a5', name: 'פתח תקווה מרכז – שרונה', plannedStart: '2024-07-01', plannedEnd: '2027-03-31', actualStart: '2024-10-01', actualEnd: null, progress: 15 },
-        { id: 'a6', name: 'שרונה – גוש דן מזרח', plannedStart: '2025-01-01', plannedEnd: '2027-12-31', actualStart: null, actualEnd: null, progress: 8 }
+        { id: 'a6', name: 'שרונה – גוש דן מזרח', plannedStart: '2025-01-01', plannedEnd: '2027-12-31', actualStart: '2025-03-01', actualEnd: null, progress: 8 }
       ],
       milestones: [
         { date: '2024-07-15', label: 'השלמת קטע א1', section: 'a1', type: 'completion' },
@@ -516,6 +852,25 @@
         answer: 'ההישגים הבולטים: (1) השלמת מלאה של קטע א1 — 17 ק"מ של תשתית מטרו. (2) 222 אישורים רגולטוריים מ-5 רשויות שונות. (3) שמירה על תקציב עם חיסכון של 22 מיליון ₪. (4) קצב בנייה של קטע א2 עולה על התחזית ב-3%.'
       }
     };
+
+    // Freeze all data constants to enforce read-only access at runtime
+    Object.freeze(PROJECT_DATA);
+    Object.freeze(PROJECT_DATA.sections);
+    Object.freeze(OPTITRACK_DATA);
+    Object.freeze(OPTITRACK_DATA.authorities);
+    Object.freeze(OPTITRACK_DATA.permitMatrix);
+    Object.freeze(OPTITRACK_DATA.activityFeed);
+    Object.freeze(OPTIBIZ_DATA);
+    Object.freeze(OPTIBIZ_DATA.cashFlow);
+    Object.freeze(OPTIRISK_DATA);
+    Object.freeze(OPTIRISK_DATA.heatMap);
+    Object.freeze(OPTIRISK_DATA.topRisks);
+    Object.freeze(OPTIDOCS_DATA);
+    Object.freeze(OPTIDOCS_DATA.documents);
+    Object.freeze(OPTIGANTT_DATA);
+    Object.freeze(OPTIGANTT_DATA.sections);
+    Object.freeze(OPTIGANTT_DATA.milestones);
+    Object.freeze(AI_CACHE);
 
     // ================================================================
     // SECTION: OptiPlan Namespace & State Management
@@ -625,6 +980,83 @@
     // OptiPlan.touch populated by future stories
 
     // ================================================================
+    // SECTION: Component — Sidebar
+    // ================================================================
+
+    function handleNavItemTap(e) {
+      e.preventDefault();
+      var $tapped = e.currentTarget;
+      var $items = OptiPlan.components.sidebar.$navItems;
+      $items.forEach(function($item) {
+        $item.classList.remove('sidebar__nav-item--active');
+      });
+      $tapped.classList.add('sidebar__nav-item--active');
+    }
+
+    OptiPlan.components.sidebar = {
+      $sidebar: null,
+      $navItems: null,
+
+      init: function() {
+        this.$sidebar = document.querySelector('.sidebar');
+        this.$navItems = this.$sidebar.querySelectorAll('.sidebar__nav-item');
+        this.$navItems.forEach(function($item) {
+          $item.addEventListener('touchstart', handleNavItemTap, { passive: false });
+          $item.addEventListener('click', handleNavItemTap);
+        });
+        this.render();
+      },
+
+      render: function() {
+        var $dashboard = this.$sidebar.querySelector('[data-module="dashboard"]');
+        if ($dashboard) {
+          $dashboard.classList.add('sidebar__nav-item--active');
+        }
+      },
+
+      destroy: function() {
+        this.$navItems.forEach(function($item) {
+          $item.removeEventListener('touchstart', handleNavItemTap);
+          $item.removeEventListener('click', handleNavItemTap);
+        });
+      }
+    };
+
+    // ================================================================
+    // SECTION: Component — Topbar
+    // ================================================================
+
+    function updateTopbarClock() {
+      var $clock = OptiPlan.components.topbar.$clock;
+      if (!$clock) return;
+      var formatter = new Intl.DateTimeFormat('he-IL', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+      $clock.textContent = formatter.format(new Date());
+    }
+
+    OptiPlan.components.topbar = {
+      $topbar: null,
+      $clock: null,
+
+      init: function() {
+        this.$topbar = document.querySelector('.topbar');
+        this.$clock = document.getElementById('topbarClock');
+        updateTopbarClock();
+        OptiPlan.state._clockInterval = setInterval(updateTopbarClock, 30000);
+      },
+
+      destroy: function() {
+        if (OptiPlan.state._clockInterval) {
+          clearInterval(OptiPlan.state._clockInterval);
+          OptiPlan.state._clockInterval = null;
+        }
+      }
+    };
+
+    // ================================================================
     // SECTION: Theme Toggle Handler
     // ================================================================
 
@@ -660,8 +1092,9 @@
         console.warn('[OptiPlan Init] Initial transition to overview failed');
       }
 
-      // Initialize component stubs (future stories add implementations)
-      // OptiPlan.components.init() — added by Story 1.3+
+      // Initialize components
+      OptiPlan.components.sidebar.init();
+      OptiPlan.components.topbar.init();
     };
 
     document.addEventListener('DOMContentLoaded', OptiPlan.init.bind(OptiPlan));

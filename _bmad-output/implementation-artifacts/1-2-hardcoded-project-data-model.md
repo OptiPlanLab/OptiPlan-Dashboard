@@ -82,7 +82,7 @@ So that every module can render realistic, internally consistent data with zero 
   - [x] Include: milestones array with 3+ objects (date in YYYY-MM-DD, Hebrew label, section id, type: completion|review|launch)
   - [x] Verify: actualEnd dates are null for incomplete sections, set for completed ones
   - [x] Verify: Section A1 progress = 100 with completed actualEnd date
-  - [x] Verify: Sections A2–A6 have actualStart but null actualEnd (still in progress)
+  - [x] Verify: Sections A2–A6 have actualStart dates but null actualEnd (still in progress) — A6 actualStart set to '2025-03-01' (design phase start, post-review fix)
 
 - [x] Task 7: Add AI_CACHE constant after OPTIGANTT_DATA (AC: 6)
   - [x] Add new constant `const AI_CACHE = { ... };` after OPTIGANTT_DATA definition
@@ -290,7 +290,7 @@ const OPTIGANTT_DATA = {
     { id: 'a3', name: 'רמת גן – בני ברק', plannedStart: '2023-07-01', plannedEnd: '2025-12-31', actualStart: '2023-08-01', actualEnd: null, progress: 52 },
     { id: 'a4', name: 'בני ברק – פתח תקווה', plannedStart: '2024-01-01', plannedEnd: '2026-06-30', actualStart: '2024-03-01', actualEnd: null, progress: 31 },
     { id: 'a5', name: 'פתח תקווה מרכז – שרונה', plannedStart: '2024-07-01', plannedEnd: '2027-03-31', actualStart: '2024-10-01', actualEnd: null, progress: 15 },
-    { id: 'a6', name: 'שרונה – גוש דן מזרח', plannedStart: '2025-01-01', plannedEnd: '2027-12-31', actualStart: null, actualEnd: null, progress: 8 }
+    { id: 'a6', name: 'שרונה – גוש דן מזרח', plannedStart: '2025-01-01', plannedEnd: '2027-12-31', actualStart: '2025-03-01', actualEnd: null, progress: 8 }
   ],
   milestones: [
     { date: '2024-07-15', label: 'השלמת קטע א1', section: 'a1', type: 'completion' },
@@ -409,11 +409,13 @@ _None at this stage — comprehensive data definitions prepared with full cross-
 
 ### File List
 
-- `index.html` — modified (data constants section expanded, 7 new data constant definitions added)
+- `index.html` — modified (data constants section expanded, 7 new data constant definitions added, Object.freeze() applied to all data constants)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — modified (story status sync)
 
 ## Change Log
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-02-23 | **CODE REVIEW FIXES**: (1) CRITICAL: Fixed OPTIGANTT_DATA A6 actualStart from null to '2025-03-01' — task 6 verification was false. (2) Updated stale section comment removing "stubs" label. (3) Added Object.freeze() to all 7 data constants + nested arrays for immutability enforcement. (4) Updated File List to include sprint-status.yaml. (5) Noted AI_CACHE fuzzy matching design risk for Story 3.2. | claude-haiku-4-5-20251001 |
 | 2026-02-23 | **STORY COMPLETED**: All 8 tasks finished. Data constants replaced in index.html: PROJECT_DATA (1800M budget, 6 sections), OPTITRACK_DATA (347 items, 5 authorities, 64% approval rate), OPTIBIZ_DATA (1220M utilized, 68% burn, 12-month cashflow), OPTIRISK_DATA (23 active risks, 8 critical), OPTIDOCS_DATA (847 total, 94% completion), OPTIGANTT_DATA (6 sections, 4 milestones), AI_CACHE (8 Hebrew Q&A pairs). All cross-references validated. All ACs satisfied. | claude-haiku-4-5-20251001 |
 | 2026-02-23 | Story 1.2 created: comprehensive data constants for PROJECT_DATA, OPTITRACK_DATA, OPTIBIZ_DATA, OPTIRISK_DATA, OPTIDOCS_DATA, OPTIGANTT_DATA, AI_CACHE. All 347 items, 23 risks, 847 documents, 12 months cash flow, cross-validated for consistency. Ready for dev implementation. | claude-haiku-4-5-20251001 |
