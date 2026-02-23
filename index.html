@@ -65,6 +65,7 @@
       --status-online: #22C55E;
       --status-online-glow: rgba(34,197,94,0.5);
       --status-danger: #EF4444;
+      --text-on-color: #FFFFFF;
     }
 
     [data-theme="dark"] {
@@ -891,7 +892,8 @@
     .permit-cell--approved { fill: var(--status-online); }
     .permit-cell--pending { fill: var(--optibiz); }
     .permit-cell--objection { fill: var(--optirisk); }
-    .permit-cell--not_submitted { fill: var(--text-muted); }
+    .permit-cell--not-submitted { fill: var(--text-muted); }
+    .permit-cell--in-review { fill: var(--optitrack); }
 
     .permit-matrix__label {
       font-family: var(--font-main);
@@ -908,7 +910,7 @@
     .permit-matrix__cell-text {
       font-family: var(--font-mono);
       font-size: 10px;
-      fill: #fff;
+      fill: var(--text-on-color);
       pointer-events: none;
     }
 
@@ -943,7 +945,7 @@
       font-family: var(--font-main);
       font-size: 14px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-on-color);
     }
 
     .activity-item__body {
@@ -1003,7 +1005,7 @@
       color: var(--optirisk);
     }
 
-    .activity-item__badge--in_review {
+    .activity-item__badge--in-review {
       background: color-mix(in srgb, var(--optitrack) 20%, transparent);
       color: var(--optitrack);
     }
@@ -1035,6 +1037,195 @@
     }
 
     .optitrack-section--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — OptiBiz Module                                */
+    /* ================================================================ */
+
+    /* --- Metrics Summary Row --- */
+    .optibiz-metrics {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+    }
+
+    .optibiz-metric {
+      flex: 1;
+      min-width: 120px;
+      background: color-mix(in srgb, var(--optibiz) 8%, var(--bg-card));
+      border-radius: var(--radius-sm);
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid color-mix(in srgb, var(--optibiz) 15%, transparent);
+    }
+
+    .optibiz-metric__value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .optibiz-metric__value--negative {
+      color: var(--optirisk);
+    }
+
+    .optibiz-metric__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .optibiz-metric__bar {
+      height: 4px;
+      background: var(--bar-track);
+      border-radius: 2px;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+
+    .optibiz-metric__bar-fill {
+      height: 100%;
+      background: var(--optibiz);
+      border-radius: 2px;
+    }
+
+    /* --- Cash Flow Chart --- */
+    .optibiz-chart-wrap {
+      margin-top: var(--gap);
+    }
+
+    .optibiz-chart__svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .optibiz-bar--plan {
+      fill: var(--optibiz);
+      opacity: 0.4;
+    }
+
+    .optibiz-bar--actual {
+      fill: var(--optibiz);
+    }
+
+    .optibiz-trend-line {
+      stroke: var(--optibiz);
+      fill: none;
+      stroke-width: 2;
+      stroke-dasharray: 6, 3;
+      opacity: 0.7;
+    }
+
+    .optibiz-trend-dot {
+      fill: var(--optibiz);
+      opacity: 0.7;
+    }
+
+    .optibiz-chart__axis-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      fill: var(--text-muted);
+    }
+
+    .optibiz-chart__month-label {
+      font-family: var(--font-main);
+      font-size: 10px;
+      fill: var(--text-muted);
+    }
+
+    .optibiz-chart__grid-line {
+      stroke: var(--border);
+      stroke-opacity: 0.3;
+    }
+
+    .optibiz-chart__axis-label--right {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      fill: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    /* --- Legend --- */
+    .optibiz-legend {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+      margin-top: var(--gap);
+    }
+
+    .optibiz-legend__item {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+    }
+
+    .optibiz-legend__swatch {
+      width: 16px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .optibiz-legend__swatch--plan {
+      background: var(--optibiz);
+      opacity: 0.4;
+    }
+
+    .optibiz-legend__swatch--actual {
+      background: var(--optibiz);
+    }
+
+    .optibiz-legend__line {
+      width: 16px;
+      height: 2px;
+      background: var(--optibiz);
+      opacity: 0.7;
+      flex-shrink: 0;
+      border-top: 2px dashed var(--optibiz);
+      background: none;
+    }
+
+    .optibiz-legend__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* --- Section Headers --- */
+    .optibiz-section-title {
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: var(--gap);
+      margin-bottom: var(--gap-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+    }
+
+    .optibiz-section-title__icon {
+      font-size: 16px;
+      color: var(--optibiz);
+    }
+
+    /* --- Staggered Entrance Animation --- */
+    .optibiz-section {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .optibiz-section--visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -2646,10 +2837,11 @@
 
         // Rows
         var statusLabels = {
-          approved: '\u2713',
-          pending: '?',
-          objection: '\u2717',
-          not_submitted: '\u2014'
+          'approved': '\u2713',
+          'pending': '?',
+          'objection': '\u2717',
+          'not-submitted': '\u2014',
+          'in-review': '\u25CB'
         };
 
         for (var r = 0; r < matrix.length; r++) {
@@ -2657,11 +2849,11 @@
           var ry = headerHeight + r * (rowHeight + cellGap);
 
           // Row label
-          svg += '<text class="permit-matrix__label" x="' + (labelWidth - 8) + '" y="' + (ry + rowHeight / 2 + 4) + '" text-anchor="end">' + row.section + '</text>';
+          svg += '<text class="permit-matrix__label" x="' + (labelWidth - 8) + '" y="' + (ry + rowHeight / 2 + 4) + '" text-anchor="end">' + row.section.toUpperCase() + '</text>';
 
           // Cells
           for (var col = 0; col < authorityKeys.length; col++) {
-            var status = row[authorityKeys[col]];
+            var status = row.statuses[col];
             var cellX = labelWidth + col * (colWidth + cellGap);
             var cssClass = 'permit-cell--' + status;
             var label = statusLabels[status] || status;
@@ -2678,7 +2870,7 @@
       _renderActivityItem: function(item) {
         var firstLetter = item.name.charAt(0);
         var avatarColor = this._getAvatarColor(firstLetter);
-        var relativeTime = this._formatRelativeTime(item.timestamp);
+        var relativeTime = item.timestamp;
         var badgeInfo = this._getStatusBadge(item.status);
 
         return '<div class="activity-item">' +
@@ -2688,31 +2880,16 @@
               '<span class="activity-item__name">' + item.name + '</span>' +
               '<span class="activity-item__time">' + relativeTime + '</span>' +
             '</div>' +
-            '<p class="activity-item__desc">' + item.action + '</p>' +
+            '<p class="activity-item__desc">' + item.description + '</p>' +
           '</div>' +
           '<span class="activity-item__badge activity-item__badge--' + item.status + '">' + badgeInfo + '</span>' +
         '</div>';
       },
 
       _getAvatarColor: function(letter) {
-        var colors = ['#6366F1', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#0EA5E9'];
+        var colors = ['var(--optigantt)', 'var(--optidocs)', 'var(--optitrack)', 'var(--optibiz)', 'var(--optirisk)', 'var(--status-online)'];
         var code = letter.charCodeAt(0);
         return colors[code % colors.length];
-      },
-
-      _formatRelativeTime: function(timestamp) {
-        var now = new Date();
-        var then = new Date(timestamp);
-        var diffMs = now - then;
-        var diffMin = Math.floor(diffMs / 60000);
-        var diffHr = Math.floor(diffMs / 3600000);
-
-        if (diffMin < 1) return '\u05E2\u05DB\u05E9\u05D9\u05D5';
-        if (diffMin < 60) return '\u05DC\u05E4\u05E0\u05D9 ' + diffMin + ' \u05D3\u05E7\u05D5\u05EA';
-        if (diffHr < 24) return '\u05DC\u05E4\u05E0\u05D9 ' + diffHr + ' \u05E9\u05E2\u05D5\u05EA';
-        var day = then.getDate();
-        var month = then.getMonth() + 1;
-        return day + '/' + month + '/' + then.getFullYear();
       },
 
       _getStatusBadge: function(status) {
@@ -2736,21 +2913,201 @@
       }
     };
 
+    // ================================================================
+    // MODULE: OptiBiz
+    // ================================================================
     OptiPlan.modules.optibiz = {
-      init: function() {},
+      $content: null,
+      _entranceTimeouts: [],
+
+      init: function() {
+        this.$content = document.querySelector('.module-overlay__content');
+      },
+
       render: function(data) {
-        var $content = document.querySelector('.module-overlay__content');
-        if (!$content) return;
-        $content.innerHTML =
-          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
-            '<i class="ti ti-chart-bar" style="font-size: 64px; color: var(--optibiz); opacity: 0.3; margin-bottom: 16px;"></i>' +
-            '<span style="font-family: var(--font-main); font-size: 16px;">OptiBiz \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05E4\u05D9\u05E0\u05E0\u05E1\u05D9</span>' +
-            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.4</span>' +
+        var self = this;
+        this.$content = document.querySelector('.module-overlay__content');
+        if (!this.$content || !data) return;
+
+        var html = '';
+
+        // --- Financial KPI Metrics Row ---
+        html += '<div class="optibiz-section optibiz-metrics" data-optibiz-section="metrics">';
+        html += self._renderMetricWithBar(
+          self._formatBillions(data.budgetUtilized) + ' / ' + self._formatBillions(data.budgetTotal),
+          '\u05E0\u05D9\u05E6\u05D5\u05DC \u05EA\u05E7\u05E6\u05D9\u05D1',
+          data.budgetUtilization
+        );
+        html += self._renderMetricCard(data.budgetUtilization + '%', '\u05D0\u05D7\u05D5\u05D6 \u05E0\u05D9\u05E6\u05D5\u05DC');
+        html += self._renderMetricCard(self._formatMillions(data.burnRate), '\u05E7\u05E6\u05D1 \u05E9\u05E8\u05D9\u05E4\u05D4 \u05D7\u05D5\u05D3\u05E9\u05D9');
+        html += self._renderVarianceCard(data.variance);
+        html += '</div>';
+
+        // --- Cash Flow Chart ---
+        html += '<div class="optibiz-section optibiz-chart-wrap" data-optibiz-section="chart">';
+        html += '<div class="optibiz-section-title"><i class="ti ti-chart-bar optibiz-section-title__icon"></i>\u05EA\u05D6\u05E8\u05D9\u05DD \u05DE\u05D6\u05D5\u05DE\u05E0\u05D9\u05DD \u2014 12 \u05D7\u05D5\u05D3\u05E9\u05D9\u05DD</div>';
+        html += self._renderCashFlowChart(data);
+        html += '</div>';
+
+        // --- Legend ---
+        html += '<div class="optibiz-section optibiz-legend" data-optibiz-section="legend">';
+        html += '<div class="optibiz-legend__item"><span class="optibiz-legend__swatch optibiz-legend__swatch--plan"></span><span class="optibiz-legend__label">\u05EA\u05DB\u05E0\u05D5\u05DF</span></div>';
+        html += '<div class="optibiz-legend__item"><span class="optibiz-legend__swatch optibiz-legend__swatch--actual"></span><span class="optibiz-legend__label">\u05D1\u05D9\u05E6\u05D5\u05E2</span></div>';
+        html += '<div class="optibiz-legend__item"><span class="optibiz-legend__line"></span><span class="optibiz-legend__label">\u05DE\u05E6\u05D8\u05D1\u05E8</span></div>';
+        html += '</div>';
+
+        this.$content.innerHTML = html;
+
+        // Staggered entrance animation
+        var sections = this.$content.querySelectorAll('.optibiz-section');
+        for (var s = 0; s < sections.length; s++) {
+          (function(section, delay) {
+            var timeout = setTimeout(function() {
+              section.classList.add('optibiz-section--visible');
+            }, delay);
+            self._entranceTimeouts.push(timeout);
+          })(sections[s], s * 100);
+        }
+      },
+
+      _formatBillions: function(val) {
+        return '\u20AA' + (val / 1000000000).toFixed(2) + 'B';
+      },
+
+      _formatMillions: function(val) {
+        return '\u20AA' + Math.round(Math.abs(val) / 1000000) + 'M';
+      },
+
+      _renderMetricCard: function(value, label) {
+        return '<div class="optibiz-metric">' +
+          '<span class="optibiz-metric__value">' + value + '</span>' +
+          '<span class="optibiz-metric__label">' + label + '</span>' +
           '</div>';
       },
+
+      _renderMetricWithBar: function(value, label, percent) {
+        return '<div class="optibiz-metric">' +
+          '<span class="optibiz-metric__value">' + value + '</span>' +
+          '<span class="optibiz-metric__label">' + label + '</span>' +
+          '<div class="optibiz-metric__bar">' +
+            '<div class="optibiz-metric__bar-fill" style="width: ' + percent + '%"></div>' +
+          '</div>' +
+          '</div>';
+      },
+
+      _renderVarianceCard: function(variance) {
+        var isNegative = variance < 0;
+        var formatted = (isNegative ? '-' : '+') + this._formatMillions(variance);
+        var cssClass = isNegative ? ' optibiz-metric__value--negative' : '';
+        return '<div class="optibiz-metric">' +
+          '<span class="optibiz-metric__value' + cssClass + '">' + formatted + '</span>' +
+          '<span class="optibiz-metric__label">\u05E1\u05D8\u05D9\u05D9\u05D4</span>' +
+          '</div>';
+      },
+
+      _renderCashFlowChart: function(data) {
+        // Chart dimensions (viewBox units)
+        var svgWidth = 720;
+        var svgHeight = 320;
+        var leftMargin = 80;
+        var rightMargin = 60;
+        var topMargin = 20;
+        var bottomMargin = 40;
+        var chartWidth = svgWidth - leftMargin - rightMargin;
+        var chartHeight = svgHeight - topMargin - bottomMargin;
+        var groupWidth = chartWidth / 12;
+        var barWidth = groupWidth * 0.35;
+        var barGap = 2;
+
+        // Y-axis scale (monthly values)
+        var maxVal = 0;
+        for (var i = 0; i < data.cashFlow.length; i++) {
+          if (data.cashFlow[i].plan > maxVal) maxVal = data.cashFlow[i].plan;
+          if (data.cashFlow[i].actual > maxVal) maxVal = data.cashFlow[i].actual;
+        }
+        maxVal = Math.ceil(maxVal / 20000000) * 20000000;
+
+        // Cumulative max for right y-axis
+        var cumulative = 0;
+        var cumulativeMax = 0;
+        for (var c = 0; c < data.cashFlow.length; c++) {
+          cumulative += data.cashFlow[c].actual;
+          if (cumulative > cumulativeMax) cumulativeMax = cumulative;
+        }
+        cumulativeMax = Math.ceil(cumulativeMax / 200000000) * 200000000;
+
+        var svg = '<svg class="optibiz-chart__svg" viewBox="0 0 ' + svgWidth + ' ' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="\u05EA\u05E8\u05E9\u05D9\u05DD \u05EA\u05D6\u05E8\u05D9\u05DD \u05DE\u05D6\u05D5\u05DE\u05E0\u05D9\u05DD">';
+
+        // Grid lines and Y-axis labels (left — monthly)
+        var tickCount = 5;
+        for (var t = 0; t <= tickCount; t++) {
+          var tickVal = (maxVal / tickCount) * t;
+          var tickY = topMargin + chartHeight - (tickVal / maxVal * chartHeight);
+          svg += '<line class="optibiz-chart__grid-line" x1="' + leftMargin + '" y1="' + tickY + '" x2="' + (svgWidth - rightMargin) + '" y2="' + tickY + '" />';
+          svg += '<text class="optibiz-chart__axis-label" x="' + (leftMargin - 8) + '" y="' + (tickY + 3) + '" text-anchor="end">' + this._formatMillions(tickVal) + '</text>';
+        }
+
+        // Right Y-axis labels (cumulative)
+        var rightTickCount = 4;
+        for (var rt = 0; rt <= rightTickCount; rt++) {
+          var rTickVal = (cumulativeMax / rightTickCount) * rt;
+          var rTickY = topMargin + chartHeight - (rTickVal / cumulativeMax * chartHeight);
+          svg += '<text class="optibiz-chart__axis-label--right" x="' + (svgWidth - rightMargin + 8) + '" y="' + (rTickY + 3) + '" text-anchor="start">' + this._formatBillions(rTickVal) + '</text>';
+        }
+
+        // Bars for each month
+        for (var m = 0; m < data.cashFlow.length; m++) {
+          var entry = data.cashFlow[m];
+          var groupX = leftMargin + (m * groupWidth);
+          var planBarX = groupX + (groupWidth - 2 * barWidth - barGap) / 2;
+          var actualBarX = planBarX + barWidth + barGap;
+
+          // Plan bar
+          var planH = (entry.plan / maxVal) * chartHeight;
+          var planY = topMargin + chartHeight - planH;
+          svg += '<rect class="optibiz-bar--plan" x="' + planBarX + '" y="' + planY + '" width="' + barWidth + '" height="' + planH + '" rx="2" />';
+
+          // Actual bar
+          var actualH = (entry.actual / maxVal) * chartHeight;
+          var actualY = topMargin + chartHeight - actualH;
+          svg += '<rect class="optibiz-bar--actual" x="' + actualBarX + '" y="' + actualY + '" width="' + barWidth + '" height="' + actualH + '" rx="2" />';
+
+          // X-axis month label
+          var labelX = groupX + groupWidth / 2;
+          svg += '<text class="optibiz-chart__month-label" x="' + labelX + '" y="' + (topMargin + chartHeight + 20) + '" text-anchor="middle">' + data.monthLabels[m] + '</text>';
+        }
+
+        // Running total trend line (uses right axis scale)
+        var cumSum = 0;
+        var trendPoints = [];
+        for (var p = 0; p < data.cashFlow.length; p++) {
+          cumSum += data.cashFlow[p].actual;
+          var px = leftMargin + (p * groupWidth) + groupWidth / 2;
+          var py = topMargin + chartHeight - (cumSum / cumulativeMax * chartHeight);
+          trendPoints.push(px + ',' + py);
+        }
+        svg += '<polyline class="optibiz-trend-line" points="' + trendPoints.join(' ') + '" />';
+
+        // Trend line data point markers
+        cumSum = 0;
+        for (var d = 0; d < data.cashFlow.length; d++) {
+          cumSum += data.cashFlow[d].actual;
+          var dx = leftMargin + (d * groupWidth) + groupWidth / 2;
+          var dy = topMargin + chartHeight - (cumSum / cumulativeMax * chartHeight);
+          svg += '<circle class="optibiz-trend-dot" cx="' + dx + '" cy="' + dy + '" r="3" />';
+        }
+
+        svg += '</svg>';
+        return svg;
+      },
+
       destroy: function() {
-        var $content = document.querySelector('.module-overlay__content');
-        if ($content) $content.innerHTML = '';
+        for (var i = 0; i < this._entranceTimeouts.length; i++) {
+          clearTimeout(this._entranceTimeouts[i]);
+        }
+        this._entranceTimeouts = [];
+        if (this.$content) this.$content.innerHTML = '';
+        this.$content = null;
       }
     };
 

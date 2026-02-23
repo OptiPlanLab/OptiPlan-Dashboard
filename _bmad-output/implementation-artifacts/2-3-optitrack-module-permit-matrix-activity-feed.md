@@ -1,6 +1,6 @@
 # Story 2.3: OptiTrack Module — Permit Matrix & Activity Feed
 
-Status: review
+Status: done
 
 ## Story
 
@@ -379,7 +379,36 @@ No errors encountered during implementation.
 ### Change Log
 
 - 2026-02-23: Implemented full OptiTrack module (Tasks 1-7) — permit matrix, activity feed, metrics row, entrance animations
+- 2026-02-23: Code review fixes — 3 CRITICAL (data model mismatches), 4 HIGH (CSS class/color issues), 3 MEDIUM (token compliance, case)
+
+### Senior Developer Review (AI)
+
+**Reviewer:** BenAkiva (via Claude Opus 4.6) on 2026-02-23
+
+**Outcome:** Changes Requested → Fixed
+
+**Issues Found:** 3 Critical, 4 High, 3 Medium, 2 Low (12 total)
+
+**Critical Issues Fixed:**
+- C1: Permit matrix `row[authorityKeys[col]]` → `row.statuses[col]` — data model mismatch, entire matrix was non-functional
+- C2: Activity feed `item.action` → `item.description` — wrong field name, descriptions showed "undefined"
+- C3: `_formatRelativeTime()` expected ISO timestamps but data has pre-formatted Hebrew strings — timestamps showed "NaN/NaN/NaN"
+
+**High Issues Fixed:**
+- H1: CSS `.permit-cell--not_submitted` → `.permit-cell--not-submitted` (hyphen vs underscore mismatch)
+- H2: CSS `.activity-item__badge--in_review` → `.activity-item__badge--in-review` (hyphen vs underscore mismatch)
+- H3: Added missing `in-review` status handling (CSS class + label) for permit matrix
+- H4: Replaced hardcoded hex avatar colors with CSS custom property references
+
+**Medium Issues Fixed:**
+- M1: Section labels `row.section` → `row.section.toUpperCase()` to show "A1" per AC
+- M2: `fill: #fff` → `fill: var(--text-on-color)` + added `--text-on-color` token to `:root`
+- M3: `color: #fff` → `color: var(--text-on-color)` in avatar
+
+**Low Issues (not fixed):**
+- L1: Hardcoded `gap: 4px`, `border-radius: 10px` — no matching design tokens exist
+- L2: Avatar uses `name.charAt(0)` instead of `item.initials` from data
 
 ### File List
 
-- `index.html` — Added OptiTrack CSS section (Component — OptiTrack Module) and replaced placeholder stub with full module implementation
+- `index.html` — Added OptiTrack CSS section (Component — OptiTrack Module) and replaced placeholder stub with full module implementation; code review fixes applied
