@@ -51,7 +51,7 @@
 
       /* Transitions */
       --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      --transition-flip: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-flip: 400ms cubic-bezier(0.4, 0, 0.2, 1);
       --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 
       /* Palette D — Module Colors */
@@ -64,6 +64,7 @@
       /* Status Colors */
       --status-online: #22C55E;
       --status-online-glow: rgba(34,197,94,0.5);
+      --status-danger: #EF4444;
     }
 
     [data-theme="dark"] {
@@ -533,16 +534,18 @@
 
     .stat-card {
       border-radius: var(--radius);
-      padding: var(--gap);
       position: relative;
-      overflow: hidden;
       cursor: pointer;
       min-width: 140px;
+      min-height: 192px;
       flex: 1;
       touch-action: manipulation;
       -webkit-touch-callout: none;
       user-select: none;
       transition: transform var(--transition);
+      perspective: 1000px;
+      -webkit-perspective: 1000px;
+      transform-style: preserve-3d;
     }
 
     .stat-card:hover {
@@ -554,11 +557,6 @@
     [data-module="optirisk"]  { --module: var(--optirisk); }
     [data-module="optidocs"]  { --module: var(--optidocs); }
     [data-module="optigantt"] { --module: var(--optigantt); }
-
-    .stat-card {
-      background: linear-gradient(135deg, var(--module), color-mix(in srgb, var(--module) 68%, #000));
-      box-shadow: 0 4px 16px color-mix(in srgb, var(--module) 35%, transparent);
-    }
 
     .stat-card__name {
       display: block;
@@ -599,6 +597,246 @@
       opacity: 0.2;
       color: #fff;
       pointer-events: none;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — Stat Card Flip                                */
+    /* ================================================================ */
+
+    .stat-card__front {
+      position: absolute;
+      inset: 0;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      transition: transform var(--transition-flip);
+      transform: rotateY(0deg);
+      z-index: 2;
+      background: linear-gradient(135deg, var(--module), color-mix(in srgb, var(--module) 68%, #000));
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--module) 35%, transparent);
+      border-radius: var(--radius);
+      overflow: hidden;
+      padding: var(--gap);
+    }
+
+    .stat-card__back {
+      position: absolute;
+      inset: 0;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      transition: transform var(--transition-flip);
+      transform: rotateY(180deg);
+      z-index: 1;
+      background: var(--bg-card);
+      border-top: 3px solid var(--module);
+      border-radius: var(--radius);
+      overflow: hidden;
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-card--flipped .stat-card__front {
+      transform: rotateY(-180deg);
+    }
+
+    .stat-card--flipped .stat-card__back {
+      transform: rotateY(0deg);
+    }
+
+    /* Back face — header */
+    .stat-card__back-header {
+      margin-bottom: var(--gap-sm);
+    }
+
+    .stat-card__back-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+    }
+
+    /* Back face — KPI rows */
+    .stat-card__back-kpis {
+      flex: 1;
+    }
+
+    .stat-card__kpi-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-card__kpi-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-card__kpi-label {
+      font-family: var(--font-main);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .stat-card__kpi-value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .stat-card__kpi-trend {
+      font-size: 12px;
+    }
+
+    .stat-card__kpi-trend--up {
+      color: var(--status-online);
+    }
+
+    .stat-card__kpi-trend--down {
+      color: var(--status-danger);
+    }
+
+    .stat-card__kpi-trend--neutral {
+      color: var(--text-muted);
+    }
+
+    /* Back face — CTA button */
+    .stat-card__back-cta {
+      width: 100%;
+      padding: 10px;
+      min-height: 44px;
+      background: var(--module);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-main);
+      font-size: 13px;
+      cursor: pointer;
+      touch-action: manipulation;
+      margin-top: auto;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — Module Overlay                               */
+    /* ================================================================ */
+
+    .module-overlay-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 350ms ease;
+    }
+
+    .module-overlay-backdrop--active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .module-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 80vw;
+      height: 85vh;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      z-index: 101;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+      transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .module-overlay--active {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Faster close animation */
+    .module-overlay--closing {
+      transition-duration: 350ms;
+    }
+
+    .module-overlay__header {
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+      padding: var(--gap) var(--gap-lg, 20px);
+      border-top: 3px solid var(--module);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .module-overlay__icon {
+      font-size: 24px;
+      color: var(--module);
+    }
+
+    .module-overlay__header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .module-overlay__title {
+      font-family: var(--font-main);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .module-overlay__subtitle {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .module-overlay__back {
+      position: absolute;
+      top: 50%;
+      inset-inline-end: var(--gap);
+      transform: translateY(-50%);
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 20px;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    }
+
+    .module-overlay__back:active {
+      transform: translateY(-50%) scale(0.95);
+      background: var(--border);
+    }
+
+    .module-overlay__content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: var(--gap);
+      overscroll-behavior: contain;
     }
 
     /* ================================================================ */
@@ -955,45 +1193,121 @@
         </div>
       </section>
 
-      <!-- Stat Cards — 5 module KPI cards (Story 1.5) -->
+      <!-- Stat Cards — 5 module KPI cards (Story 1.5, flip added Story 2.1) -->
       <section class="stat-cards-row">
         <div class="stat-card" data-module="optitrack" style="opacity: 0; transform: translateY(18px) scale(0.97);">
-          <span class="stat-card__name">OptiTrack</span>
-          <span class="stat-card__value"></span>
-          <span class="stat-card__label"></span>
-          <span class="stat-card__sublabel"></span>
-          <i class="stat-card__icon ti ti-route"></i>
+          <div class="stat-card__front">
+            <span class="stat-card__name">OptiTrack</span>
+            <span class="stat-card__value"></span>
+            <span class="stat-card__label"></span>
+            <span class="stat-card__sublabel"></span>
+            <i class="stat-card__icon ti ti-route"></i>
+          </div>
+          <div class="stat-card__back">
+            <div class="stat-card__back-header"><span class="stat-card__back-title">OptiTrack</span></div>
+            <div class="stat-card__back-kpis">
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+            </div>
+            <button class="stat-card__back-cta">למודול המלא</button>
+          </div>
         </div>
         <div class="stat-card" data-module="optibiz" style="opacity: 0; transform: translateY(18px) scale(0.97);">
-          <span class="stat-card__name">OptiBiz</span>
-          <span class="stat-card__value"></span>
-          <span class="stat-card__label"></span>
-          <span class="stat-card__sublabel"></span>
-          <i class="stat-card__icon ti ti-chart-bar"></i>
+          <div class="stat-card__front">
+            <span class="stat-card__name">OptiBiz</span>
+            <span class="stat-card__value"></span>
+            <span class="stat-card__label"></span>
+            <span class="stat-card__sublabel"></span>
+            <i class="stat-card__icon ti ti-chart-bar"></i>
+          </div>
+          <div class="stat-card__back">
+            <div class="stat-card__back-header"><span class="stat-card__back-title">OptiBiz</span></div>
+            <div class="stat-card__back-kpis">
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+            </div>
+            <button class="stat-card__back-cta">למודול המלא</button>
+          </div>
         </div>
         <div class="stat-card" data-module="optirisk" style="opacity: 0; transform: translateY(18px) scale(0.97);">
-          <span class="stat-card__name">OptiRisk</span>
-          <span class="stat-card__value"></span>
-          <span class="stat-card__label"></span>
-          <span class="stat-card__sublabel"></span>
-          <i class="stat-card__icon ti ti-alert-triangle"></i>
+          <div class="stat-card__front">
+            <span class="stat-card__name">OptiRisk</span>
+            <span class="stat-card__value"></span>
+            <span class="stat-card__label"></span>
+            <span class="stat-card__sublabel"></span>
+            <i class="stat-card__icon ti ti-alert-triangle"></i>
+          </div>
+          <div class="stat-card__back">
+            <div class="stat-card__back-header"><span class="stat-card__back-title">OptiRisk</span></div>
+            <div class="stat-card__back-kpis">
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+            </div>
+            <button class="stat-card__back-cta">למודול המלא</button>
+          </div>
         </div>
         <div class="stat-card" data-module="optidocs" style="opacity: 0; transform: translateY(18px) scale(0.97);">
-          <span class="stat-card__name">OptiDocs</span>
-          <span class="stat-card__value"></span>
-          <span class="stat-card__label"></span>
-          <span class="stat-card__sublabel"></span>
-          <i class="stat-card__icon ti ti-file-text"></i>
+          <div class="stat-card__front">
+            <span class="stat-card__name">OptiDocs</span>
+            <span class="stat-card__value"></span>
+            <span class="stat-card__label"></span>
+            <span class="stat-card__sublabel"></span>
+            <i class="stat-card__icon ti ti-file-text"></i>
+          </div>
+          <div class="stat-card__back">
+            <div class="stat-card__back-header"><span class="stat-card__back-title">OptiDocs</span></div>
+            <div class="stat-card__back-kpis">
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+            </div>
+            <button class="stat-card__back-cta">למודול המלא</button>
+          </div>
         </div>
         <div class="stat-card" data-module="optigantt" style="opacity: 0; transform: translateY(18px) scale(0.97);">
-          <span class="stat-card__name">OptiGantt</span>
-          <span class="stat-card__value"></span>
-          <span class="stat-card__label"></span>
-          <span class="stat-card__sublabel"></span>
-          <i class="stat-card__icon ti ti-calendar-stats"></i>
+          <div class="stat-card__front">
+            <span class="stat-card__name">OptiGantt</span>
+            <span class="stat-card__value"></span>
+            <span class="stat-card__label"></span>
+            <span class="stat-card__sublabel"></span>
+            <i class="stat-card__icon ti ti-calendar-stats"></i>
+          </div>
+          <div class="stat-card__back">
+            <div class="stat-card__back-header"><span class="stat-card__back-title">OptiGantt</span></div>
+            <div class="stat-card__back-kpis">
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+              <div class="stat-card__kpi-row"><span class="stat-card__kpi-label"></span><span class="stat-card__kpi-value"></span><span class="stat-card__kpi-trend"></span></div>
+            </div>
+            <button class="stat-card__back-cta">למודול המלא</button>
+          </div>
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Module Expansion Overlay (Layer 3) -->
+  <div class="module-overlay-backdrop"></div>
+  <div class="module-overlay" role="dialog" aria-modal="true" aria-label="Module detail view">
+    <div class="module-overlay__header">
+      <i class="module-overlay__icon ti"></i>
+      <div class="module-overlay__header-text">
+        <span class="module-overlay__title"></span>
+        <span class="module-overlay__subtitle"></span>
+      </div>
+      <button class="module-overlay__back" aria-label="Back to dashboard">
+        <i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+    <div class="module-overlay__content"></div>
   </div>
 
   <!-- Viewport overlays — content populated in Story 1.3 -->
@@ -1311,8 +1625,27 @@
 
     function handleNavItemTap(e) {
       e.preventDefault();
-      const $tapped = e.currentTarget;
-      const $items = OptiPlan.components.sidebar.$navItems;
+      var $tapped = e.currentTarget;
+      var moduleId = $tapped.dataset.module;
+
+      // If tapping Dashboard while overlay is open, close it
+      if (moduleId === 'dashboard') {
+        if (OptiPlan.state.currentLayer === 'module-expand') {
+          OptiPlan.components.moduleOverlay.close();
+        }
+        _resetSidebarToDashboard();
+        return;
+      }
+
+      // If tapping a module nav item, open/switch overlay
+      var moduleIds = ['optitrack', 'optibiz', 'optirisk', 'optidocs', 'optigantt'];
+      if (moduleIds.indexOf(moduleId) !== -1) {
+        OptiPlan.components.moduleOverlay.expand(moduleId);
+        return;
+      }
+
+      // For non-module items (tools, system), just update visual state
+      var $items = OptiPlan.components.sidebar.$navItems;
       $items.forEach(function($item) {
         $item.classList.remove('sidebar__nav-item--active');
         $item.removeAttribute('aria-current');
@@ -1516,14 +1849,169 @@
     var STAT_CARD_ENTRANCE_DELAY = 1200;
     var STAT_CARD_STAGGER_MS = 60;
 
+    var CARD_BACK_CONFIG = {
+      optitrack: {
+        title: 'OptiTrack',
+        kpis: [
+          { label: '\u05E1\u05D4"\u05DB \u05E4\u05E8\u05D9\u05D8\u05D9\u05DD', getValue: function() { return OPTITRACK_DATA.totalItems; }, trend: 'neutral' },
+          { label: '\u05D0\u05D7\u05D5\u05D6 \u05D0\u05D9\u05E9\u05D5\u05E8', getValue: function() { return OPTITRACK_DATA.approvalRate + '%'; }, trend: 'up' },
+          { label: '\u05D4\u05EA\u05E0\u05D2\u05D3\u05D5\u05D9\u05D5\u05EA', getValue: function() { return OPTITRACK_DATA.objections; }, trend: 'down' },
+          { label: '\u05DE\u05DE\u05EA\u05D9\u05E0\u05D9\u05DD', getValue: function() { return OPTITRACK_DATA.pending; }, trend: 'neutral' }
+        ]
+      },
+      optibiz: {
+        title: 'OptiBiz',
+        kpis: [
+          { label: '\u05E0\u05D9\u05E6\u05D5\u05DC \u05EA\u05E7\u05E6\u05D9\u05D1', getValue: function() { return '\u20AA' + (OPTIBIZ_DATA.budgetUtilized / 1000000000).toFixed(2) + 'B'; }, trend: 'up' },
+          { label: '\u05D0\u05D7\u05D5\u05D6 \u05EA\u05E7\u05E6\u05D9\u05D1', getValue: function() { return OPTIBIZ_DATA.budgetUtilization + '%'; }, trend: 'neutral' },
+          { label: '\u05E7\u05E6\u05D1 \u05E9\u05E8\u05D9\u05E4\u05D4', getValue: function() { return '\u20AA' + Math.round(OPTIBIZ_DATA.burnRate / 1000000) + 'M'; }, trend: 'neutral' },
+          { label: '\u05E1\u05D8\u05D9\u05D9\u05D4 Q1', getValue: function() { return '\u20AA' + Math.round(OPTIBIZ_DATA.variance / 1000000) + 'M'; }, trend: 'down' }
+        ]
+      },
+      optirisk: {
+        title: 'OptiRisk',
+        kpis: [
+          { label: '\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05E4\u05E2\u05D9\u05DC\u05D9\u05DD', getValue: function() { return OPTIRISK_DATA.activeRisks; }, trend: 'down' },
+          { label: '\u05E7\u05E8\u05D9\u05D8\u05D9\u05D9\u05DD', getValue: function() { return OPTIRISK_DATA.critical; }, trend: 'down' },
+          { label: '\u05DE\u05D8\u05D5\u05E4\u05DC\u05D9\u05DD', getValue: function() { return OPTIRISK_DATA.topRisks.filter(function(r) { return r.mitigation === 'resolved'; }).length; }, trend: 'up' },
+          { label: '\u05DE\u05D2\u05DE\u05D4', getValue: function() {
+            var worsening = OPTIRISK_DATA.topRisks.filter(function(r) { return r.trend === 'up'; }).length;
+            var improving = OPTIRISK_DATA.topRisks.filter(function(r) { return r.trend === 'down'; }).length;
+            if (improving > worsening) return '\u05DE\u05E9\u05EA\u05E4\u05E8';
+            if (worsening > improving) return '\u05DE\u05D7\u05DE\u05D9\u05E8';
+            return '\u05D9\u05E6\u05D9\u05D1';
+          }, trend: 'down' }
+        ]
+      },
+      optidocs: {
+        title: 'OptiDocs',
+        kpis: [
+          { label: '\u05E1\u05D4"\u05DB \u05DE\u05E1\u05DE\u05DB\u05D9\u05DD', getValue: function() { return OPTIDOCS_DATA.total; }, trend: 'neutral' },
+          { label: '\u05D0\u05D7\u05D5\u05D6 \u05D4\u05E9\u05DC\u05DE\u05D4', getValue: function() { return OPTIDOCS_DATA.completionRate + '%'; }, trend: 'up' },
+          { label: '\u05DE\u05DE\u05EA\u05D9\u05E0\u05D9\u05DD', getValue: function() { return OPTIDOCS_DATA.pending; }, trend: 'neutral' },
+          { label: '\u05D1\u05D0\u05D9\u05D7\u05D5\u05E8', getValue: function() { return OPTIDOCS_DATA.overdue; }, trend: 'down' }
+        ]
+      },
+      optigantt: {
+        title: 'OptiGantt',
+        kpis: [
+          { label: '\u05E7\u05D8\u05E2\u05D9\u05DD', getValue: function() { return OPTIGANTT_DATA.sections.length; }, trend: 'neutral' },
+          { label: '\u05D1\u05DE\u05E1\u05DC\u05D5\u05DC', getValue: function() {
+            return OPTIGANTT_DATA.sections.filter(function(s) { return s.progress >= 50; }).length;
+          }, trend: 'up' },
+          { label: '\u05D1\u05E2\u05D9\u05DB\u05D5\u05D1', getValue: function() {
+            return OPTIGANTT_DATA.sections.filter(function(s) { return s.progress < 50; }).length;
+          }, trend: 'down' },
+          { label: '\u05D0\u05D1\u05E0\u05D9 \u05D3\u05E8\u05DA', getValue: function() { return OPTIGANTT_DATA.milestones.length; }, trend: 'neutral' }
+        ]
+      }
+    };
+
+    var MODULE_OVERLAY_CONFIG = {
+      optitrack: {
+        title: 'OptiTrack',
+        subtitle: '\u05E0\u05D9\u05D4\u05D5\u05DC \u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD',
+        icon: 'ti-route',
+        dataKey: 'OPTITRACK_DATA'
+      },
+      optibiz: {
+        title: 'OptiBiz',
+        subtitle: '\u05E0\u05D9\u05D4\u05D5\u05DC \u05E4\u05D9\u05E0\u05E0\u05E1\u05D9',
+        icon: 'ti-chart-bar',
+        dataKey: 'OPTIBIZ_DATA'
+      },
+      optirisk: {
+        title: 'OptiRisk',
+        subtitle: '\u05E0\u05D9\u05D4\u05D5\u05DC \u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD',
+        icon: 'ti-alert-triangle',
+        dataKey: 'OPTIRISK_DATA'
+      },
+      optidocs: {
+        title: 'OptiDocs',
+        subtitle: '\u05E0\u05D9\u05D4\u05D5\u05DC \u05DE\u05E1\u05DE\u05DB\u05D9\u05DD',
+        icon: 'ti-file-text',
+        dataKey: 'OPTIDOCS_DATA'
+      },
+      optigantt: {
+        title: 'OptiGantt',
+        subtitle: '\u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD',
+        icon: 'ti-calendar',
+        dataKey: 'OPTIGANTT_DATA'
+      }
+    };
+
     function handleStatCardTouchStart(e) {
       var card = e.currentTarget;
+      card.style.transition = 'none';
       card.style.transform = 'scale(0.98)';
     }
 
     function handleStatCardTouchEnd(e) {
       var card = e.currentTarget;
       card.style.transform = '';
+      void card.offsetHeight;
+      card.style.transition = '';
+    }
+
+    // ================================================================
+    // SECTION: Component — Card Flip Interaction
+    // ================================================================
+
+    function handleStatCardTap(e) {
+      var card = e.currentTarget;
+      var moduleId = card.dataset.module;
+
+      // If tapping the CTA button, open module overlay
+      if (e.target.classList.contains('stat-card__back-cta')) {
+        var ctaModuleId = e.currentTarget.dataset.module;
+        OptiPlan.components.moduleOverlay.expand(ctaModuleId);
+        return;
+      }
+
+      // If same card is already flipped, don't re-flip
+      if (card.classList.contains('stat-card--flipped')) {
+        return;
+      }
+
+      // If another card is flipped, snap it back immediately
+      var currentlyFlipped = document.querySelector('.stat-card--flipped');
+      if (currentlyFlipped) {
+        var frontFace = currentlyFlipped.querySelector('.stat-card__front');
+        var backFace = currentlyFlipped.querySelector('.stat-card__back');
+        if (frontFace) frontFace.style.transition = 'none';
+        if (backFace) backFace.style.transition = 'none';
+        currentlyFlipped.classList.remove('stat-card--flipped');
+        // Force reflow to apply snap
+        void currentlyFlipped.offsetHeight;
+        if (frontFace) frontFace.style.transition = '';
+        if (backFace) backFace.style.transition = '';
+      }
+
+      // Flip the tapped card
+      card.classList.add('stat-card--flipped');
+      OptiPlan.state.activeModule = moduleId;
+      // Only transition if not already in card-flip (switching cards stays in same layer)
+      if (OptiPlan.state.currentLayer !== 'card-flip') {
+        OptiPlan.state.transition('card-flip');
+      }
+    }
+
+    function handleOutsideTap(e) {
+      // Don't process if no card is flipped
+      if (OptiPlan.state.currentLayer !== 'card-flip') return;
+
+      // Check if tap is inside any stat card
+      var isInsideCard = e.target.closest('.stat-card');
+      if (isInsideCard) return;
+
+      // Flip the active card back
+      var flippedCard = document.querySelector('.stat-card--flipped');
+      if (flippedCard) {
+        flippedCard.classList.remove('stat-card--flipped');
+      }
+
+      OptiPlan.state.activeModule = null;
+      OptiPlan.state.transition('overview');
     }
 
     OptiPlan.components.statCards = {
@@ -1541,7 +2029,7 @@
 
       render: function(data) {
         var self = this;
-        // Populate card content from config
+        // Populate front face content from config
         STAT_CARD_CONFIG.forEach(function(config, i) {
           var $card = self.$statCards[i];
           if (!$card) return;
@@ -1560,6 +2048,32 @@
               : config.sublabel;
           }
         });
+
+        // Populate back face content from CARD_BACK_CONFIG
+        for (var i = 0; i < self.$statCards.length; i++) {
+          var $card = self.$statCards[i];
+          var moduleKey = $card.dataset.module;
+          var backConfig = CARD_BACK_CONFIG[moduleKey];
+          if (!backConfig) continue;
+
+          var $kpiRows = $card.querySelectorAll('.stat-card__kpi-row');
+          for (var j = 0; j < backConfig.kpis.length && j < $kpiRows.length; j++) {
+            var kpi = backConfig.kpis[j];
+            var $row = $kpiRows[j];
+            var $kpiLabel = $row.querySelector('.stat-card__kpi-label');
+            var $kpiValue = $row.querySelector('.stat-card__kpi-value');
+            var $kpiTrend = $row.querySelector('.stat-card__kpi-trend');
+
+            if ($kpiLabel) $kpiLabel.textContent = kpi.label;
+            if ($kpiValue) $kpiValue.textContent = kpi.getValue();
+            if ($kpiTrend) {
+              $kpiTrend.className = 'stat-card__kpi-trend stat-card__kpi-trend--' + kpi.trend;
+              if (kpi.trend === 'up') $kpiTrend.textContent = '\u25B2';
+              else if (kpi.trend === 'down') $kpiTrend.textContent = '\u25BC';
+              else $kpiTrend.textContent = '\u2014';
+            }
+          }
+        }
 
         // Staggered entrance animation
         STAT_CARD_CONFIG.forEach(function(config, i) {
@@ -1584,7 +2098,9 @@
         for (var i = 0; i < this.$statCards.length; i++) {
           this.$statCards[i].addEventListener('touchstart', handleStatCardTouchStart, { passive: true });
           this.$statCards[i].addEventListener('touchend', handleStatCardTouchEnd, { passive: true });
+          this.$statCards[i].addEventListener('click', handleStatCardTap);
         }
+        document.addEventListener('click', handleOutsideTap);
       },
 
       destroy: function() {
@@ -1596,8 +2112,311 @@
           for (var i = 0; i < this.$statCards.length; i++) {
             this.$statCards[i].removeEventListener('touchstart', handleStatCardTouchStart);
             this.$statCards[i].removeEventListener('touchend', handleStatCardTouchEnd);
+            this.$statCards[i].removeEventListener('click', handleStatCardTap);
           }
         }
+        document.removeEventListener('click', handleOutsideTap);
+      }
+    };
+
+    // ================================================================
+    // SECTION: Component — Module Overlay
+    // ================================================================
+
+    var _isOverlayTransitioning = false;
+
+    function handleModuleClose(e) {
+      if (e) e.preventDefault();
+      OptiPlan.components.moduleOverlay.close();
+    }
+
+    function handleBackdropTap(e) {
+      if (e.target === OptiPlan.components.moduleOverlay.$backdrop) {
+        OptiPlan.components.moduleOverlay.close();
+      }
+    }
+
+    function handlePopState(e) {
+      if (OptiPlan.state.currentLayer === 'module-expand') {
+        OptiPlan.components.moduleOverlay.close();
+      }
+    }
+
+    function _updateSidebarForModule(moduleId) {
+      var $items = OptiPlan.components.sidebar.$navItems;
+      if (!$items) return;
+      $items.forEach(function($item) {
+        $item.classList.remove('sidebar__nav-item--active');
+        $item.removeAttribute('aria-current');
+        if ($item.dataset.module === moduleId) {
+          $item.classList.add('sidebar__nav-item--active');
+          $item.setAttribute('aria-current', 'page');
+        }
+      });
+    }
+
+    function _resetSidebarToDashboard() {
+      var $items = OptiPlan.components.sidebar.$navItems;
+      if (!$items) return;
+      $items.forEach(function($item) {
+        $item.classList.remove('sidebar__nav-item--active');
+        $item.removeAttribute('aria-current');
+        if ($item.dataset.module === 'dashboard') {
+          $item.classList.add('sidebar__nav-item--active');
+          $item.setAttribute('aria-current', 'page');
+        }
+      });
+    }
+
+    OptiPlan.components.moduleOverlay = {
+      $backdrop: null,
+      $overlay: null,
+      $content: null,
+      $title: null,
+      $subtitle: null,
+      $icon: null,
+      $backBtn: null,
+      _currentModuleId: null,
+
+      init: function() {
+        this.$backdrop = document.querySelector('.module-overlay-backdrop');
+        this.$overlay = document.querySelector('.module-overlay');
+        this.$content = document.querySelector('.module-overlay__content');
+        this.$title = document.querySelector('.module-overlay__title');
+        this.$subtitle = document.querySelector('.module-overlay__subtitle');
+        this.$icon = document.querySelector('.module-overlay__icon');
+        this.$backBtn = document.querySelector('.module-overlay__back');
+        this._bindEvents();
+      },
+
+      expand: function(moduleId) {
+        if (_isOverlayTransitioning) return;
+        var self = this;
+        var config = MODULE_OVERLAY_CONFIG[moduleId];
+        if (!config) {
+          console.warn('[OptiPlan ModuleOverlay] Unknown module:', moduleId);
+          return;
+        }
+
+        // If already showing a different module, switch
+        if (this._currentModuleId && this._currentModuleId !== moduleId) {
+          this._switchModule(moduleId);
+          return;
+        }
+
+        _isOverlayTransitioning = true;
+        this._currentModuleId = moduleId;
+
+        // Set module color via CSS custom property
+        this.$overlay.style.setProperty('--module', 'var(--' + moduleId + ')');
+
+        // Populate header
+        this.$title.textContent = config.title;
+        this.$subtitle.textContent = config.subtitle;
+        this.$icon.className = 'module-overlay__icon ti ' + config.icon;
+
+        // Activate overlay
+        this.$backdrop.classList.add('module-overlay-backdrop--active');
+        this.$overlay.classList.remove('module-overlay--closing');
+        this.$overlay.classList.add('module-overlay--active');
+
+        // Update state
+        OptiPlan.state.activeModule = moduleId;
+        OptiPlan.state.transition('module-expand');
+
+        // Push history for back button
+        window.history.pushState({ layer: 'module-expand', moduleId: moduleId }, '');
+
+        // Update sidebar active state
+        _updateSidebarForModule(moduleId);
+
+        // Render module content (if module exists)
+        if (OptiPlan.modules[moduleId] && OptiPlan.modules[moduleId].render) {
+          var dataKey = config.dataKey;
+          var data = window[dataKey];
+          OptiPlan.modules[moduleId].render(data);
+        }
+
+        // Clear transitioning flag after animation
+        setTimeout(function() {
+          _isOverlayTransitioning = false;
+        }, 500);
+      },
+
+      close: function() {
+        if (_isOverlayTransitioning) return;
+        if (!this._currentModuleId) return;
+        var self = this;
+
+        _isOverlayTransitioning = true;
+
+        // Use faster close animation
+        this.$overlay.classList.add('module-overlay--closing');
+
+        // Deactivate
+        this.$backdrop.classList.remove('module-overlay-backdrop--active');
+        this.$overlay.classList.remove('module-overlay--active');
+
+        var closingModuleId = this._currentModuleId;
+
+        // After transition, clean up
+        setTimeout(function() {
+          // Destroy module content
+          if (OptiPlan.modules[closingModuleId] && OptiPlan.modules[closingModuleId].destroy) {
+            OptiPlan.modules[closingModuleId].destroy();
+          }
+          self.$content.innerHTML = '';
+          self.$overlay.classList.remove('module-overlay--closing');
+          self._currentModuleId = null;
+          _isOverlayTransitioning = false;
+        }, 350);
+
+        // Update state
+        OptiPlan.state.activeModule = null;
+        OptiPlan.state.transition('overview');
+
+        // Reset sidebar to Dashboard
+        _resetSidebarToDashboard();
+
+        // Reset card flip state if any card is flipped
+        var flippedCard = document.querySelector('.stat-card--flipped');
+        if (flippedCard) {
+          flippedCard.classList.remove('stat-card--flipped');
+        }
+      },
+
+      _switchModule: function(newModuleId) {
+        var self = this;
+        _isOverlayTransitioning = true;
+
+        // Close current (fast)
+        this.$overlay.classList.add('module-overlay--closing');
+        this.$overlay.classList.remove('module-overlay--active');
+
+        var oldModuleId = this._currentModuleId;
+
+        setTimeout(function() {
+          // Destroy old module
+          if (OptiPlan.modules[oldModuleId] && OptiPlan.modules[oldModuleId].destroy) {
+            OptiPlan.modules[oldModuleId].destroy();
+          }
+          self.$content.innerHTML = '';
+          self.$overlay.classList.remove('module-overlay--closing');
+          self._currentModuleId = null;
+          _isOverlayTransitioning = false;
+
+          // Open new module
+          self.expand(newModuleId);
+        }, 350);
+      },
+
+      _bindEvents: function() {
+        this.$backBtn.addEventListener('click', handleModuleClose);
+        this.$backdrop.addEventListener('click', handleBackdropTap);
+        window.addEventListener('popstate', handlePopState);
+      },
+
+      destroy: function() {
+        this.$backBtn.removeEventListener('click', handleModuleClose);
+        this.$backdrop.removeEventListener('click', handleBackdropTap);
+        window.removeEventListener('popstate', handlePopState);
+        if (this._currentModuleId) {
+          this.close();
+        }
+      }
+    };
+
+    // ================================================================
+    // SECTION: Modules — Placeholder Stubs
+    // ================================================================
+
+    OptiPlan.modules.optitrack = {
+      init: function() {},
+      render: function(data) {
+        var $content = document.querySelector('.module-overlay__content');
+        if (!$content) return;
+        $content.innerHTML =
+          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
+            '<i class="ti ti-route" style="font-size: 64px; color: var(--optitrack); opacity: 0.3; margin-bottom: 16px;"></i>' +
+            '<span style="font-family: var(--font-main); font-size: 16px;">OptiTrack \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD</span>' +
+            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.3</span>' +
+          '</div>';
+      },
+      destroy: function() {
+        var $content = document.querySelector('.module-overlay__content');
+        if ($content) $content.innerHTML = '';
+      }
+    };
+
+    OptiPlan.modules.optibiz = {
+      init: function() {},
+      render: function(data) {
+        var $content = document.querySelector('.module-overlay__content');
+        if (!$content) return;
+        $content.innerHTML =
+          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
+            '<i class="ti ti-chart-bar" style="font-size: 64px; color: var(--optibiz); opacity: 0.3; margin-bottom: 16px;"></i>' +
+            '<span style="font-family: var(--font-main); font-size: 16px;">OptiBiz \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05E4\u05D9\u05E0\u05E0\u05E1\u05D9</span>' +
+            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.4</span>' +
+          '</div>';
+      },
+      destroy: function() {
+        var $content = document.querySelector('.module-overlay__content');
+        if ($content) $content.innerHTML = '';
+      }
+    };
+
+    OptiPlan.modules.optirisk = {
+      init: function() {},
+      render: function(data) {
+        var $content = document.querySelector('.module-overlay__content');
+        if (!$content) return;
+        $content.innerHTML =
+          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
+            '<i class="ti ti-alert-triangle" style="font-size: 64px; color: var(--optirisk); opacity: 0.3; margin-bottom: 16px;"></i>' +
+            '<span style="font-family: var(--font-main); font-size: 16px;">OptiRisk \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD</span>' +
+            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.5</span>' +
+          '</div>';
+      },
+      destroy: function() {
+        var $content = document.querySelector('.module-overlay__content');
+        if ($content) $content.innerHTML = '';
+      }
+    };
+
+    OptiPlan.modules.optidocs = {
+      init: function() {},
+      render: function(data) {
+        var $content = document.querySelector('.module-overlay__content');
+        if (!$content) return;
+        $content.innerHTML =
+          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
+            '<i class="ti ti-file-text" style="font-size: 64px; color: var(--optidocs); opacity: 0.3; margin-bottom: 16px;"></i>' +
+            '<span style="font-family: var(--font-main); font-size: 16px;">OptiDocs \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05DE\u05E1\u05DE\u05DB\u05D9\u05DD</span>' +
+            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.6</span>' +
+          '</div>';
+      },
+      destroy: function() {
+        var $content = document.querySelector('.module-overlay__content');
+        if ($content) $content.innerHTML = '';
+      }
+    };
+
+    OptiPlan.modules.optigantt = {
+      init: function() {},
+      render: function(data) {
+        var $content = document.querySelector('.module-overlay__content');
+        if (!$content) return;
+        $content.innerHTML =
+          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
+            '<i class="ti ti-calendar" style="font-size: 64px; color: var(--optigantt); opacity: 0.3; margin-bottom: 16px;"></i>' +
+            '<span style="font-family: var(--font-main); font-size: 16px;">OptiGantt \u2014 \u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD</span>' +
+            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.7</span>' +
+          '</div>';
+      },
+      destroy: function() {
+        var $content = document.querySelector('.module-overlay__content');
+        if ($content) $content.innerHTML = '';
       }
     };
 
@@ -1630,16 +2449,15 @@
         return;
       }
 
-      // Transition back to overview from any deeper layer
-      // Future: When module overlay and card flip components exist,
-      // call their close/reset methods here before transitioning.
-      // e.g., if (OptiPlan.components.moduleOverlay) OptiPlan.components.moduleOverlay.close();
-      // e.g., if (OptiPlan.components.statCards.resetFlip) OptiPlan.components.statCards.resetFlip();
-
       if (currentLayer === 'module-expand') {
-        OptiPlan.state.transition('overview');
+        OptiPlan.components.moduleOverlay.close();
         console.log('[OptiPlan Idle] Auto-reset from module-expand to overview');
       } else if (currentLayer === 'card-flip') {
+        var flippedCard = document.querySelector('.stat-card--flipped');
+        if (flippedCard) {
+          flippedCard.classList.remove('stat-card--flipped');
+        }
+        OptiPlan.state.activeModule = null;
         OptiPlan.state.transition('overview');
         console.log('[OptiPlan Idle] Auto-reset from card-flip to overview');
       }
@@ -1693,6 +2511,7 @@
       OptiPlan.components.topbar.init();
       OptiPlan.components.heroGauges.init();
       OptiPlan.components.statCards.init();
+      OptiPlan.components.moduleOverlay.init();
 
       // Idle auto-reset
       OptiPlan.components.idleReset.init();
