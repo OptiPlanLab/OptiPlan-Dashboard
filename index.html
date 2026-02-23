@@ -1186,7 +1186,6 @@
     .optibiz-legend__line {
       width: 16px;
       height: 2px;
-      background: var(--optibiz);
       opacity: 0.7;
       flex-shrink: 0;
       border-top: 2px dashed var(--optibiz);
@@ -1226,6 +1225,249 @@
     }
 
     .optibiz-section--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — OptiRisk Module                               */
+    /* ================================================================ */
+
+    /* --- Metrics Summary Row --- */
+    .optirisk-metrics {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+    }
+
+    .optirisk-metric {
+      flex: 1;
+      min-width: 120px;
+      background: color-mix(in srgb, var(--optirisk) 8%, var(--bg-card));
+      border-radius: var(--radius-sm);
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid color-mix(in srgb, var(--optirisk) 15%, transparent);
+    }
+
+    .optirisk-metric__value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .optirisk-metric__value--critical {
+      color: var(--optirisk);
+    }
+
+    .optirisk-metric__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* --- Heat Map SVG --- */
+    .optirisk-heatmap-wrap {
+      margin-top: var(--gap);
+    }
+
+    .optirisk-heatmap__svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .risk-cell--zone-0 { fill: var(--status-online); }
+    .risk-cell--zone-1 { fill: #84CC16; }
+    .risk-cell--zone-2 { fill: var(--optibiz); }
+    .risk-cell--zone-3 { fill: var(--optirisk); }
+    .risk-cell--zone-4 { fill: var(--status-danger); }
+
+    .optirisk-heatmap__axis-title {
+      font-family: var(--font-main);
+      font-size: 12px;
+      font-weight: 700;
+      fill: var(--text-secondary);
+    }
+
+    .optirisk-heatmap__row-label {
+      font-family: var(--font-main);
+      font-size: 11px;
+      fill: var(--text-secondary);
+    }
+
+    .optirisk-heatmap__col-label {
+      font-family: var(--font-main);
+      font-size: 11px;
+      fill: var(--text-secondary);
+    }
+
+    .optirisk-heatmap__count {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .optirisk-heatmap__count--zero {
+      fill: var(--text-muted);
+    }
+
+    .optirisk-heatmap__count--nonzero {
+      fill: var(--text-on-color);
+    }
+
+    /* --- Color Scale Legend --- */
+    .optirisk-legend {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+      margin-top: var(--gap-sm);
+      align-items: center;
+    }
+
+    .optirisk-legend__item {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+    }
+
+    .optirisk-legend__swatch {
+      width: 16px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .optirisk-legend__swatch--zone-0 { background: var(--status-online); }
+    .optirisk-legend__swatch--zone-1 { background: #84CC16; }
+    .optirisk-legend__swatch--zone-2 { background: var(--optibiz); }
+    .optirisk-legend__swatch--zone-3 { background: var(--optirisk); }
+    .optirisk-legend__swatch--zone-4 { background: var(--status-danger); }
+
+    .optirisk-legend__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* --- Top Risks Table --- */
+    .optirisk-table {
+      margin-top: var(--gap);
+    }
+
+    .optirisk-table__header {
+      display: flex;
+      padding: var(--gap-sm) var(--gap);
+      border-bottom: 1px solid var(--border);
+      gap: var(--gap);
+    }
+
+    .optirisk-table__col {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .optirisk-table__col--name {
+      flex: 2;
+      min-width: 0;
+    }
+
+    .optirisk-table__col--severity,
+    .optirisk-table__col--trend,
+    .optirisk-table__col--mitigation {
+      flex: 1;
+      text-align: center;
+    }
+
+    .optirisk-table__row {
+      display: flex;
+      padding: var(--gap-sm) var(--gap);
+      gap: var(--gap);
+      align-items: center;
+      min-height: 44px;
+      transition: background 150ms ease;
+    }
+
+    .optirisk-table__row--alt {
+      background: var(--bar-track);
+    }
+
+    .optirisk-table__row:hover {
+      background: var(--feed-hover);
+    }
+
+    .optirisk-table__row .optirisk-table__col {
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    .optirisk-table__row .optirisk-table__col--name {
+      font-weight: 600;
+    }
+
+    /* --- Severity & Mitigation Badges --- */
+    .optirisk-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-main);
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .optirisk-badge--critical { background: rgba(239, 68, 68, 0.2); color: var(--status-danger); }
+    .optirisk-badge--high { background: rgba(255, 122, 60, 0.2); color: var(--optirisk); }
+    .optirisk-badge--medium { background: rgba(246, 174, 45, 0.2); color: var(--optibiz); }
+    .optirisk-badge--low { background: rgba(34, 197, 94, 0.2); color: var(--status-online); }
+
+    .optirisk-badge--active { background: rgba(9, 145, 243, 0.2); color: var(--optitrack); }
+    .optirisk-badge--monitoring { background: rgba(246, 174, 45, 0.15); color: var(--optibiz); }
+    .optirisk-badge--resolved { background: rgba(34, 197, 94, 0.15); color: var(--status-online); }
+    .optirisk-badge--legal-review { background: rgba(160, 164, 184, 0.2); color: var(--text-secondary); }
+
+    /* --- Trend Arrows --- */
+    .optirisk-trend {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .optirisk-trend--up { color: var(--status-danger); }
+    .optirisk-trend--down { color: var(--status-online); }
+    .optirisk-trend--stable { color: var(--text-muted); }
+
+    /* --- Section Headers --- */
+    .optirisk-section-title {
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: var(--gap);
+      margin-bottom: var(--gap-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+    }
+
+    .optirisk-section-title__icon {
+      font-size: 16px;
+      color: var(--optirisk);
+    }
+
+    /* --- Staggered Entrance Animation --- */
+    .optirisk-section {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .optirisk-section--visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -1962,6 +2204,19 @@
       return new Intl.NumberFormat('he-IL').format(amount);
     };
 
+    OptiPlan.utils.formatCurrencyShort = function(amount, forceScale) {
+      if (typeof amount !== 'number' || isNaN(amount)) {
+        console.warn('[OptiPlan Utils] Invalid currency amount:', amount);
+        return '';
+      }
+      var abs = Math.abs(amount);
+      if (abs === 0) return '\u20AA0';
+      if (forceScale === 'B' || (!forceScale && abs >= 1000000000)) {
+        return '\u20AA' + (abs / 1000000000).toFixed(2) + 'B';
+      }
+      return '\u20AA' + Math.round(abs / 1000000) + 'M';
+    };
+
     OptiPlan.utils.formatPercent = function(value) {
       if (typeof value !== 'number' || isNaN(value)) {
         console.warn('[OptiPlan Utils] Invalid percent value:', value);
@@ -2633,10 +2888,15 @@
         _updateSidebarForModule(moduleId);
 
         // Render module content (if module exists)
-        if (OptiPlan.modules[moduleId] && OptiPlan.modules[moduleId].render) {
-          var dataKey = config.dataKey;
-          var data = window[dataKey];
-          OptiPlan.modules[moduleId].render(data);
+        if (OptiPlan.modules[moduleId]) {
+          if (OptiPlan.modules[moduleId].init) {
+            OptiPlan.modules[moduleId].init();
+          }
+          if (OptiPlan.modules[moduleId].render) {
+            var dataKey = config.dataKey;
+            var data = window[dataKey];
+            OptiPlan.modules[moduleId].render(data);
+          }
         }
 
         // Clear transitioning flag after animation
@@ -2926,20 +3186,26 @@
 
       render: function(data) {
         var self = this;
-        this.$content = document.querySelector('.module-overlay__content');
         if (!this.$content || !data) return;
 
+        // Clear pending entrance timeouts from any previous render
+        for (var t = 0; t < this._entranceTimeouts.length; t++) {
+          clearTimeout(this._entranceTimeouts[t]);
+        }
+        this._entranceTimeouts = [];
+
+        var fmt = OptiPlan.utils.formatCurrencyShort;
         var html = '';
 
         // --- Financial KPI Metrics Row ---
         html += '<div class="optibiz-section optibiz-metrics" data-optibiz-section="metrics">';
         html += self._renderMetricWithBar(
-          self._formatBillions(data.budgetUtilized) + ' / ' + self._formatBillions(data.budgetTotal),
+          fmt(data.budgetUtilized) + ' / ' + fmt(data.budgetTotal),
           '\u05E0\u05D9\u05E6\u05D5\u05DC \u05EA\u05E7\u05E6\u05D9\u05D1',
           data.budgetUtilization
         );
         html += self._renderMetricCard(data.budgetUtilization + '%', '\u05D0\u05D7\u05D5\u05D6 \u05E0\u05D9\u05E6\u05D5\u05DC');
-        html += self._renderMetricCard(self._formatMillions(data.burnRate), '\u05E7\u05E6\u05D1 \u05E9\u05E8\u05D9\u05E4\u05D4 \u05D7\u05D5\u05D3\u05E9\u05D9');
+        html += self._renderMetricCard(fmt(data.burnRate), '\u05E7\u05E6\u05D1 \u05E9\u05E8\u05D9\u05E4\u05D4 \u05D7\u05D5\u05D3\u05E9\u05D9');
         html += self._renderVarianceCard(data.variance);
         html += '</div>';
 
@@ -2970,14 +3236,6 @@
         }
       },
 
-      _formatBillions: function(val) {
-        return '\u20AA' + (val / 1000000000).toFixed(2) + 'B';
-      },
-
-      _formatMillions: function(val) {
-        return '\u20AA' + Math.round(Math.abs(val) / 1000000) + 'M';
-      },
-
       _renderMetricCard: function(value, label) {
         return '<div class="optibiz-metric">' +
           '<span class="optibiz-metric__value">' + value + '</span>' +
@@ -2997,7 +3255,7 @@
 
       _renderVarianceCard: function(variance) {
         var isNegative = variance < 0;
-        var formatted = (isNegative ? '-' : '+') + this._formatMillions(variance);
+        var formatted = (isNegative ? '-' : '+') + OptiPlan.utils.formatCurrencyShort(variance);
         var cssClass = isNegative ? ' optibiz-metric__value--negative' : '';
         return '<div class="optibiz-metric">' +
           '<span class="optibiz-metric__value' + cssClass + '">' + formatted + '</span>' +
@@ -3006,6 +3264,8 @@
       },
 
       _renderCashFlowChart: function(data) {
+        var fmt = OptiPlan.utils.formatCurrencyShort;
+
         // Chart dimensions (viewBox units)
         var svgWidth = 720;
         var svgHeight = 320;
@@ -3015,26 +3275,23 @@
         var bottomMargin = 40;
         var chartWidth = svgWidth - leftMargin - rightMargin;
         var chartHeight = svgHeight - topMargin - bottomMargin;
-        var groupWidth = chartWidth / 12;
+        var monthCount = data.cashFlow.length;
+        var groupWidth = chartWidth / monthCount;
         var barWidth = groupWidth * 0.35;
         var barGap = 2;
 
-        // Y-axis scale (monthly values)
+        // Single pass: compute maxVal, cumulativeMax, and cumulative data points
         var maxVal = 0;
-        for (var i = 0; i < data.cashFlow.length; i++) {
+        var cumulative = 0;
+        var cumulativeData = [];
+        for (var i = 0; i < monthCount; i++) {
           if (data.cashFlow[i].plan > maxVal) maxVal = data.cashFlow[i].plan;
           if (data.cashFlow[i].actual > maxVal) maxVal = data.cashFlow[i].actual;
+          cumulative += data.cashFlow[i].actual;
+          cumulativeData.push(cumulative);
         }
         maxVal = Math.ceil(maxVal / 20000000) * 20000000;
-
-        // Cumulative max for right y-axis
-        var cumulative = 0;
-        var cumulativeMax = 0;
-        for (var c = 0; c < data.cashFlow.length; c++) {
-          cumulative += data.cashFlow[c].actual;
-          if (cumulative > cumulativeMax) cumulativeMax = cumulative;
-        }
-        cumulativeMax = Math.ceil(cumulativeMax / 200000000) * 200000000;
+        var cumulativeMax = Math.ceil(cumulative / 200000000) * 200000000;
 
         var svg = '<svg class="optibiz-chart__svg" viewBox="0 0 ' + svgWidth + ' ' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="\u05EA\u05E8\u05E9\u05D9\u05DD \u05EA\u05D6\u05E8\u05D9\u05DD \u05DE\u05D6\u05D5\u05DE\u05E0\u05D9\u05DD">';
 
@@ -3044,19 +3301,20 @@
           var tickVal = (maxVal / tickCount) * t;
           var tickY = topMargin + chartHeight - (tickVal / maxVal * chartHeight);
           svg += '<line class="optibiz-chart__grid-line" x1="' + leftMargin + '" y1="' + tickY + '" x2="' + (svgWidth - rightMargin) + '" y2="' + tickY + '" />';
-          svg += '<text class="optibiz-chart__axis-label" x="' + (leftMargin - 8) + '" y="' + (tickY + 3) + '" text-anchor="end">' + this._formatMillions(tickVal) + '</text>';
+          svg += '<text class="optibiz-chart__axis-label" x="' + (leftMargin - 8) + '" y="' + (tickY + 3) + '" text-anchor="end">' + fmt(tickVal) + '</text>';
         }
 
-        // Right Y-axis labels (cumulative)
+        // Right Y-axis labels (cumulative — forced billions scale)
         var rightTickCount = 4;
         for (var rt = 0; rt <= rightTickCount; rt++) {
           var rTickVal = (cumulativeMax / rightTickCount) * rt;
           var rTickY = topMargin + chartHeight - (rTickVal / cumulativeMax * chartHeight);
-          svg += '<text class="optibiz-chart__axis-label--right" x="' + (svgWidth - rightMargin + 8) + '" y="' + (rTickY + 3) + '" text-anchor="start">' + this._formatBillions(rTickVal) + '</text>';
+          svg += '<text class="optibiz-chart__axis-label--right" x="' + (svgWidth - rightMargin + 8) + '" y="' + (rTickY + 3) + '" text-anchor="start">' + fmt(rTickVal, 'B') + '</text>';
         }
 
-        // Bars for each month
-        for (var m = 0; m < data.cashFlow.length; m++) {
+        // Bars and month labels
+        var trendPoints = [];
+        for (var m = 0; m < monthCount; m++) {
           var entry = data.cashFlow[m];
           var groupX = leftMargin + (m * groupWidth);
           var planBarX = groupX + (groupWidth - 2 * barWidth - barGap) / 2;
@@ -3075,25 +3333,20 @@
           // X-axis month label
           var labelX = groupX + groupWidth / 2;
           svg += '<text class="optibiz-chart__month-label" x="' + labelX + '" y="' + (topMargin + chartHeight + 20) + '" text-anchor="middle">' + data.monthLabels[m] + '</text>';
+
+          // Collect trend point
+          var px = leftMargin + (m * groupWidth) + groupWidth / 2;
+          var py = topMargin + chartHeight - (cumulativeData[m] / cumulativeMax * chartHeight);
+          trendPoints.push(px + ',' + py);
         }
 
         // Running total trend line (uses right axis scale)
-        var cumSum = 0;
-        var trendPoints = [];
-        for (var p = 0; p < data.cashFlow.length; p++) {
-          cumSum += data.cashFlow[p].actual;
-          var px = leftMargin + (p * groupWidth) + groupWidth / 2;
-          var py = topMargin + chartHeight - (cumSum / cumulativeMax * chartHeight);
-          trendPoints.push(px + ',' + py);
-        }
         svg += '<polyline class="optibiz-trend-line" points="' + trendPoints.join(' ') + '" />';
 
         // Trend line data point markers
-        cumSum = 0;
-        for (var d = 0; d < data.cashFlow.length; d++) {
-          cumSum += data.cashFlow[d].actual;
+        for (var d = 0; d < monthCount; d++) {
           var dx = leftMargin + (d * groupWidth) + groupWidth / 2;
-          var dy = topMargin + chartHeight - (cumSum / cumulativeMax * chartHeight);
+          var dy = topMargin + chartHeight - (cumulativeData[d] / cumulativeMax * chartHeight);
           svg += '<circle class="optibiz-trend-dot" cx="' + dx + '" cy="' + dy + '" r="3" />';
         }
 
@@ -3111,21 +3364,200 @@
       }
     };
 
+    // ================================================================
+    // MODULE: OptiRisk
+    // ================================================================
     OptiPlan.modules.optirisk = {
-      init: function() {},
+      $content: null,
+      _entranceTimeouts: [],
+
+      init: function() {
+        this.$content = document.querySelector('.module-overlay__content');
+      },
+
       render: function(data) {
-        var $content = document.querySelector('.module-overlay__content');
-        if (!$content) return;
-        $content.innerHTML =
-          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
-            '<i class="ti ti-alert-triangle" style="font-size: 64px; color: var(--optirisk); opacity: 0.3; margin-bottom: 16px;"></i>' +
-            '<span style="font-family: var(--font-main); font-size: 16px;">OptiRisk \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD</span>' +
-            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.5</span>' +
+        var self = this;
+        this.$content = document.querySelector('.module-overlay__content');
+        if (!this.$content || !data) return;
+
+        var html = '';
+
+        // --- Metrics Summary Row ---
+        html += '<div class="optirisk-section optirisk-metrics" data-optirisk-section="metrics">';
+        html += self._renderMetricCard(data.activeRisks, '\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05E4\u05E2\u05D9\u05DC\u05D9\u05DD', false);
+        html += self._renderMetricCard(data.critical, '\u05E7\u05E8\u05D9\u05D8\u05D9\u05D9\u05DD', true);
+        html += self._renderMetricCard(data.topRisks.length, '\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD', false);
+        html += '</div>';
+
+        // --- Heat Map Section ---
+        html += '<div class="optirisk-section optirisk-heatmap-wrap" data-optirisk-section="heatmap">';
+        html += '<div class="optirisk-section-title"><i class="ti ti-chart-dots-3 optirisk-section-title__icon"></i>\u05DE\u05E4\u05EA \u05D7\u05D5\u05DD \u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD</div>';
+        html += self._renderHeatMap(data);
+        // --- Color Scale Legend ---
+        html += self._renderLegend();
+        html += '</div>';
+
+        // --- Top Risks Table ---
+        html += '<div class="optirisk-section" data-optirisk-section="table">';
+        html += '<div class="optirisk-section-title"><i class="ti ti-list-details optirisk-section-title__icon"></i>\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD</div>';
+        html += self._renderTopRisksTable(data);
+        html += '</div>';
+
+        this.$content.innerHTML = html;
+
+        // Staggered entrance animation
+        var sections = this.$content.querySelectorAll('.optirisk-section');
+        for (var s = 0; s < sections.length; s++) {
+          (function(section, delay) {
+            var timeout = setTimeout(function() {
+              section.classList.add('optirisk-section--visible');
+            }, delay);
+            self._entranceTimeouts.push(timeout);
+          })(sections[s], s * 100);
+        }
+      },
+
+      _renderMetricCard: function(value, label, isCritical) {
+        var valueClass = 'optirisk-metric__value';
+        if (isCritical) valueClass += ' optirisk-metric__value--critical';
+        return '<div class="optirisk-metric">' +
+          '<span class="' + valueClass + '">' + value + '</span>' +
+          '<span class="optirisk-metric__label">' + label + '</span>' +
           '</div>';
       },
+
+      _getZone: function(row, col) {
+        var sum = row + col;
+        if (sum <= 1) return 0;
+        if (sum <= 3) return 1;
+        if (sum <= 4) return 2;
+        if (sum <= 6) return 3;
+        return 4;
+      },
+
+      _renderHeatMap: function(data) {
+        var self = this;
+        var gridStartX = 110;
+        var gridStartY = 30;
+        var cellWidth = 52;
+        var cellHeight = 44;
+        var cellGap = 4;
+        var gridWidth = 5 * (cellWidth + cellGap) - cellGap;
+        var gridHeight = 5 * (cellHeight + cellGap) - cellGap;
+        var svgWidth = gridStartX + gridWidth + 20;
+        var svgHeight = gridStartY + gridHeight + 50;
+
+        var svg = '<svg class="optirisk-heatmap__svg" viewBox="0 0 ' + svgWidth + ' ' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="\u05DE\u05E4\u05EA \u05D7\u05D5\u05DD \u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD">';
+
+        // Y-axis title (Probability)
+        var axisTitleY = gridStartY + gridHeight / 2;
+        svg += '<text class="optirisk-heatmap__axis-title" x="12" y="' + axisTitleY + '" text-anchor="middle" transform="rotate(-90, 12, ' + axisTitleY + ')">\u05E1\u05D1\u05D9\u05E8\u05D5\u05EA</text>';
+
+        // Row labels (probability — Hebrew, low at bottom, high at top)
+        for (var r = 0; r < 5; r++) {
+          var visualRow = 4 - r;
+          var cy = gridStartY + visualRow * (cellHeight + cellGap) + cellHeight / 2 + 4;
+          svg += '<text class="optirisk-heatmap__row-label" x="' + (gridStartX - 8) + '" y="' + cy + '" text-anchor="end">' + data.probLabels[r] + '</text>';
+        }
+
+        // Grid cells
+        for (var row = 0; row < 5; row++) {
+          for (var col = 0; col < 5; col++) {
+            var visualRow = 4 - row;
+            var x = gridStartX + col * (cellWidth + cellGap);
+            var y = gridStartY + visualRow * (cellHeight + cellGap);
+            var zone = self._getZone(row, col);
+            var count = data.heatMap[row][col];
+
+            svg += '<rect class="risk-cell--zone-' + zone + '" x="' + x + '" y="' + y + '" width="' + cellWidth + '" height="' + cellHeight + '" rx="4" />';
+
+            var countClass = count > 0 ? 'optirisk-heatmap__count--nonzero' : 'optirisk-heatmap__count--zero';
+            svg += '<text class="optirisk-heatmap__count ' + countClass + '" x="' + (x + cellWidth / 2) + '" y="' + (y + cellHeight / 2 + 5) + '" text-anchor="middle">' + count + '</text>';
+          }
+        }
+
+        // Column labels (impact — Hebrew)
+        var gridBottom = gridStartY + gridHeight;
+        for (var c = 0; c < 5; c++) {
+          var cx = gridStartX + c * (cellWidth + cellGap) + cellWidth / 2;
+          svg += '<text class="optirisk-heatmap__col-label" x="' + cx + '" y="' + (gridBottom + 20) + '" text-anchor="middle">' + data.impactLabels[c] + '</text>';
+        }
+
+        // X-axis title (Impact)
+        var axisTitleX = gridStartX + gridWidth / 2;
+        svg += '<text class="optirisk-heatmap__axis-title" x="' + axisTitleX + '" y="' + (gridBottom + 40) + '" text-anchor="middle">\u05D4\u05E9\u05E4\u05E2\u05D4</text>';
+
+        svg += '</svg>';
+        return svg;
+      },
+
+      _renderLegend: function() {
+        var labels = ['\u05E0\u05DE\u05D5\u05DA', '\u05E0\u05DE\u05D5\u05DA-\u05D1\u05D9\u05E0\u05D5\u05E0\u05D9', '\u05D1\u05D9\u05E0\u05D5\u05E0\u05D9', '\u05D2\u05D1\u05D5\u05D4', '\u05E7\u05E8\u05D9\u05D8\u05D9'];
+        var html = '<div class="optirisk-legend">';
+        for (var i = 0; i < labels.length; i++) {
+          html += '<div class="optirisk-legend__item">' +
+            '<span class="optirisk-legend__swatch optirisk-legend__swatch--zone-' + i + '"></span>' +
+            '<span class="optirisk-legend__label">' + labels[i] + '</span>' +
+            '</div>';
+        }
+        html += '</div>';
+        return html;
+      },
+
+      _renderTopRisksTable: function(data) {
+        var severityLabels = {
+          critical: '\u05E7\u05E8\u05D9\u05D8\u05D9',
+          high: '\u05D2\u05D1\u05D5\u05D4',
+          medium: '\u05D1\u05D9\u05E0\u05D5\u05E0\u05D9',
+          low: '\u05E0\u05DE\u05D5\u05DA'
+        };
+        var mitigationLabels = {
+          active: '\u05D8\u05D9\u05E4\u05D5\u05DC \u05E4\u05E2\u05D9\u05DC',
+          monitoring: '\u05E0\u05D9\u05D8\u05D5\u05E8',
+          resolved: '\u05D8\u05D5\u05E4\u05DC',
+          'legal-review': '\u05D1\u05D3\u05D9\u05E7\u05D4 \u05DE\u05E9\u05E4\u05D8\u05D9\u05EA'
+        };
+        var trendMap = {
+          up: { arrow: '\u2191', cssClass: 'optirisk-trend--up' },
+          down: { arrow: '\u2193', cssClass: 'optirisk-trend--down' },
+          stable: { arrow: '\u2192', cssClass: 'optirisk-trend--stable' }
+        };
+
+        var html = '<div class="optirisk-table">';
+
+        // Table header
+        html += '<div class="optirisk-table__header">' +
+          '<span class="optirisk-table__col optirisk-table__col--name">\u05E1\u05D9\u05DB\u05D5\u05DF</span>' +
+          '<span class="optirisk-table__col optirisk-table__col--severity">\u05D7\u05D5\u05DE\u05E8\u05D4</span>' +
+          '<span class="optirisk-table__col optirisk-table__col--trend">\u05DE\u05D2\u05DE\u05D4</span>' +
+          '<span class="optirisk-table__col optirisk-table__col--mitigation">\u05E1\u05D8\u05D8\u05D5\u05E1 \u05D8\u05D9\u05E4\u05D5\u05DC</span>' +
+          '</div>';
+
+        // Table rows
+        for (var i = 0; i < data.topRisks.length; i++) {
+          var risk = data.topRisks[i];
+          var altClass = i % 2 === 1 ? ' optirisk-table__row--alt' : '';
+          var trend = trendMap[risk.trend] || trendMap.stable;
+
+          html += '<div class="optirisk-table__row' + altClass + '">' +
+            '<span class="optirisk-table__col optirisk-table__col--name">' + risk.name + '</span>' +
+            '<span class="optirisk-table__col optirisk-table__col--severity"><span class="optirisk-badge optirisk-badge--' + risk.severity + '">' + (severityLabels[risk.severity] || risk.severity) + '</span></span>' +
+            '<span class="optirisk-table__col optirisk-table__col--trend"><span class="optirisk-trend ' + trend.cssClass + '">' + trend.arrow + '</span></span>' +
+            '<span class="optirisk-table__col optirisk-table__col--mitigation"><span class="optirisk-badge optirisk-badge--' + risk.mitigation + '">' + (mitigationLabels[risk.mitigation] || risk.mitigation) + '</span></span>' +
+            '</div>';
+        }
+
+        html += '</div>';
+        return html;
+      },
+
       destroy: function() {
-        var $content = document.querySelector('.module-overlay__content');
-        if ($content) $content.innerHTML = '';
+        for (var i = 0; i < this._entranceTimeouts.length; i++) {
+          clearTimeout(this._entranceTimeouts[i]);
+        }
+        this._entranceTimeouts = [];
+        if (this.$content) this.$content.innerHTML = '';
+        this.$content = null;
       }
     };
 

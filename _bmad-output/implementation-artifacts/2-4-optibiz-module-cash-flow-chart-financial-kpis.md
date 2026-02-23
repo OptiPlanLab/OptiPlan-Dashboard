@@ -1,6 +1,6 @@
 # Story 2.4: OptiBiz Module — Cash Flow Chart & Financial KPIs
 
-Status: review
+Status: done
 
 ## Story
 
@@ -471,12 +471,22 @@ No blocking issues encountered during implementation.
 - Replaced JS placeholder stub with full module implementation
 - Followed OptiTrack module pattern for consistency (metrics row, section titles, staggered entrance)
 - Dual y-axis chart design to handle monthly vs cumulative scale difference
-- All currency formatting via internal helper methods within module namespace
+- All currency formatting via shared `OptiPlan.utils.formatCurrencyShort()` utility (post-review fix)
 
 ### File List
 
-- `index.html` — Modified: Added OptiBiz CSS section (~170 lines), replaced placeholder JS stub with full module implementation (~195 lines)
+- `index.html` — Modified: Added OptiBiz CSS section (~170 lines), replaced placeholder JS stub with full module implementation (~185 lines), added `formatCurrencyShort` utility, fixed overlay to call `init()` before `render()`
 
 ### Change Log
 
 - **2026-02-23:** Complete implementation of Story 2.4 — OptiBiz module with financial KPI summary row (4 metrics), 12-month cash flow grouped bar chart (SVG), running total trend line (dual y-axis), chart legend, module namespace (init/render/destroy), and staggered entrance animation. All values data-driven from OPTIBIZ_DATA. 32/32 validation checks passed.
+- **2026-02-23:** Code review fixes (9 findings: 0 HIGH, 4 MEDIUM, 5 LOW — all resolved):
+  - Moved currency formatting from private `_formatBillions`/`_formatMillions` to shared `OptiPlan.utils.formatCurrencyShort()` utility with optional `forceScale` parameter (AC #2 compliance)
+  - Fixed `_entranceTimeouts` not cleared on re-render (potential memory leak)
+  - Fixed `init()` never called: overlay `expand()` now calls `init()` before `render()` for all modules
+  - Removed dead CSS: `.optibiz-legend__line` had duplicate overridden `background` property
+  - Consolidated triple cumulative sum computation into single-pass loop with `cumulativeData` array
+  - Fixed "₪0.00B" format inconsistency on right y-axis (now shows "₪0")
+  - Replaced hardcoded `12` month count with dynamic `data.cashFlow.length`
+  - AC #2 `--grid-line` token doesn't exist in design system; implementation correctly uses `var(--border)` per dev notes (no code change needed)
+  - Hardcoded `cubic-bezier` in animation CSS matches OptiTrack pattern — systemic issue deferred
