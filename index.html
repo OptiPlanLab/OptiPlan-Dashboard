@@ -731,6 +731,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 350ms ease;
+      touch-action: none;
     }
 
     .module-overlay-backdrop--active {
@@ -837,6 +838,205 @@
       overflow-x: hidden;
       padding: var(--gap);
       overscroll-behavior: contain;
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — OptiTrack Module                              */
+    /* ================================================================ */
+
+    /* --- Metrics Summary Row --- */
+    .optitrack-metrics {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+    }
+
+    .optitrack-metric {
+      flex: 1;
+      min-width: 120px;
+      background: color-mix(in srgb, var(--optitrack) 8%, var(--bg-card));
+      border-radius: var(--radius-sm);
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid color-mix(in srgb, var(--optitrack) 15%, transparent);
+    }
+
+    .optitrack-metric__value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .optitrack-metric__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* --- Permit Matrix --- */
+    .permit-matrix {
+      margin-top: var(--gap);
+    }
+
+    .permit-matrix__svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .permit-cell--approved { fill: var(--status-online); }
+    .permit-cell--pending { fill: var(--optibiz); }
+    .permit-cell--objection { fill: var(--optirisk); }
+    .permit-cell--not_submitted { fill: var(--text-muted); }
+
+    .permit-matrix__label {
+      font-family: var(--font-main);
+      font-size: 11px;
+      fill: var(--text-primary);
+    }
+
+    .permit-matrix__col-label {
+      font-family: var(--font-main);
+      font-size: 9px;
+      fill: var(--text-secondary);
+    }
+
+    .permit-matrix__cell-text {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      fill: #fff;
+      pointer-events: none;
+    }
+
+    /* --- Activity Feed --- */
+    .activity-feed {
+      margin-top: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-sm, 8px);
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--gap);
+      padding: var(--gap-sm, 8px) 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-item__avatar {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .activity-item__body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-item__header {
+      display: flex;
+      align-items: baseline;
+      gap: var(--gap-sm, 8px);
+      flex-wrap: wrap;
+    }
+
+    .activity-item__name {
+      font-family: var(--font-main);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .activity-item__time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .activity-item__desc {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 4px 0 0;
+    }
+
+    .activity-item__badge {
+      font-family: var(--font-main);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .activity-item__badge--approved {
+      background: color-mix(in srgb, var(--status-online) 20%, transparent);
+      color: var(--status-online);
+    }
+
+    .activity-item__badge--pending {
+      background: color-mix(in srgb, var(--optibiz) 20%, transparent);
+      color: var(--optibiz);
+    }
+
+    .activity-item__badge--objection {
+      background: color-mix(in srgb, var(--optirisk) 20%, transparent);
+      color: var(--optirisk);
+    }
+
+    .activity-item__badge--in_review {
+      background: color-mix(in srgb, var(--optitrack) 20%, transparent);
+      color: var(--optitrack);
+    }
+
+    /* --- Section Headers --- */
+    .optitrack-section-title {
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: var(--gap);
+      margin-bottom: var(--gap-sm, 8px);
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm, 8px);
+    }
+
+    .optitrack-section-title__icon {
+      font-size: 16px;
+      color: var(--optitrack);
+    }
+
+    /* --- Staggered Entrance Animation --- */
+    .optitrack-section {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .optitrack-section--visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ================================================================ */
@@ -1518,9 +1718,9 @@
 
     const _ALLOWED_TRANSITIONS = {
       'idle':          ['overview'],
-      'overview':      ['card-flip', 'idle'],
+      'overview':      ['card-flip', 'module-expand', 'idle'],
       'card-flip':     ['overview', 'module-expand'],
-      'module-expand': ['overview']
+      'module-expand': ['overview', 'module-expand']
     };
 
     const OptiPlan = {
@@ -1907,7 +2107,7 @@
       }
     };
 
-    var MODULE_OVERLAY_CONFIG = {
+    const MODULE_OVERLAY_CONFIG = {
       optitrack: {
         title: 'OptiTrack',
         subtitle: '\u05E0\u05D9\u05D4\u05D5\u05DC \u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD',
@@ -2138,6 +2338,12 @@
 
     function handlePopState(e) {
       if (OptiPlan.state.currentLayer === 'module-expand') {
+        OptiPlan.components.moduleOverlay.close({ fromPopstate: true });
+      }
+    }
+
+    function handleEscapeKey(e) {
+      if (e.key === 'Escape' && OptiPlan.state.currentLayer === 'module-expand') {
         OptiPlan.components.moduleOverlay.close();
       }
     }
@@ -2177,6 +2383,7 @@
       $icon: null,
       $backBtn: null,
       _currentModuleId: null,
+      _triggerElement: null,
 
       init: function() {
         this.$backdrop = document.querySelector('.module-overlay-backdrop');
@@ -2206,6 +2413,7 @@
 
         _isOverlayTransitioning = true;
         this._currentModuleId = moduleId;
+        this._triggerElement = document.activeElement;
 
         // Set module color via CSS custom property
         this.$overlay.style.setProperty('--module', 'var(--' + moduleId + ')');
@@ -2219,6 +2427,9 @@
         this.$backdrop.classList.add('module-overlay-backdrop--active');
         this.$overlay.classList.remove('module-overlay--closing');
         this.$overlay.classList.add('module-overlay--active');
+
+        // Move focus into overlay for accessibility
+        this.$backBtn.focus();
 
         // Update state
         OptiPlan.state.activeModule = moduleId;
@@ -2243,10 +2454,11 @@
         }, 500);
       },
 
-      close: function() {
+      close: function(opts) {
         if (_isOverlayTransitioning) return;
         if (!this._currentModuleId) return;
         var self = this;
+        opts = opts || {};
 
         _isOverlayTransitioning = true;
 
@@ -2283,6 +2495,17 @@
         if (flippedCard) {
           flippedCard.classList.remove('stat-card--flipped');
         }
+
+        // Clean up history if not triggered by browser back button
+        if (!opts.fromPopstate) {
+          window.history.back();
+        }
+
+        // Restore focus to triggering element
+        if (self._triggerElement && self._triggerElement.focus) {
+          self._triggerElement.focus();
+          self._triggerElement = null;
+        }
       },
 
       _switchModule: function(newModuleId) {
@@ -2314,13 +2537,17 @@
         this.$backBtn.addEventListener('click', handleModuleClose);
         this.$backdrop.addEventListener('click', handleBackdropTap);
         window.addEventListener('popstate', handlePopState);
+        document.addEventListener('keydown', handleEscapeKey);
       },
 
       destroy: function() {
         this.$backBtn.removeEventListener('click', handleModuleClose);
         this.$backdrop.removeEventListener('click', handleBackdropTap);
         window.removeEventListener('popstate', handlePopState);
+        document.removeEventListener('keydown', handleEscapeKey);
         if (this._currentModuleId) {
+          // Force close — bypass transition lock for cleanup
+          _isOverlayTransitioning = false;
           this.close();
         }
       }
@@ -2330,21 +2557,182 @@
     // SECTION: Modules — Placeholder Stubs
     // ================================================================
 
+    // ================================================================
+    // MODULE: OptiTrack
+    // ================================================================
     OptiPlan.modules.optitrack = {
-      init: function() {},
+      $content: null,
+      _entranceTimeouts: [],
+
+      init: function() {
+        this.$content = document.querySelector('.module-overlay__content');
+      },
+
       render: function(data) {
-        var $content = document.querySelector('.module-overlay__content');
-        if (!$content) return;
-        $content.innerHTML =
-          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
-            '<i class="ti ti-route" style="font-size: 64px; color: var(--optitrack); opacity: 0.3; margin-bottom: 16px;"></i>' +
-            '<span style="font-family: var(--font-main); font-size: 16px;">OptiTrack \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05EA\u05D9\u05D0\u05D5\u05DE\u05D9\u05DD</span>' +
-            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.3</span>' +
+        var self = this;
+        this.$content = document.querySelector('.module-overlay__content');
+        if (!this.$content || !data) return;
+
+        var html = '';
+
+        // --- Metrics Summary Row ---
+        html += '<div class="optitrack-section optitrack-metrics" data-optitrack-section="metrics">';
+        html += self._renderMetricCard(data.totalItems, '\u05E1\u05D4\u05F4\u05DB \u05E4\u05E8\u05D9\u05D8\u05D9\u05DD');
+        html += self._renderMetricCard(data.approvalRate + '%', '\u05D0\u05D7\u05D5\u05D6 \u05D0\u05D9\u05E9\u05D5\u05E8\u05D9\u05DD');
+        html += self._renderMetricCard(data.objections, '\u05D4\u05EA\u05E0\u05D2\u05D3\u05D5\u05D9\u05D5\u05EA');
+        html += self._renderMetricCard(data.pending, '\u05DE\u05DE\u05EA\u05D9\u05E0\u05D9\u05DD');
+        html += '</div>';
+
+        // --- Permit Matrix ---
+        html += '<div class="optitrack-section" data-optitrack-section="matrix">';
+        html += '<div class="optitrack-section-title"><i class="ti ti-table optitrack-section-title__icon"></i>\u05DE\u05D8\u05E8\u05D9\u05E6\u05EA \u05D4\u05D9\u05EA\u05E8\u05D9\u05DD</div>';
+        html += '<div class="permit-matrix">';
+        html += self._renderPermitMatrix(data);
+        html += '</div>';
+        html += '</div>';
+
+        // --- Activity Feed ---
+        html += '<div class="optitrack-section" data-optitrack-section="feed">';
+        html += '<div class="optitrack-section-title"><i class="ti ti-activity optitrack-section-title__icon"></i>\u05E4\u05D9\u05D3 \u05E4\u05E2\u05D9\u05DC\u05D5\u05EA</div>';
+        html += '<div class="activity-feed">';
+        for (var i = 0; i < data.activityFeed.length; i++) {
+          html += self._renderActivityItem(data.activityFeed[i]);
+        }
+        html += '</div>';
+        html += '</div>';
+
+        this.$content.innerHTML = html;
+
+        // Staggered entrance animation
+        var sections = this.$content.querySelectorAll('.optitrack-section');
+        for (var s = 0; s < sections.length; s++) {
+          (function(section, delay) {
+            var timeout = setTimeout(function() {
+              section.classList.add('optitrack-section--visible');
+            }, delay);
+            self._entranceTimeouts.push(timeout);
+          })(sections[s], s * 100);
+        }
+      },
+
+      _renderMetricCard: function(value, label) {
+        return '<div class="optitrack-metric">' +
+          '<span class="optitrack-metric__value">' + value + '</span>' +
+          '<span class="optitrack-metric__label">' + label + '</span>' +
           '</div>';
       },
+
+      _renderPermitMatrix: function(data) {
+        var authorities = data.authorities;
+        var matrix = data.permitMatrix;
+        var authorityKeys = ['municipality', 'electric', 'water', 'telecom', 'antiquities'];
+
+        // SVG dimensions
+        var colWidth = 64;
+        var rowHeight = 40;
+        var cellGap = 4;
+        var labelWidth = 40;
+        var headerHeight = 50;
+        var svgWidth = labelWidth + (authorities.length * (colWidth + cellGap));
+        var svgHeight = headerHeight + (matrix.length * (rowHeight + cellGap));
+
+        var svg = '<svg class="permit-matrix__svg" viewBox="0 0 ' + svgWidth + ' ' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="\u05DE\u05D8\u05E8\u05D9\u05E6\u05EA \u05D4\u05D9\u05EA\u05E8\u05D9\u05DD">';
+
+        // Column headers (authority names)
+        for (var c = 0; c < authorities.length; c++) {
+          var cx = labelWidth + c * (colWidth + cellGap) + colWidth / 2;
+          svg += '<text class="permit-matrix__col-label" x="' + cx + '" y="' + (headerHeight - 8) + '" text-anchor="middle">' + authorities[c].name + '</text>';
+        }
+
+        // Rows
+        var statusLabels = {
+          approved: '\u2713',
+          pending: '?',
+          objection: '\u2717',
+          not_submitted: '\u2014'
+        };
+
+        for (var r = 0; r < matrix.length; r++) {
+          var row = matrix[r];
+          var ry = headerHeight + r * (rowHeight + cellGap);
+
+          // Row label
+          svg += '<text class="permit-matrix__label" x="' + (labelWidth - 8) + '" y="' + (ry + rowHeight / 2 + 4) + '" text-anchor="end">' + row.section + '</text>';
+
+          // Cells
+          for (var col = 0; col < authorityKeys.length; col++) {
+            var status = row[authorityKeys[col]];
+            var cellX = labelWidth + col * (colWidth + cellGap);
+            var cssClass = 'permit-cell--' + status;
+            var label = statusLabels[status] || status;
+
+            svg += '<rect class="' + cssClass + '" x="' + cellX + '" y="' + ry + '" width="' + colWidth + '" height="' + rowHeight + '" rx="4" />';
+            svg += '<text class="permit-matrix__cell-text" x="' + (cellX + colWidth / 2) + '" y="' + (ry + rowHeight / 2 + 4) + '" text-anchor="middle">' + label + '</text>';
+          }
+        }
+
+        svg += '</svg>';
+        return svg;
+      },
+
+      _renderActivityItem: function(item) {
+        var firstLetter = item.name.charAt(0);
+        var avatarColor = this._getAvatarColor(firstLetter);
+        var relativeTime = this._formatRelativeTime(item.timestamp);
+        var badgeInfo = this._getStatusBadge(item.status);
+
+        return '<div class="activity-item">' +
+          '<div class="activity-item__avatar" style="background:' + avatarColor + '">' + firstLetter + '</div>' +
+          '<div class="activity-item__body">' +
+            '<div class="activity-item__header">' +
+              '<span class="activity-item__name">' + item.name + '</span>' +
+              '<span class="activity-item__time">' + relativeTime + '</span>' +
+            '</div>' +
+            '<p class="activity-item__desc">' + item.action + '</p>' +
+          '</div>' +
+          '<span class="activity-item__badge activity-item__badge--' + item.status + '">' + badgeInfo + '</span>' +
+        '</div>';
+      },
+
+      _getAvatarColor: function(letter) {
+        var colors = ['#6366F1', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#0EA5E9'];
+        var code = letter.charCodeAt(0);
+        return colors[code % colors.length];
+      },
+
+      _formatRelativeTime: function(timestamp) {
+        var now = new Date();
+        var then = new Date(timestamp);
+        var diffMs = now - then;
+        var diffMin = Math.floor(diffMs / 60000);
+        var diffHr = Math.floor(diffMs / 3600000);
+
+        if (diffMin < 1) return '\u05E2\u05DB\u05E9\u05D9\u05D5';
+        if (diffMin < 60) return '\u05DC\u05E4\u05E0\u05D9 ' + diffMin + ' \u05D3\u05E7\u05D5\u05EA';
+        if (diffHr < 24) return '\u05DC\u05E4\u05E0\u05D9 ' + diffHr + ' \u05E9\u05E2\u05D5\u05EA';
+        var day = then.getDate();
+        var month = then.getMonth() + 1;
+        return day + '/' + month + '/' + then.getFullYear();
+      },
+
+      _getStatusBadge: function(status) {
+        var labels = {
+          approved: '\u05DE\u05D0\u05D5\u05E9\u05E8',
+          pending: '\u05DE\u05DE\u05EA\u05D9\u05DF',
+          objection: '\u05D4\u05EA\u05E0\u05D2\u05D3\u05D5\u05EA',
+          in_review: '\u05D1\u05D1\u05D3\u05D9\u05E7\u05D4'
+        };
+        return labels[status] || status;
+      },
+
       destroy: function() {
-        var $content = document.querySelector('.module-overlay__content');
-        if ($content) $content.innerHTML = '';
+        // Clear entrance timeouts
+        for (var i = 0; i < this._entranceTimeouts.length; i++) {
+          clearTimeout(this._entranceTimeouts[i]);
+        }
+        this._entranceTimeouts = [];
+        if (this.$content) this.$content.innerHTML = '';
+        this.$content = null;
       }
     };
 

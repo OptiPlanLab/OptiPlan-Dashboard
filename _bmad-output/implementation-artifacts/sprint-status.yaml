@@ -55,10 +55,10 @@ development_status:
   # ─── Epic 2: Module Exploration ─────────────────────────────────────────────
   epic-2: in-progress
   2-1-card-flip-interaction-kpi-back-face-layer-2: done
-  2-2-module-expansion-overlay-container-layer-3: review
-  2-3-optitrack-module-permit-matrix-activity-feed: ready-for-dev
-  2-4-optibiz-module-cash-flow-chart-financial-kpis: backlog
-  2-5-optirisk-module-risk-heat-map-top-risks-table: backlog
+  2-2-module-expansion-overlay-container-layer-3: done
+  2-3-optitrack-module-permit-matrix-activity-feed: review
+  2-4-optibiz-module-cash-flow-chart-financial-kpis: in-progress
+  2-5-optirisk-module-risk-heat-map-top-risks-table: ready-for-dev
   2-6-optidocs-module-document-tracking-table: backlog
   2-7-optigantt-module-schedule-timeline: backlog
   epic-2-retrospective: optional
