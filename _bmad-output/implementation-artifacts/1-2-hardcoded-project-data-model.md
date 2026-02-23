@@ -1,6 +1,6 @@
 # Story 1.2: Hardcoded Project Data Model
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -28,81 +28,81 @@ So that every module can render realistic, internally consistent data with zero 
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Replace PROJECT_DATA stub with complete definition (AC: 1)
-  - [ ] Replace `const PROJECT_DATA = {};` stub with complete object
-  - [ ] Include: projectName, projectSubtitle, client, projectId, totalBudget (1800000000), currency, startDate, targetEndDate
-  - [ ] Include: sections array with 6 objects (A1–A6) each with id, Hebrew name, phase (complete|execution|planning|design), progress (0–100)
-  - [ ] Verify: totalBudget = 1800000000 NIS
-  - [ ] Verify: sections array contains exactly 6 items with realistic progress values
+- [x] Task 1: Replace PROJECT_DATA stub with complete definition (AC: 1)
+  - [x] Replace `const PROJECT_DATA = {};` stub with complete object
+  - [x] Include: projectName, projectSubtitle, client, projectId, totalBudget (1800000000), currency, startDate, targetEndDate
+  - [x] Include: sections array with 6 objects (A1–A6) each with id, Hebrew name, phase (complete|execution|planning|design), progress (0–100)
+  - [x] Verify: totalBudget = 1800000000 NIS
+  - [x] Verify: sections array contains exactly 6 items with realistic progress values
 
-- [ ] Task 2: Replace OPTITRACK_DATA stub with complete definition (AC: 2, 3)
-  - [ ] Replace `const OPTITRACK_DATA = {};` stub with complete object
-  - [ ] Include: totalItems (347), approved (222), approvalRate (64), objections (12), pending (35), inReview (78)
-  - [ ] Include: authorities array with 5 objects (עירייה, חברת חשמל, מקורות, בזק, רשות העתיקות)
-  - [ ] Each authority: { name, nameEn, total, approved, pending, objections, inReview }
-  - [ ] Include: permitMatrix array (6 sections × 5 authorities) with status values: 'approved', 'pending', 'in-review', 'objection', 'not-submitted'
-  - [ ] Include: activityFeed array with 5–6 objects (id, initials, name, timestamp in Hebrew, description, status)
-  - [ ] Verify: totalItems = 347 ✓
-  - [ ] Verify: Sum of authorities totals = 347 ✓
-  - [ ] Verify: approved (222) + pending (35) + objections (12) + inReview (78) = 347 ✓
-  - [ ] Verify: approvalRate = 222 ÷ 347 = 63.98% ≈ 64% ✓
+- [x] Task 2: Replace OPTITRACK_DATA stub with complete definition (AC: 2, 3)
+  - [x] Replace `const OPTITRACK_DATA = {};` stub with complete object
+  - [x] Include: totalItems (347), approved (222), approvalRate (64), objections (12), pending (35), inReview (78)
+  - [x] Include: authorities array with 5 objects (עירייה, חברת חשמל, מקורות, בזק, רשות העתיקות)
+  - [x] Each authority: { name, nameEn, total, approved, pending, objections, inReview }
+  - [x] Include: permitMatrix array (6 sections × 5 authorities) with status values: 'approved', 'pending', 'in-review', 'objection', 'not-submitted'
+  - [x] Include: activityFeed array with 5–6 objects (id, initials, name, timestamp in Hebrew, description, status)
+  - [x] Verify: totalItems = 347 ✓
+  - [x] Verify: Sum of authorities totals = 347 ✓
+  - [x] Verify: approved (222) + pending (35) + objections (12) + inReview (78) = 347 ✓
+  - [x] Verify: approvalRate = 222 ÷ 347 = 63.98% ≈ 64% ✓
 
-- [ ] Task 3: Replace OPTIBIZ_DATA stub with complete definition (AC: 2, 4)
-  - [ ] Replace `const OPTIBIZ_DATA = {};` stub with complete object
-  - [ ] Include: budgetTotal (1800000000), budgetUtilized (1220000000), budgetUtilization (68)
-  - [ ] Include: burnRate (101666667), variance (-22000000)
-  - [ ] Include: monthLabels array with 12 Hebrew month abbreviations (ינו׳, פבר׳, מרץ, אפר׳, מאי, יונ׳, יול׳, אוג׳, ספט׳, אוק׳, נוב׳, דצמ׳)
-  - [ ] Include: cashFlow array with 12 objects (month, plan, actual) with NIS values
-  - [ ] Verify: budgetUtilized = 1220000000 (exactly) ✓
-  - [ ] Verify: budgetUtilization = 1220000000 ÷ 1800000000 = 67.78% → 68% ✓
-  - [ ] Verify: Sum of monthly actual values = 1220000000 ✓
-  - [ ] Verify: Sum of monthly plan values = 1800000000 ✓
-  - [ ] Verify: CROSSES-REFERENCES PROJECT_DATA.totalBudget (same 1800000000 value) ✓
+- [x] Task 3: Replace OPTIBIZ_DATA stub with complete definition (AC: 2, 4)
+  - [x] Replace `const OPTIBIZ_DATA = {};` stub with complete object
+  - [x] Include: budgetTotal (1800000000), budgetUtilized (1220000000), budgetUtilization (68)
+  - [x] Include: burnRate (101666667), variance (-22000000)
+  - [x] Include: monthLabels array with 12 Hebrew month abbreviations (ינו׳, פבר׳, מרץ, אפר׳, מאי, יונ׳, יול׳, אוג׳, ספט׳, אוק׳, נוב׳, דצמ׳)
+  - [x] Include: cashFlow array with 12 objects (month, plan, actual) with NIS values
+  - [x] Verify: budgetUtilized = 1220000000 (exactly) ✓
+  - [x] Verify: budgetUtilization = 1220000000 ÷ 1800000000 = 67.78% → 68% ✓
+  - [x] Verify: Sum of monthly actual values = 1220000000 ✓
+  - [x] Verify: Sum of monthly plan values = 1800000000 ✓
+  - [x] Verify: CROSSES-REFERENCES PROJECT_DATA.totalBudget (same 1800000000 value) ✓
 
-- [ ] Task 4: Replace OPTIRISK_DATA stub with complete definition (AC: 2)
-  - [ ] Replace `const OPTIRISK_DATA = {};` stub with complete object
-  - [ ] Include: activeRisks (23), critical (8)
-  - [ ] Include: heatMap 5×5 grid (probability × impact) with counts that sum to 23
-  - [ ] Include: probLabels array (5 Hebrew labels: נמוכה, נמוכה-בינונית, בינונית, בינונית-גבוהה, גבוהה)
-  - [ ] Include: impactLabels array (5 Hebrew labels: נמוכה, נמוכה-בינונית, בינונית, גבוהה, קריטי)
-  - [ ] Include: topRisks array with 5–6 objects (id, name in Hebrew, severity, trend direction, mitigation status, prob, impact)
-  - [ ] Verify: Sum of all heatMap cells = 23 ✓
-  - [ ] Verify: Sum of critical zone cells (prob>=4 AND impact>=4) = 8 ✓
+- [x] Task 4: Replace OPTIRISK_DATA stub with complete definition (AC: 2)
+  - [x] Replace `const OPTIRISK_DATA = {};` stub with complete object
+  - [x] Include: activeRisks (23), critical (8)
+  - [x] Include: heatMap 5×5 grid (probability × impact) with counts that sum to 23
+  - [x] Include: probLabels array (5 Hebrew labels: נמוכה, נמוכה-בינונית, בינונית, בינונית-גבוהה, גבוהה)
+  - [x] Include: impactLabels array (5 Hebrew labels: נמוכה, נמוכה-בינונית, בינונית, גבוהה, קריטי)
+  - [x] Include: topRisks array with 5–6 objects (id, name in Hebrew, severity, trend direction, mitigation status, prob, impact)
+  - [x] Verify: Sum of all heatMap cells = 23 ✓
+  - [x] Verify: Sum of critical zone cells (prob>=4 AND impact>=4) = 8 ✓
 
-- [ ] Task 5: Replace OPTIDOCS_DATA stub with complete definition (AC: 2)
-  - [ ] Replace `const OPTIDOCS_DATA = {};` stub with complete object
-  - [ ] Include: total (847), approved (796), completionRate (94), pending (38), overdue (13)
-  - [ ] Include: documents array with 7–10 sample objects (id, name in Hebrew, type, status, date in YYYY-MM-DD, assignee)
-  - [ ] Verify: approved (796) ÷ total (847) = 93.98% ≈ 94% ✓
-  - [ ] Verify: approved + pending + overdue = 796 + 38 + 13 = 847 ✓
+- [x] Task 5: Replace OPTIDOCS_DATA stub with complete definition (AC: 2)
+  - [x] Replace `const OPTIDOCS_DATA = {};` stub with complete object
+  - [x] Include: total (847), approved (796), completionRate (94), pending (38), overdue (13)
+  - [x] Include: documents array with 7–10 sample objects (id, name in Hebrew, type, status, date in YYYY-MM-DD, assignee)
+  - [x] Verify: approved (796) ÷ total (847) = 93.98% ≈ 94% ✓
+  - [x] Verify: approved + pending + overdue = 796 + 38 + 13 = 847 ✓
 
-- [ ] Task 6: Replace OPTIGANTT_DATA stub with complete definition (AC: 2)
-  - [ ] Replace `const OPTIGANTT_DATA = {};` stub with complete object
-  - [ ] Include: sections array with 6 objects matching PROJECT_DATA sections (id, name, plannedStart, plannedEnd, actualStart, actualEnd, progress)
-  - [ ] Include: milestones array with 3+ objects (date in YYYY-MM-DD, Hebrew label, section id, type: completion|review|launch)
-  - [ ] Verify: actualEnd dates are null for incomplete sections, set for completed ones
-  - [ ] Verify: Section A1 progress = 100 with completed actualEnd date
-  - [ ] Verify: Sections A2–A6 have actualStart but null actualEnd (still in progress)
+- [x] Task 6: Replace OPTIGANTT_DATA stub with complete definition (AC: 2)
+  - [x] Replace `const OPTIGANTT_DATA = {};` stub with complete object
+  - [x] Include: sections array with 6 objects matching PROJECT_DATA sections (id, name, plannedStart, plannedEnd, actualStart, actualEnd, progress)
+  - [x] Include: milestones array with 3+ objects (date in YYYY-MM-DD, Hebrew label, section id, type: completion|review|launch)
+  - [x] Verify: actualEnd dates are null for incomplete sections, set for completed ones
+  - [x] Verify: Section A1 progress = 100 with completed actualEnd date
+  - [x] Verify: Sections A2–A6 have actualStart but null actualEnd (still in progress)
 
-- [ ] Task 7: Add AI_CACHE constant after OPTIGANTT_DATA (AC: 6)
-  - [ ] Add new constant `const AI_CACHE = { ... };` after OPTIGANTT_DATA definition
-  - [ ] Include: 6–8 Hebrew question-answer pairs
-  - [ ] Topics: תקציב (budget), לוח זמנים (schedule), סיכונים (risks), תיאומים (permits), קטע א3 (section status), הצלחה (adversarial), ניצול תקציב (budget utilization), הישגים (achievements)
-  - [ ] Each entry: { question: '...', answer: '...' }
-  - [ ] Verify: Each answer references at least one specific project data point (number, section name, authority name)
-  - [ ] Verify: All answers are in Hebrew
+- [x] Task 7: Add AI_CACHE constant after OPTIGANTT_DATA (AC: 6)
+  - [x] Add new constant `const AI_CACHE = { ... };` after OPTIGANTT_DATA definition
+  - [x] Include: 6–8 Hebrew question-answer pairs
+  - [x] Topics: תקציב (budget), לוח זמנים (schedule), סיכונים (risks), תיאומים (permits), קטע א3 (section status), הצלחה (adversarial), ניצול תקציב (budget utilization), הישגים (achievements)
+  - [x] Each entry: { question: '...', answer: '...' }
+  - [x] Verify: Each answer references at least one specific project data point (number, section name, authority name)
+  - [x] Verify: All answers are in Hebrew
 
-- [ ] Task 8: Verify all cross-references and consistency (AC: 2)
-  - [ ] Mathematically validate: OPTIBIZ_DATA.budgetUtilized (1220M) = 68% of PROJECT_DATA.totalBudget (1800M) ✓
-  - [ ] Validate: OPTITRACK_DATA.totalItems (347) = sum of authority breakdowns ✓
-  - [ ] Validate: OPTITRACK_DATA approval data sums correctly ✓
-  - [ ] Validate: OPTIRISK_DATA heatMap and critical counts are consistent ✓
-  - [ ] Validate: OPTIDOCS_DATA document counts add up ✓
-  - [ ] Validate: All data constants use camelCase keys ✓
-  - [ ] Validate: All numbers are raw values (not pre-formatted strings) ✓
-  - [ ] Validate: All Hebrew text is in data constants only (not in logic) ✓
-  - [ ] Test: Open index.html in Safari; console shows no errors ✓
-  - [ ] Test: `OptiPlan.utils.formatCurrency(1220000000)` returns properly formatted Hebrew string ✓
+- [x] Task 8: Verify all cross-references and consistency (AC: 2)
+  - [x] Mathematically validate: OPTIBIZ_DATA.budgetUtilized (1220M) = 68% of PROJECT_DATA.totalBudget (1800M) ✓
+  - [x] Validate: OPTITRACK_DATA.totalItems (347) = sum of authority breakdowns ✓
+  - [x] Validate: OPTITRACK_DATA approval data sums correctly ✓
+  - [x] Validate: OPTIRISK_DATA heatMap and critical counts are consistent ✓
+  - [x] Validate: OPTIDOCS_DATA document counts add up ✓
+  - [x] Validate: All data constants use camelCase keys ✓
+  - [x] Validate: All numbers are raw values (not pre-formatted strings) ✓
+  - [x] Validate: All Hebrew text is in data constants only (not in logic) ✓
+  - [x] Test: Open index.html in Safari; console shows no errors ✓
+  - [x] Test: `OptiPlan.utils.formatCurrency(1220000000)` returns properly formatted Hebrew string ✓
 
 ## Dev Notes
 
@@ -415,4 +415,5 @@ _None at this stage — comprehensive data definitions prepared with full cross-
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-02-23 | **STORY COMPLETED**: All 8 tasks finished. Data constants replaced in index.html: PROJECT_DATA (1800M budget, 6 sections), OPTITRACK_DATA (347 items, 5 authorities, 64% approval rate), OPTIBIZ_DATA (1220M utilized, 68% burn, 12-month cashflow), OPTIRISK_DATA (23 active risks, 8 critical), OPTIDOCS_DATA (847 total, 94% completion), OPTIGANTT_DATA (6 sections, 4 milestones), AI_CACHE (8 Hebrew Q&A pairs). All cross-references validated. All ACs satisfied. | claude-haiku-4-5-20251001 |
 | 2026-02-23 | Story 1.2 created: comprehensive data constants for PROJECT_DATA, OPTITRACK_DATA, OPTIBIZ_DATA, OPTIRISK_DATA, OPTIDOCS_DATA, OPTIGANTT_DATA, AI_CACHE. All 347 items, 23 risks, 847 documents, 12 months cash flow, cross-validated for consistency. Ready for dev implementation. | claude-haiku-4-5-20251001 |

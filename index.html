@@ -351,12 +351,171 @@
     // SECTION: Data Constants (stubs — populated in Story 1.2)
     // ================================================================
 
-    const PROJECT_DATA = {};
-    const OPTITRACK_DATA = {};
-    const OPTIBIZ_DATA = {};
-    const OPTIRISK_DATA = {};
-    const OPTIDOCS_DATA = {};
-    const OPTIGANTT_DATA = {};
+    const PROJECT_DATA = {
+      projectName: 'הרחבת קו מטרו, גוש דן',
+      projectSubtitle: 'קו M1 — מת"א מרכז לפ"ת',
+      client: 'נת"ע',
+      projectId: 'NTA-M1-2022',
+      totalBudget: 1800000000,
+      currency: 'NIS',
+      startDate: '2022-04-01',
+      targetEndDate: '2027-12-31',
+      sections: [
+        { id: 'a1', name: 'תל אביב מרכז – גבעתיים', phase: 'complete', progress: 100 },
+        { id: 'a2', name: 'גבעתיים – רמת גן', phase: 'execution', progress: 78 },
+        { id: 'a3', name: 'רמת גן – בני ברק', phase: 'execution', progress: 52 },
+        { id: 'a4', name: 'בני ברק – פתח תקווה', phase: 'planning', progress: 31 },
+        { id: 'a5', name: 'פתח תקווה מרכז – שרונה', phase: 'planning', progress: 15 },
+        { id: 'a6', name: 'שרונה – גוש דן מזרח', phase: 'design', progress: 8 }
+      ]
+    };
+
+    const OPTITRACK_DATA = {
+      totalItems: 347,
+      approved: 222,
+      approvalRate: 64,
+      pending: 35,
+      objections: 12,
+      inReview: 78,
+      authorities: [
+        { name: 'עירייה', nameEn: 'Municipality', total: 89, approved: 62, pending: 14, objections: 4, inReview: 9 },
+        { name: 'חברת חשמל', nameEn: 'Israel Electric Corp', total: 72, approved: 51, pending: 8, objections: 3, inReview: 10 },
+        { name: 'מקורות', nameEn: 'Water Authority', total: 68, approved: 45, pending: 7, objections: 3, inReview: 13 },
+        { name: 'בזק', nameEn: 'Communications', total: 61, approved: 40, pending: 4, objections: 2, inReview: 15 },
+        { name: 'רשות העתיקות', nameEn: 'Antiquities Authority', total: 57, approved: 24, pending: 2, objections: 0, inReview: 31 }
+      ],
+      permitMatrix: [
+        { section: 'a1', statuses: ['approved','approved','approved','approved','approved'] },
+        { section: 'a2', statuses: ['approved','approved','approved','pending','objection'] },
+        { section: 'a3', statuses: ['approved','approved','in-review','pending','objection'] },
+        { section: 'a4', statuses: ['in-review','in-review','pending','pending','not-submitted'] },
+        { section: 'a5', statuses: ['pending','not-submitted','not-submitted','not-submitted','not-submitted'] },
+        { section: 'a6', statuses: ['not-submitted','not-submitted','not-submitted','not-submitted','not-submitted'] }
+      ],
+      activityFeed: [
+        { id: 1, initials: 'ד.ל', name: 'דניאלה לוי', timestamp: 'לפני 3 דק׳', description: 'אישור עיריית גבעתיים לפריסת תשתית קטע א2', status: 'approved' },
+        { id: 2, initials: 'מ.כ', name: 'מיכאל כהן', timestamp: 'לפני 18 דק׳', description: 'הגשת בקשה לרשות העתיקות — קטע א3 חפירות', status: 'pending' },
+        { id: 3, initials: 'א.ש', name: 'אביטל שמאי', timestamp: 'לפני 42 דק׳', description: 'התנגדות חברת חשמל לתנאי חציית מנהרה קטע א2', status: 'objection' },
+        { id: 4, initials: 'ר.ב', name: 'רונן בן-דוד', timestamp: 'לפני 1:15 שע׳', description: 'חתימת הסכם תיאום עם מקורות — קטע א1 הושלם', status: 'approved' },
+        { id: 5, initials: 'נ.פ', name: 'נטע פרידמן', timestamp: 'לפני 2:30 שע׳', description: 'בדיקת ביניים בזק — חוות דעת מקצועית בהכנה', status: 'in-review' },
+        { id: 6, initials: 'י.ג', name: 'יובל גרין', timestamp: 'לפני 4 שע׳', description: 'פגישת תיאום עם נציגי עירייה — לוח זמנים קטע א4', status: 'in-review' }
+      ]
+    };
+
+    const OPTIBIZ_DATA = {
+      budgetTotal: 1800000000,
+      budgetUtilized: 1220000000,
+      budgetUtilization: 68,
+      burnRate: 101666667,
+      variance: -22000000,
+      monthLabels: ['ינו׳','פבר׳','מרץ','אפר׳','מאי','יונ׳','יול׳','אוג׳','ספט׳','אוק׳','נוב׳','דצמ׳'],
+      cashFlow: [
+        { month: 'ינו׳', plan: 100000000, actual: 72000000 },
+        { month: 'פבר׳', plan: 118000000, actual: 85000000 },
+        { month: 'מרץ',  plan: 138000000, actual: 98000000 },
+        { month: 'אפר׳', plan: 150000000, actual: 110000000 },
+        { month: 'מאי',  plan: 160000000, actual: 118000000 },
+        { month: 'יונ׳', plan: 165000000, actual: 125000000 },
+        { month: 'יול׳', plan: 168000000, actual: 128000000 },
+        { month: 'אוג׳', plan: 175000000, actual: 135000000 },
+        { month: 'ספט׳', plan: 168000000, actual: 130000000 },
+        { month: 'אוק׳', plan: 162000000, actual: 122000000 },
+        { month: 'נוב׳', plan: 152000000, actual: 55000000 },
+        { month: 'דצמ׳', plan: 144000000, actual: 42000000 }
+      ]
+    };
+
+    const OPTIRISK_DATA = {
+      activeRisks: 23,
+      critical: 8,
+      heatMap: [
+        [0, 1, 0, 0, 0],
+        [1, 2, 1, 0, 0],
+        [0, 2, 2, 1, 0],
+        [0, 1, 3, 2, 2],
+        [0, 0, 1, 2, 2]
+      ],
+      probLabels: ['נמוכה', 'נמוכה-בינונית', 'בינונית', 'בינונית-גבוהה', 'גבוהה'],
+      impactLabels: ['נמוכה', 'נמוכה-בינונית', 'בינונית', 'גבוהה', 'קריטי'],
+      topRisks: [
+        { id: 1, name: 'עיכובי רשות העתיקות — קטע א4', severity: 'critical', trend: 'up', mitigation: 'active', prob: 4, impact: 5 },
+        { id: 2, name: 'עלייה בעלות חומרי גלם וחציבה', severity: 'critical', trend: 'up', mitigation: 'monitoring', prob: 5, impact: 4 },
+        { id: 3, name: 'מחלוקות קנין — קטע א3', severity: 'critical', trend: 'stable', mitigation: 'legal-review', prob: 4, impact: 4 },
+        { id: 4, name: 'מחסור בכוח אדם מהנדסים', severity: 'high', trend: 'down', mitigation: 'resolved', prob: 3, impact: 4 },
+        { id: 5, name: 'סיכוני ממשק בין-קבלני — קטע א2/א3', severity: 'high', trend: 'up', mitigation: 'active', prob: 4, impact: 3 },
+        { id: 6, name: 'אי עמידה בלוח זמנים — קטע א5', severity: 'high', trend: 'up', mitigation: 'monitoring', prob: 5, impact: 3 }
+      ]
+    };
+
+    const OPTIDOCS_DATA = {
+      total: 847,
+      approved: 796,
+      completionRate: 94,
+      pending: 38,
+      overdue: 13,
+      documents: [
+        { id: 'D001', name: 'תוכנית בינוי קטע א1', type: 'תוכנית', status: 'approved', date: '2024-03-15', assignee: 'ד.ל' },
+        { id: 'D002', name: 'דוח סקר קרקע א2', type: 'דוח', status: 'approved', date: '2024-05-22', assignee: 'מ.כ' },
+        { id: 'D003', name: 'היתר בנייה א3 — שלב א', type: 'היתר', status: 'pending', date: '2024-09-10', assignee: 'א.ש' },
+        { id: 'D004', name: 'תסקיר השפעה על הסביבה', type: 'תסקיר', status: 'approved', date: '2024-01-30', assignee: 'ר.ב' },
+        { id: 'D005', name: 'חוזה קבלן ראשי — קטע א4', type: 'חוזה', status: 'approved', date: '2024-07-08', assignee: 'נ.פ' },
+        { id: 'D006', name: 'בקשת שינוי — מנהרה א3', type: 'בקשת שינוי', status: 'overdue', date: '2024-10-01', assignee: 'י.ג' },
+        { id: 'D007', name: 'תוכנית ניהול בטיחות א2', type: 'תוכנית', status: 'approved', date: '2024-04-18', assignee: 'ד.ל' },
+        { id: 'D008', name: 'פרוטוקול בדיקת איכות א1', type: 'פרוטוקול', status: 'approved', date: '2024-06-30', assignee: 'מ.כ' }
+      ]
+    };
+
+    const OPTIGANTT_DATA = {
+      sections: [
+        { id: 'a1', name: 'תל אביב מרכז – גבעתיים', plannedStart: '2022-04-01', plannedEnd: '2024-06-30', actualStart: '2022-04-01', actualEnd: '2024-07-15', progress: 100 },
+        { id: 'a2', name: 'גבעתיים – רמת גן', plannedStart: '2023-01-01', plannedEnd: '2025-03-31', actualStart: '2023-01-15', actualEnd: null, progress: 78 },
+        { id: 'a3', name: 'רמת גן – בני ברק', plannedStart: '2023-07-01', plannedEnd: '2025-12-31', actualStart: '2023-08-01', actualEnd: null, progress: 52 },
+        { id: 'a4', name: 'בני ברק – פתח תקווה', plannedStart: '2024-01-01', plannedEnd: '2026-06-30', actualStart: '2024-03-01', actualEnd: null, progress: 31 },
+        { id: 'a5', name: 'פתח תקווה מרכז – שרונה', plannedStart: '2024-07-01', plannedEnd: '2027-03-31', actualStart: '2024-10-01', actualEnd: null, progress: 15 },
+        { id: 'a6', name: 'שרונה – גוש דן מזרח', plannedStart: '2025-01-01', plannedEnd: '2027-12-31', actualStart: null, actualEnd: null, progress: 8 }
+      ],
+      milestones: [
+        { date: '2024-07-15', label: 'השלמת קטע א1', section: 'a1', type: 'completion' },
+        { date: '2025-06-30', label: 'בדיקות הפעלה — שלב א', section: 'a2', type: 'review' },
+        { date: '2026-12-31', label: 'תחילת הפעלה מסחרית', section: 'a4', type: 'launch' },
+        { date: '2027-12-31', label: 'השלמת פרויקט', section: 'a6', type: 'completion' }
+      ]
+    };
+
+    const AI_CACHE = {
+      'תקציב': {
+        question: 'מה המצב התקציבי של הפרויקט?',
+        answer: 'פרויקט הרחבת קו המטרו עומד על תקציב כולל של 1.8 מיליארד ₪. נכון להיום, נוצל 1.22 מיליארד ₪ — שיעור ניצול של 68%. הפרויקט נמצא מתחת לתקציב המתוכנן בכ-22 מיליון ₪, המעיד על ניהול פיננסי יעיל.'
+      },
+      'לוח זמנים': {
+        question: 'האם הפרויקט עומד בלוח הזמנים?',
+        answer: 'הפרויקט מציג ביצועי לוח זמנים מעורבים: קטע א1 הושלם בהצלחה, קטע א2 מתקדם ב-78%, וקטע א3 ב-52%. קטעים א4–א6 בשלבי תכנון ועיצוב. לוח הזמנים הכולל — פיניש דצמבר 2027 — נשמר.'
+      },
+      'סיכונים': {
+        question: 'מהם הסיכונים הקריטיים של הפרויקט?',
+        answer: 'זוהו 23 סיכונים פעילים, מתוכם 8 סיכונים קריטיים. הסיכונים המשמעותיים ביותר: עיכובי רשות העתיקות בקטע א4, עלייה בעלות חומרי גלם, ומחלוקות קנין בקטע א3. כל הסיכונים הקריטיים מנוהלים אקטיבית עם תוכניות מיטיגציה.'
+      },
+      'תיאומים': {
+        question: 'מה מצב התיאומים עם הרשויות?',
+        answer: 'מתוך 347 פריטי תיאום עם 5 רשויות, 222 אושרו (64%), 35 ממתינים לאישור, ו-12 נמצאים בהתנגדות. רשות העתיקות מציגה את קצב האישור האיטי ביותר — מה שמשפיע ישירות על קטע א4.'
+      },
+      'קטע א3': {
+        question: 'מה מצב קטע א3?',
+        answer: 'קטע א3 (רמת גן – בני ברק) מתקדם ב-52% ביחס לתכנון. שלב הביצוע החל באוגוסט 2023, עם תאריך יעד לסיום בסוף 2025. האתגרים הנוכחיים: מחלוקות קנין שנמצאות בבדיקה משפטית ותיאומים עם רשות העתיקות.'
+      },
+      'ניצול תקציב': {
+        question: 'מה שיעור ניצול התקציב?',
+        answer: 'שיעור ניצול התקציב עומד על 68% — 1.22 מיליארד ₪ מתוך 1.8 מיליארד ₪. קצב השריפה החודשי הממוצע הוא כ-102 מיליון ₪. בהינתן לוח הזמנים הנוכחי, הפרויקט צפוי לסיים בתוך המסגרת התקציבית.'
+      },
+      'הצלחה': {
+        question: 'האם הפרויקט יצליח?',
+        answer: 'על בסיס נתוני פרויקט הרחבת קו המטרו, המדדים מצביעים על מגמה חיובית: קטע א1 הושלם בהצלחה, הניצול התקציבי ביחס לתכנון תקין, ו-64% מהתיאומים עם רשויות אושרו. הפרויקט מציג בשלות תפעולית גבוהה ועמידה ביעדיו העיקריים.'
+      },
+      'הישגים': {
+        question: 'מה ההישגים העיקריים עד כה?',
+        answer: 'ההישגים הבולטים: (1) השלמת מלאה של קטע א1 — 17 ק"מ של תשתית מטרו. (2) 222 אישורים רגולטוריים מ-5 רשויות שונות. (3) שמירה על תקציב עם חיסכון של 22 מיליון ₪. (4) קצב בנייה של קטע א2 עולה על התחזית ב-3%.'
+      }
+    };
 
     // ================================================================
     // SECTION: OptiPlan Namespace & State Management
