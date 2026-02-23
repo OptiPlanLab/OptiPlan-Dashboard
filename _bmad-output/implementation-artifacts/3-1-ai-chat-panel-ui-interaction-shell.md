@@ -1,6 +1,6 @@
 # Story 3.1: AI Chat Panel UI & Interaction Shell
 
-Status: review
+Status: done
 
 ## Story
 
@@ -613,6 +613,45 @@ No blocking issues encountered during implementation.
 
 - `index.html` — Modified: added AI Chat Panel HTML, CSS section, JS section, and integrated with existing sidebar/idle/state/init code
 
+## Senior Developer Review (AI)
+
+_Reviewer: BenAkiva on 2026-02-23_
+
+### Review Summary
+
+**Issues Found:** 2 High, 3 Medium, 2 Low
+**Git vs Story Discrepancies:** 0
+**Outcome:** All HIGH and MEDIUM issues auto-fixed. LOW issues noted but acceptable.
+
+### Findings & Fixes Applied
+
+**HIGH-1 (FIXED): Scope Creep — Full LLM API Integration Code in Story 3.1**
+- `_buildSystemPrompt()`, `_buildMessages()`, full `fetch()` chain with `AbortController`, timeout logic — all belonged in Story 3.2
+- Fix: Removed ~120 lines of LLM API code. `sendMessage()` now uses cache-only path directly. Removed `_abortController`/`_abortTimeoutId` properties, abort cleanup from `handleChatClose` and `destroy()`
+
+**HIGH-2 (FIXED): AC 4 Violation — Missing JetBrains Mono for Numeric Data**
+- AI response bubbles used only `var(--font-main)`, no `JetBrains Mono` for numeric citations
+- Fix: Added `.chat-bubble--ai .chat-bubble__numeric` CSS rule with `var(--font-mono)` and `font-weight: 500`. Updated `displayResponse()` to wrap numeric data (digits, decimals, percentages, currency symbols) in `<span class="chat-bubble__numeric">` via regex
+
+**MEDIUM-3 (FIXED): History Cap Fires AFTER Push, Not BEFORE**
+- Task 6.4 specifies cap before push; implementation checked after push, causing momentary array overflow
+- Fix: Moved history cap check + DOM cleanup to execute before `this.history.push()` in `displayResponse()`
+
+**MEDIUM-4 (FIXED): `destroy()` Doesn't Clear Dynamic Chip Buttons**
+- `destroy()` removed event listeners but didn't clear `chatChips.innerHTML`, causing chip duplication on re-init
+- Fix: Added `chatChips.innerHTML = ''` in `destroy()` after message cleanup
+
+**MEDIUM-5 (FIXED): Redundant Chip Touch Feedback**
+- Both JS `handleChipTouchStart`/`handleChipTouchEnd` (inline style `scale(0.98)`) AND CSS `:active` provided identical feedback
+- Fix: Removed JS touch handlers entirely. CSS `:active` pseudo-class provides the same GPU-composited feedback per architecture standards
+
+**LOW-6 (NOT FIXED): Double `handleActivityReset` Call**
+- Chat handlers explicitly call `handleActivityReset()` but events also bubble to document-level `pointerdown` listener. Double invocation is harmless (timer reset is idempotent)
+
+**LOW-7 (NOT FIXED): No Guard for Already-Open Chat State**
+- `handleChatOpen()` lacks `if (OptiPlan.state.chatOpen) return;` guard. Re-running open sequence is harmless since state set is idempotent
+
 ## Change Log
 
 - 2026-02-23: Implemented Story 3.1 — AI Chat Panel UI & Interaction Shell. Added complete chat panel with slide-in animation, message bubbles (user/AI), typing indicator, suggested question chips from AI_CACHE, fuzzy cached response matching, history management with cap, and full integration with sidebar nav, AI indicator, idle reset, and state management.
+- 2026-02-23: Senior Developer Review — Fixed 5 issues (2 HIGH, 3 MEDIUM). Removed scope-creep LLM API code (~120 lines deferred to Story 3.2), added JetBrains Mono numeric formatting in AI response bubbles, fixed history cap timing (before push), added chip cleanup in destroy(), removed redundant JS touch feedback handlers (CSS :active sufficient).

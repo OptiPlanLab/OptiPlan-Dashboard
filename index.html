@@ -1857,6 +1857,98 @@
     }
 
     /* ================================================================ */
+    /* SECTION: Component — Tooltip                                      */
+    /* ================================================================ */
+
+    .tooltip {
+      position: fixed;
+      z-index: 1100;
+      max-width: 280px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-card-hover);
+      padding: 12px 16px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tooltip--visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .tooltip--below {
+      transform: translateY(-6px);
+    }
+
+    .tooltip--below.tooltip--visible {
+      transform: translateY(0);
+    }
+
+    .tooltip__text {
+      font-family: var(--font-main);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      direction: rtl;
+      text-align: right;
+    }
+
+    .tooltip__arrow {
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border: 6px solid transparent;
+      border-top-color: var(--bg-card);
+    }
+
+    .tooltip__arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: -7px;
+      width: 0;
+      height: 0;
+      border: 7px solid transparent;
+      border-top-color: var(--border);
+      z-index: -1;
+    }
+
+    .tooltip--below .tooltip__arrow {
+      border-top-color: transparent;
+      border-bottom-color: var(--bg-card);
+      top: -12px;
+      bottom: auto;
+    }
+
+    .tooltip--below .tooltip__arrow::after {
+      border-top-color: transparent;
+      border-bottom-color: var(--border);
+      bottom: auto;
+      top: 5px;
+      left: -7px;
+    }
+
+    [data-tooltip] {
+      -webkit-touch-callout: none;
+      cursor: pointer;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tooltip {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ================================================================ */
     /* SECTION: Component — AI Chat Panel                                */
     /* ================================================================ */
 
@@ -1989,6 +2081,11 @@
     .chat-bubble__text {
       direction: rtl;
       text-align: right;
+    }
+
+    .chat-bubble--ai .chat-bubble__numeric {
+      font-family: var(--font-mono);
+      font-weight: 500;
     }
 
     .chat-bubble__time {
@@ -2339,7 +2436,7 @@
         <i class="ti ti-robot sidebar__nav-icon"></i>
         <span class="sidebar__nav-label">Opium AI</span>
       </a>
-      <div class="ai-indicator">
+      <div class="ai-indicator" data-tooltip="סוכני AI סורקים מיילים, מסמכים ודוחות — מפיקים תובנות בזמן אמת">
         <span class="ai-indicator__dot"></span>
         <span class="ai-indicator__text">3 סוכנים פעילים</span>
       </div>
@@ -2401,7 +2498,8 @@
     <main id="mainRegion">
       <!-- Hero Gauges — 3 animated SVG ring gauges (Story 1.4) -->
       <section class="hero-gauges">
-        <div class="hero-gauge" data-gauge="financial">
+        <!-- Values must match PROJECT_DATA/module_DATA constants -->
+        <div class="hero-gauge" data-gauge="financial" data-tooltip="ניטור בריאות פיננסית ב-₪1.8 מיליארד תקציב — סטיות מזוהות בזמן אמת">
           <svg class="hero-gauge__svg" viewBox="0 0 120 120">
             <circle class="hero-gauge__track" cx="60" cy="60" r="50"
                     stroke-width="8" fill="none" />
@@ -2413,7 +2511,7 @@
           </svg>
           <span class="hero-gauge__label">בריאות פיננסית</span>
         </div>
-        <div class="hero-gauge" data-gauge="coordination">
+        <div class="hero-gauge" data-gauge="coordination" data-tooltip="תיאום עם 12 רשויות ממשלתיות — בפלטפורמה אחת">
           <svg class="hero-gauge__svg" viewBox="0 0 120 120">
             <circle class="hero-gauge__track" cx="60" cy="60" r="50"
                     stroke-width="8" fill="none" />
@@ -2425,7 +2523,7 @@
           </svg>
           <span class="hero-gauge__label">השלמת תיאומים</span>
         </div>
-        <div class="hero-gauge" data-gauge="schedule">
+        <div class="hero-gauge" data-gauge="schedule" data-tooltip="מעקב לוחות זמנים ב-6 קטעי ביצוע — חריגות מזוהות אוטומטית">
           <svg class="hero-gauge__svg" viewBox="0 0 120 120">
             <circle class="hero-gauge__track" cx="60" cy="60" r="50"
                     stroke-width="8" fill="none" />
@@ -2441,7 +2539,8 @@
 
       <!-- Stat Cards — 5 module KPI cards (Story 1.5, flip added Story 2.1) -->
       <section class="stat-cards-row">
-        <div class="stat-card" data-module="optitrack" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+        <!-- Values must match *_DATA constants -->
+        <div class="stat-card" data-module="optitrack" data-tooltip="בקרת תיאומים — 347 פריטים מול 5 רשויות, מכל הקטעים" style="opacity: 0; transform: translateY(18px) scale(0.97);">
           <div class="stat-card__front">
             <span class="stat-card__name">OptiTrack</span>
             <span class="stat-card__value"></span>
@@ -2460,7 +2559,7 @@
             <button class="stat-card__back-cta">למודול המלא</button>
           </div>
         </div>
-        <div class="stat-card" data-module="optibiz" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+        <div class="stat-card" data-module="optibiz" data-tooltip="ניהול תזרים מזומנים — תכנון מול ביצוע, חודש בחודש" style="opacity: 0; transform: translateY(18px) scale(0.97);">
           <div class="stat-card__front">
             <span class="stat-card__name">OptiBiz</span>
             <span class="stat-card__value"></span>
@@ -2479,7 +2578,7 @@
             <button class="stat-card__back-cta">למודול המלא</button>
           </div>
         </div>
-        <div class="stat-card" data-module="optirisk" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+        <div class="stat-card" data-module="optirisk" data-tooltip="מיפוי סיכונים — 23 סיכונים פעילים, 8 קריטיים, עם מגמות" style="opacity: 0; transform: translateY(18px) scale(0.97);">
           <div class="stat-card__front">
             <span class="stat-card__name">OptiRisk</span>
             <span class="stat-card__value"></span>
@@ -2498,7 +2597,7 @@
             <button class="stat-card__back-cta">למודול המלא</button>
           </div>
         </div>
-        <div class="stat-card" data-module="optidocs" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+        <div class="stat-card" data-module="optidocs" data-tooltip="מעקב מסמכים ומשימות — 847 פריטים, 94% הושלמו" style="opacity: 0; transform: translateY(18px) scale(0.97);">
           <div class="stat-card__front">
             <span class="stat-card__name">OptiDocs</span>
             <span class="stat-card__value"></span>
@@ -2517,7 +2616,7 @@
             <button class="stat-card__back-cta">למודול המלא</button>
           </div>
         </div>
-        <div class="stat-card" data-module="optigantt" style="opacity: 0; transform: translateY(18px) scale(0.97);">
+        <div class="stat-card" data-module="optigantt" data-tooltip="לוח זמנים גאנט — 6 קטעים, אבני דרך, ניתוח חריגות" style="opacity: 0; transform: translateY(18px) scale(0.97);">
           <div class="stat-card__front">
             <span class="stat-card__name">OptiGantt</span>
             <span class="stat-card__value"></span>
@@ -2925,6 +3024,178 @@
     // OptiPlan.touch populated by future stories
 
     // ================================================================
+    // SECTION: Component — Tooltip
+    // ================================================================
+
+    OptiPlan.components.tooltip = {
+      $tooltip: null,
+      _activeTarget: null,
+      _isVisible: false,
+
+      init: function() {
+        var self = this;
+
+        // Create single tooltip DOM element
+        var $el = document.createElement('div');
+        $el.className = 'tooltip';
+        $el.innerHTML = '<span class="tooltip__text"></span><div class="tooltip__arrow"></div>';
+        document.body.appendChild($el);
+        self.$tooltip = $el;
+
+        self._bindEvents();
+      },
+
+      _bindEvents: function() {
+        var $triggers = document.querySelectorAll('[data-tooltip]');
+        for (var i = 0; i < $triggers.length; i++) {
+          $triggers[i].addEventListener('touchstart', handleTooltipTap, { passive: true });
+          $triggers[i].addEventListener('click', handleTooltipTap);
+        }
+        document.addEventListener('touchstart', handleTooltipDismiss, { passive: true });
+        document.addEventListener('click', handleTooltipDismiss);
+      },
+
+      show: function(target) {
+        var self = this;
+        var text = target.dataset.tooltip;
+        if (!text) return;
+
+        // Don't show tooltip on flipped stat cards
+        if (target.classList.contains('stat-card--flipped')) return;
+
+        var $text = self.$tooltip.querySelector('.tooltip__text');
+        $text.textContent = text;
+
+        self._position(target);
+        self.$tooltip.classList.add('tooltip--visible');
+        self._activeTarget = target;
+        self._isVisible = true;
+      },
+
+      hide: function() {
+        var self = this;
+        if (!self.$tooltip) return;
+        self.$tooltip.classList.remove('tooltip--visible');
+        self.$tooltip.classList.remove('tooltip--below');
+        self._activeTarget = null;
+        self._isVisible = false;
+      },
+
+      _position: function(target) {
+        var self = this;
+        var $tip = self.$tooltip;
+        var $arrow = $tip.querySelector('.tooltip__arrow');
+
+        // Remove below class before measuring
+        $tip.classList.remove('tooltip--below');
+
+        // Temporarily show off-screen for measurement
+        $tip.style.visibility = 'hidden';
+        $tip.style.display = 'block';
+        $tip.classList.add('tooltip--visible');
+
+        var tipW = $tip.offsetWidth;
+        var tipH = $tip.offsetHeight;
+
+        $tip.classList.remove('tooltip--visible');
+        $tip.style.visibility = '';
+        $tip.style.display = '';
+
+        var triggerRect = target.getBoundingClientRect();
+        var gap = 12;
+        var edgePad = 8;
+
+        // Default: above
+        var top = triggerRect.top - tipH - gap;
+        var left = triggerRect.left + (triggerRect.width / 2) - (tipW / 2);
+
+        // Viewport overflow — top: switch to below
+        if (top < edgePad) {
+          top = triggerRect.bottom + gap;
+          $tip.classList.add('tooltip--below');
+        }
+
+        // Viewport overflow — horizontal clamping
+        var viewW = window.innerWidth;
+        if (left < edgePad) {
+          left = edgePad;
+        } else if (left + tipW > viewW - edgePad) {
+          left = viewW - tipW - edgePad;
+        }
+
+        $tip.style.top = top + 'px';
+        $tip.style.left = left + 'px';
+
+        // Adjust arrow to point at trigger center
+        var triggerCenter = triggerRect.left + (triggerRect.width / 2);
+        var arrowLeft = triggerCenter - left;
+        // Clamp arrow within tooltip bounds (12px from edges)
+        if (arrowLeft < 12) arrowLeft = 12;
+        if (arrowLeft > tipW - 12) arrowLeft = tipW - 12;
+        $arrow.style.left = arrowLeft + 'px';
+      },
+
+      destroy: function() {
+        var self = this;
+        var $triggers = document.querySelectorAll('[data-tooltip]');
+        for (var i = 0; i < $triggers.length; i++) {
+          $triggers[i].removeEventListener('touchstart', handleTooltipTap);
+          $triggers[i].removeEventListener('click', handleTooltipTap);
+        }
+        document.removeEventListener('touchstart', handleTooltipDismiss);
+        document.removeEventListener('click', handleTooltipDismiss);
+        if (self.$tooltip && self.$tooltip.parentNode) {
+          self.$tooltip.parentNode.removeChild(self.$tooltip);
+        }
+        self.$tooltip = null;
+        self._activeTarget = null;
+        self._isVisible = false;
+      }
+    };
+
+    function handleTooltipTap(e) {
+      var tooltip = OptiPlan.components.tooltip;
+      var target = e.currentTarget;
+
+      // Prevent duplicate handling (touchstart + click)
+      if (e.type === 'click' && tooltip._lastTouchTime && (Date.now() - tooltip._lastTouchTime < 500)) {
+        return;
+      }
+      if (e.type === 'touchstart') {
+        tooltip._lastTouchTime = Date.now();
+      }
+
+      // Toggle: if tapping the already-active target, hide
+      if (tooltip._activeTarget === target) {
+        tooltip.hide();
+        return;
+      }
+
+      // Hide any existing, then show for new target
+      tooltip.hide();
+      tooltip.show(target);
+    }
+
+    function handleTooltipDismiss(e) {
+      var tooltip = OptiPlan.components.tooltip;
+      if (!tooltip._isVisible) return;
+
+      // Prevent duplicate handling (touchstart + click)
+      if (e.type === 'click' && tooltip._lastDismissTouchTime && (Date.now() - tooltip._lastDismissTouchTime < 500)) {
+        return;
+      }
+      if (e.type === 'touchstart') {
+        tooltip._lastDismissTouchTime = Date.now();
+      }
+
+      // Don't dismiss if tap is inside tooltip or on active target
+      if (tooltip.$tooltip && tooltip.$tooltip.contains(e.target)) return;
+      if (tooltip._activeTarget && tooltip._activeTarget.contains(e.target)) return;
+
+      tooltip.hide();
+    }
+
+    // ================================================================
     // SECTION: Component — Sidebar
     // ================================================================
 
@@ -3277,6 +3548,9 @@
     // ================================================================
 
     function handleStatCardTap(e) {
+      // Dismiss tooltip before any card action
+      OptiPlan.components.tooltip.hide();
+
       var card = e.currentTarget;
       var moduleId = card.dataset.module;
 
@@ -3517,6 +3791,8 @@
 
       expand: function(moduleId) {
         if (_isOverlayTransitioning) return;
+        // Dismiss tooltip when opening overlay
+        OptiPlan.components.tooltip.hide();
         var self = this;
         var config = MODULE_OVERLAY_CONFIG[moduleId];
         if (!config) {
@@ -4618,15 +4894,6 @@
 
     function handleChatClose(e) {
       if (e) e.preventDefault();
-      // Abort any in-flight LLM request on panel close
-      if (OptiPlan.ai._abortController) {
-        OptiPlan.ai._abortController.abort();
-        OptiPlan.ai._abortController = null;
-      }
-      if (OptiPlan.ai._abortTimeoutId) {
-        clearTimeout(OptiPlan.ai._abortTimeoutId);
-        OptiPlan.ai._abortTimeoutId = null;
-      }
       OptiPlan.state.set('chatOpen', false);
       _resetSidebarToDashboard();
     }
@@ -4658,21 +4925,9 @@
       handleActivityReset();
     }
 
-    function handleChipTouchStart(e) {
-      e.currentTarget.style.transform = 'scale(0.98)';
-      e.currentTarget.style.webkitTransform = 'scale(0.98)';
-    }
-
-    function handleChipTouchEnd(e) {
-      e.currentTarget.style.transform = '';
-      e.currentTarget.style.webkitTransform = '';
-    }
-
     OptiPlan.ai = {
       history: [],
       _responseTimeout: null,
-      _abortController: null,
-      _abortTimeoutId: null,
       _isTyping: false,
       $chatPanel: null,
       $backdrop: null,
@@ -4696,8 +4951,6 @@
           var chipBtn = document.createElement('button');
           chipBtn.className = 'chat-panel__chip';
           chipBtn.textContent = AI_CACHE[cacheKeys[i]].question;
-          chipBtn.addEventListener('touchstart', handleChipTouchStart, { passive: true });
-          chipBtn.addEventListener('touchend', handleChipTouchEnd, { passive: true });
           chipBtn.addEventListener('click', handleChipTap);
           $chipsContainer.appendChild(chipBtn);
         }
@@ -4735,37 +4988,6 @@
         }
       },
 
-      _buildSystemPrompt: function() {
-        var p = PROJECT_DATA;
-        return 'אתה עוזר AI מומחה לפרויקטי תשתית ובנייה. אתה משמש כיועץ בכיר לפרויקט "' + p.projectName + '".\n\n' +
-          'פרטי הפרויקט:\n' +
-          '- שם: ' + p.projectName + '\n' +
-          '- תקציב כולל: ' + (p.totalBudget / 1000000000).toFixed(1) + ' מיליארד ₪\n' +
-          '- מזמין: ' + p.client + '\n' +
-          '- מספר קטעים: ' + p.sections.length + ' (A1-A6)\n' +
-          '- סיכונים פעילים: ' + OPTIRISK_DATA.activeRisks + ', מתוכם ' + OPTIRISK_DATA.critical + ' קריטיים\n' +
-          '- אישורי רישוי: ' + OPTITRACK_DATA.approvalRate + '%\n' +
-          '- מסמכים: ' + OPTIDOCS_DATA.total + ' סה"כ, ' + OPTIDOCS_DATA.completionRate + '% הושלמו\n\n' +
-          'כללים:\n' +
-          '1. ענה תמיד בעברית בלבד\n' +
-          '2. הפנה לנתוני פרויקט ספציפיים בכל תשובה (שמות קטעים, מספרים, אחוזים)\n' +
-          '3. לעולם אל תגיד "אני לא יודע" — תמיד ספק תשובה רלוונטית על בסיס הנתונים הזמינים\n' +
-          '4. שמור על תשובות קצרות ומקצועיות (2-4 משפטים)\n' +
-          '5. השתמש במינוחים מקצועיים של תשתיות ובנייה\n' +
-          '6. אם השאלה לא קשורה לפרויקט, הפנה את השיחה חזרה לנתוני הפרויקט';
-      },
-
-      _buildMessages: function(text) {
-        var messages = [];
-        var historyLimit = MAX_CHAT_HISTORY * 2;
-        var startIndex = Math.max(0, this.history.length - historyLimit);
-        for (var i = startIndex; i < this.history.length; i++) {
-          messages.push({ role: this.history[i].role, content: this.history[i].content });
-        }
-        messages.push({ role: 'user', content: text });
-        return messages;
-      },
-
       sendMessage: function(text) {
         if (!text || typeof text !== 'string') return;
         text = text.trim();
@@ -4793,88 +5015,18 @@
 
         var self = this;
 
-        // Abort any previous in-flight request
-        if (this._abortController) {
-          this._abortController.abort();
-        }
-
-        // Skip API call if no API key configured — cache-only mode
-        if (!API_KEY) {
-          var cached = this.findCachedResponse(text);
-          this._responseTimeout = setTimeout(function showCached() {
-            self.displayResponse(cached);
-          }, 800 + Math.floor(Math.random() * 700));
-          return;
-        }
-
-        var controller = new AbortController();
-        this._abortController = controller;
-
-        var timeoutId = setTimeout(function abortTimeout() {
-          controller.abort();
-        }, LLM_TIMEOUT_MS);
-        this._abortTimeoutId = timeoutId;
-
-        fetch(LLM_API_URL, {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'x-api-key': API_KEY,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true'
-          },
-          body: JSON.stringify({
-            model: LLM_MODEL,
-            max_tokens: LLM_MAX_TOKENS,
-            system: self._buildSystemPrompt(),
-            messages: self._buildMessages(text)
-          }),
-          signal: controller.signal
-        })
-        .then(function handleResponse(res) {
-          clearTimeout(timeoutId);
-          if (!res.ok) {
-            throw new Error('API returned ' + res.status);
-          }
-          return res.json();
-        })
-        .then(function handleData(data) {
-          var responseText = data.content && data.content[0] && data.content[0].text;
-          if (!responseText) {
-            throw new Error('Empty response from API');
-          }
-          self.displayResponse(responseText);
-        })
-        .catch(function handleError(err) {
-          clearTimeout(timeoutId);
-          console.warn('[OptiPlan AI]', err.message);
-          var fallback = self.findCachedResponse(text);
-          self.displayResponse(fallback);
-        })
-        .finally(function cleanupFetch() {
-          self._abortController = null;
-          self._abortTimeoutId = null;
-        });
+        // Cache-only mode — LLM API integration deferred to Story 3.2
+        var cached = this.findCachedResponse(text);
+        this._responseTimeout = setTimeout(function showCached() {
+          self.displayResponse(cached);
+        }, 800 + Math.floor(Math.random() * 700));
       },
 
       displayResponse: function(text) {
         // Hide typing indicator
         this.showTypingIndicator(false);
 
-        // Add AI bubble
-        var aiBubbleHtml = '<div class="chat-bubble chat-bubble--ai">' +
-          '<div class="chat-bubble__text">' + this._escapeHtml(text) + '</div>' +
-          '<span class="chat-bubble__time">' + this._getTimeString() + '</span>' +
-          '</div>';
-        this.$messages.insertAdjacentHTML('beforeend', aiBubbleHtml);
-
-        // Push to history
-        this.history.push({ role: 'assistant', content: text });
-
-        // Scroll to bottom
-        this.$messages.scrollTop = this.$messages.scrollHeight;
-
-        // Cap history — remove oldest pair if over limit
+        // Cap history BEFORE push — remove oldest pair if at limit
         if (this.history.length >= MAX_CHAT_HISTORY * 2) {
           this.history.shift();
           this.history.shift();
@@ -4885,6 +5037,23 @@
             $bubbles[1].remove();
           }
         }
+
+        // Wrap numeric data (digits, decimals, percentages, currency) with JetBrains Mono span
+        var escaped = this._escapeHtml(text);
+        var formatted = escaped.replace(/([\u20AA$€]?\s*[\d,]+\.?\d*\s*%?)/g, '<span class="chat-bubble__numeric">$1</span>');
+
+        // Add AI bubble
+        var aiBubbleHtml = '<div class="chat-bubble chat-bubble--ai">' +
+          '<div class="chat-bubble__text">' + formatted + '</div>' +
+          '<span class="chat-bubble__time">' + this._getTimeString() + '</span>' +
+          '</div>';
+        this.$messages.insertAdjacentHTML('beforeend', aiBubbleHtml);
+
+        // Push to history
+        this.history.push({ role: 'assistant', content: text });
+
+        // Scroll to bottom
+        this.$messages.scrollTop = this.$messages.scrollHeight;
 
         // Re-enable send button
         if (this.$sendBtn) {
@@ -4966,16 +5135,6 @@
           this._responseTimeout = null;
         }
 
-        // Abort any in-flight LLM request
-        if (this._abortController) {
-          this._abortController.abort();
-          this._abortController = null;
-        }
-        if (this._abortTimeoutId) {
-          clearTimeout(this._abortTimeoutId);
-          this._abortTimeoutId = null;
-        }
-
         this.history = [];
         this._isTyping = false;
 
@@ -5000,8 +5159,6 @@
 
         if (this.$chips) {
           this.$chips.forEach(function($chip) {
-            $chip.removeEventListener('touchstart', handleChipTouchStart);
-            $chip.removeEventListener('touchend', handleChipTouchEnd);
             $chip.removeEventListener('click', handleChipTap);
           });
         }
@@ -5013,6 +5170,10 @@
         }
 
         if (this.$messages) this.$messages.innerHTML = '';
+
+        // Clear dynamically-created chip buttons to prevent duplication on re-init
+        var $chipsContainer = document.getElementById('chatChips');
+        if ($chipsContainer) $chipsContainer.innerHTML = '';
 
         this.$chatPanel = null;
         this.$backdrop = null;
@@ -5056,6 +5217,9 @@
         // Already at rest — nothing to reset
         return;
       }
+
+      // Dismiss tooltip on any idle reset
+      OptiPlan.components.tooltip.hide();
 
       if (currentLayer === 'module-expand') {
         OptiPlan.components.moduleOverlay.close();
@@ -5120,6 +5284,7 @@
       OptiPlan.components.heroGauges.init();
       OptiPlan.components.statCards.init();
       OptiPlan.components.moduleOverlay.init();
+      OptiPlan.components.tooltip.init();
 
       // AI Chat
       OptiPlan.ai.init();

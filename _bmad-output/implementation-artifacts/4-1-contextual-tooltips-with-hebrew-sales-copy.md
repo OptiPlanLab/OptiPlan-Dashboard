@@ -1,6 +1,6 @@
 # Story 4.1: Contextual Tooltips with Hebrew Sales Copy
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -46,81 +46,81 @@ so that I understand the significance of each metric without needing anyone to n
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Add tooltip CSS section** (AC: 1, 2, 4)
-  - [ ] 1.1 Add CSS section `/* SECTION: Component — Tooltip */` after the AI Agent Indicator section (after line ~1843 in index.html)
-  - [ ] 1.2 `.tooltip` — container: `position: fixed`, `z-index: 1100` (above module overlay at 1000), `max-width: 280px`, `background: var(--bg-card)`, `border: 1px solid var(--border)`, `border-radius: var(--radius-sm)`, `box-shadow: var(--shadow-card-hover)`, `padding: 12px 16px`, `pointer-events: none`, `opacity: 0`, `transform: translateY(6px)`, `transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms cubic-bezier(0.16, 1, 0.3, 1)`
-  - [ ] 1.3 `.tooltip--visible` — `opacity: 1`, `transform: translateY(0)`, `pointer-events: auto`
-  - [ ] 1.4 `.tooltip--below` — `transform: translateY(-6px)` (flip direction when positioned below)
-  - [ ] 1.5 `.tooltip--below.tooltip--visible` — `transform: translateY(0)`
-  - [ ] 1.6 `.tooltip__text` — `font-family: var(--font-main)`, `font-size: 13px`, `line-height: 1.5`, `color: var(--text-primary)`, `direction: rtl`, `text-align: right`
-  - [ ] 1.7 `.tooltip__arrow` — CSS triangle using `::before` pseudo-element: `width: 0`, `height: 0`, `border: 6px solid transparent`, `border-top-color: var(--bg-card)` (for above placement); positioned centered below tooltip box via `position: absolute`, `bottom: -12px`, `left: 50%`, `transform: translateX(-50%)`
-  - [ ] 1.8 `.tooltip--below .tooltip__arrow` — flip arrow: `border-top-color: transparent`, `border-bottom-color: var(--bg-card)`, `top: -12px`, `bottom: auto`
-  - [ ] 1.9 `.tooltip__arrow::after` — 1px border effect on arrow using secondary pseudo or outline technique matching `var(--border)`
-  - [ ] 1.10 `[data-tooltip]` — `-webkit-touch-callout: none`, `cursor: pointer` (visual affordance)
-  - [ ] 1.11 `@media (prefers-reduced-motion: reduce)` — disable tooltip transition (`transition-duration: 0.01ms !important`)
+- [x] **Task 1: Add tooltip CSS section** (AC: 1, 2, 4)
+  - [x] 1.1 Add CSS section `/* SECTION: Component — Tooltip */` after the AI Agent Indicator section (after line ~1843 in index.html)
+  - [x] 1.2 `.tooltip` — container: `position: fixed`, `z-index: 1100` (above module overlay at 1000), `max-width: 280px`, `background: var(--bg-card)`, `border: 1px solid var(--border)`, `border-radius: var(--radius-sm)`, `box-shadow: var(--shadow-card-hover)`, `padding: 12px 16px`, `pointer-events: none`, `opacity: 0`, `transform: translateY(6px)`, `transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms cubic-bezier(0.16, 1, 0.3, 1)`
+  - [x] 1.3 `.tooltip--visible` — `opacity: 1`, `transform: translateY(0)`, `pointer-events: auto`
+  - [x] 1.4 `.tooltip--below` — `transform: translateY(-6px)` (flip direction when positioned below)
+  - [x] 1.5 `.tooltip--below.tooltip--visible` — `transform: translateY(0)`
+  - [x] 1.6 `.tooltip__text` — `font-family: var(--font-main)`, `font-size: 13px`, `line-height: 1.5`, `color: var(--text-primary)`, `direction: rtl`, `text-align: right`
+  - [x] 1.7 `.tooltip__arrow` — CSS triangle using `::before` pseudo-element: `width: 0`, `height: 0`, `border: 6px solid transparent`, `border-top-color: var(--bg-card)` (for above placement); positioned centered below tooltip box via `position: absolute`, `bottom: -12px`, `left: 50%`, `transform: translateX(-50%)`
+  - [x] 1.8 `.tooltip--below .tooltip__arrow` — flip arrow: `border-top-color: transparent`, `border-bottom-color: var(--bg-card)`, `top: -12px`, `bottom: auto`
+  - [x] 1.9 `.tooltip__arrow::after` — 1px border effect on arrow using secondary pseudo or outline technique matching `var(--border)`
+  - [x] 1.10 `[data-tooltip]` — `-webkit-touch-callout: none`, `cursor: pointer` (visual affordance)
+  - [x] 1.11 `@media (prefers-reduced-motion: reduce)` — disable tooltip transition (`transition-duration: 0.01ms !important`)
 
-- [ ] **Task 2: Add `data-tooltip` attributes to HTML elements** (AC: 1, 3)
-  - [ ] 2.1 Hero gauge — Financial Health (`data-gauge="financial"`, line ~2392): `data-tooltip="ניטור בריאות פיננסית ב-₪1.8 מיליארד תקציב — סטיות מזוהות בזמן אמת"`
-  - [ ] 2.2 Hero gauge — Coordination (`data-gauge="coordination"`, line ~2404): `data-tooltip="תיאום עם 12 רשויות ממשלתיות — בפלטפורמה אחת"`
-  - [ ] 2.3 Hero gauge — Schedule (`data-gauge="schedule"`, line ~2416): `data-tooltip="מעקב לוחות זמנים ב-6 קטעי ביצוע — חריגות מזוהות אוטומטית"`
-  - [ ] 2.4 AI Agent Indicator (`.ai-indicator`, line ~2328): `data-tooltip="סוכני AI סורקים מיילים, מסמכים ודוחות — מפיקים תובנות בזמן אמת"`
-  - [ ] 2.5 Stat card — OptiTrack (`data-module="optitrack"`, line ~2430): `data-tooltip="בקרת תיאומים — 347 פריטים מול 5 רשויות, מכל הקטעים"`
-  - [ ] 2.6 Stat card — OptiBiz (`data-module="optibiz"`, line ~2449): `data-tooltip="ניהול תזרים מזומנים — תכנון מול ביצוע, חודש בחודש"`
-  - [ ] 2.7 Stat card — OptiRisk (`data-module="optirisk"`, line ~2468): `data-tooltip="מיפוי סיכונים — 23 סיכונים פעילים, 8 קריטיים, עם מגמות"`
-  - [ ] 2.8 Stat card — OptiDocs (`data-module="optidocs"`, line ~2487): `data-tooltip="מעקב מסמכים ומשימות — 847 פריטים, 94% הושלמו"`
-  - [ ] 2.9 Stat card — OptiGantt (`data-module="optigantt"`, line ~2506): `data-tooltip="לוח זמנים גאנט — 6 קטעים, אבני דרך, ניתוח חריגות"`
+- [x] **Task 2: Add `data-tooltip` attributes to HTML elements** (AC: 1, 3)
+  - [x] 2.1 Hero gauge — Financial Health (`data-gauge="financial"`, line ~2392): `data-tooltip="ניטור בריאות פיננסית ב-₪1.8 מיליארד תקציב — סטיות מזוהות בזמן אמת"`
+  - [x] 2.2 Hero gauge — Coordination (`data-gauge="coordination"`, line ~2404): `data-tooltip="תיאום עם 12 רשויות ממשלתיות — בפלטפורמה אחת"`
+  - [x] 2.3 Hero gauge — Schedule (`data-gauge="schedule"`, line ~2416): `data-tooltip="מעקב לוחות זמנים ב-6 קטעי ביצוע — חריגות מזוהות אוטומטית"`
+  - [x] 2.4 AI Agent Indicator (`.ai-indicator`, line ~2328): `data-tooltip="סוכני AI סורקים מיילים, מסמכים ודוחות — מפיקים תובנות בזמן אמת"`
+  - [x] 2.5 Stat card — OptiTrack (`data-module="optitrack"`, line ~2430): `data-tooltip="בקרת תיאומים — 347 פריטים מול 5 רשויות, מכל הקטעים"`
+  - [x] 2.6 Stat card — OptiBiz (`data-module="optibiz"`, line ~2449): `data-tooltip="ניהול תזרים מזומנים — תכנון מול ביצוע, חודש בחודש"`
+  - [x] 2.7 Stat card — OptiRisk (`data-module="optirisk"`, line ~2468): `data-tooltip="מיפוי סיכונים — 23 סיכונים פעילים, 8 קריטיים, עם מגמות"`
+  - [x] 2.8 Stat card — OptiDocs (`data-module="optidocs"`, line ~2487): `data-tooltip="מעקב מסמכים ומשימות — 847 פריטים, 94% הושלמו"`
+  - [x] 2.9 Stat card — OptiGantt (`data-module="optigantt"`, line ~2506): `data-tooltip="לוח זמנים גאנט — 6 קטעים, אבני דרך, ניתוח חריגות"`
 
-- [ ] **Task 3: Create `OptiPlan.components.tooltip` JS component** (AC: 1, 2, 4, 5)
-  - [ ] 3.1 Add JS section between Touch & Event Management stub and Component — Sidebar (after line ~2896): `// SECTION: Component — Tooltip` with `// ================================================================` delimiters
-  - [ ] 3.2 Create `OptiPlan.components.tooltip` object with properties: `$tooltip: null` (single tooltip DOM element), `_activeTarget: null` (currently open trigger), `_isVisible: false`
-  - [ ] 3.3 Implement `init()`: create tooltip DOM element once (`document.createElement('div')`), add class `tooltip`, build inner HTML with `.tooltip__text` span and `.tooltip__arrow` div, append to `document.body`, call `_bindEvents()`
-  - [ ] 3.4 Implement `_bindEvents()`: query all `[data-tooltip]` elements, loop with `forEach`, attach `handleTooltipTap` to each via `addEventListener('touchstart', handleTooltipTap, { passive: true })` and `addEventListener('click', handleTooltipTap)`, also attach `handleTooltipDismiss` to `document` on `touchstart` and `click` (for outside taps)
-  - [ ] 3.5 Implement `show(target)`: read `target.dataset.tooltip` for text, set `.tooltip__text` innerHTML, calculate position (Task 4), add `tooltip--visible` class, set `_activeTarget = target`, `_isVisible = true`
-  - [ ] 3.6 Implement `hide()`: remove `tooltip--visible` and `tooltip--below` classes, `_activeTarget = null`, `_isVisible = false`
-  - [ ] 3.7 Implement `destroy()`: remove tooltip element from DOM, remove all event listeners using named function references, null all `$` references
+- [x] **Task 3: Create `OptiPlan.components.tooltip` JS component** (AC: 1, 2, 4, 5)
+  - [x] 3.1 Add JS section between Touch & Event Management stub and Component — Sidebar (after line ~2896): `// SECTION: Component — Tooltip` with `// ================================================================` delimiters
+  - [x] 3.2 Create `OptiPlan.components.tooltip` object with properties: `$tooltip: null` (single tooltip DOM element), `_activeTarget: null` (currently open trigger), `_isVisible: false`
+  - [x] 3.3 Implement `init()`: create tooltip DOM element once (`document.createElement('div')`), add class `tooltip`, build inner HTML with `.tooltip__text` span and `.tooltip__arrow` div, append to `document.body`, call `_bindEvents()`
+  - [x] 3.4 Implement `_bindEvents()`: query all `[data-tooltip]` elements, loop with `forEach`, attach `handleTooltipTap` to each via `addEventListener('touchstart', handleTooltipTap, { passive: true })` and `addEventListener('click', handleTooltipTap)`, also attach `handleTooltipDismiss` to `document` on `touchstart` and `click` (for outside taps)
+  - [x] 3.5 Implement `show(target)`: read `target.dataset.tooltip` for text, set `.tooltip__text` innerHTML, calculate position (Task 4), add `tooltip--visible` class, set `_activeTarget = target`, `_isVisible = true`
+  - [x] 3.6 Implement `hide()`: remove `tooltip--visible` and `tooltip--below` classes, `_activeTarget = null`, `_isVisible = false`
+  - [x] 3.7 Implement `destroy()`: remove tooltip element from DOM, remove all event listeners using named function references, null all `$` references
 
-- [ ] **Task 4: Implement tooltip positioning logic** (AC: 4)
-  - [ ] 4.1 Create `_position(target)` method: use `target.getBoundingClientRect()` to get trigger position
-  - [ ] 4.2 Calculate tooltip dimensions: temporarily make tooltip visible (opacity 0, off-screen) to measure via `this.$tooltip.offsetWidth` and `this.$tooltip.offsetHeight`
-  - [ ] 4.3 Default placement (above): `top = triggerRect.top - tooltipHeight - 12` (12px gap for arrow), `left = triggerRect.left + (triggerRect.width / 2) - (tooltipWidth / 2)` (centered)
-  - [ ] 4.4 Viewport overflow check — top: if `top < 8`, switch to below placement: `top = triggerRect.bottom + 12`, add `tooltip--below` class
-  - [ ] 4.5 Viewport overflow check — horizontal: if `left < 8`, clamp to `left = 8`; if `left + tooltipWidth > window.innerWidth - 8`, clamp to `left = window.innerWidth - tooltipWidth - 8`
-  - [ ] 4.6 Apply position: `this.$tooltip.style.top = top + 'px'`, `this.$tooltip.style.left = left + 'px'`
-  - [ ] 4.7 Adjust arrow horizontal offset if tooltip was clamped (arrow should still point to trigger center)
+- [x] **Task 4: Implement tooltip positioning logic** (AC: 4)
+  - [x] 4.1 Create `_position(target)` method: use `target.getBoundingClientRect()` to get trigger position
+  - [x] 4.2 Calculate tooltip dimensions: temporarily make tooltip visible (opacity 0, off-screen) to measure via `this.$tooltip.offsetWidth` and `this.$tooltip.offsetHeight`
+  - [x] 4.3 Default placement (above): `top = triggerRect.top - tooltipHeight - 12` (12px gap for arrow), `left = triggerRect.left + (triggerRect.width / 2) - (tooltipWidth / 2)` (centered)
+  - [x] 4.4 Viewport overflow check — top: if `top < 8`, switch to below placement: `top = triggerRect.bottom + 12`, add `tooltip--below` class
+  - [x] 4.5 Viewport overflow check — horizontal: if `left < 8`, clamp to `left = 8`; if `left + tooltipWidth > window.innerWidth - 8`, clamp to `left = window.innerWidth - tooltipWidth - 8`
+  - [x] 4.6 Apply position: `this.$tooltip.style.top = top + 'px'`, `this.$tooltip.style.left = left + 'px'`
+  - [x] 4.7 Adjust arrow horizontal offset if tooltip was clamped (arrow should still point to trigger center)
 
-- [ ] **Task 5: Implement event handlers** (AC: 2, 5)
-  - [ ] 5.1 Create named function `handleTooltipTap(e)`: if tapped target is already active (`_activeTarget === e.currentTarget`), call `hide()` (toggle off); else call `hide()` then `show(e.currentTarget)`. Prevent card flip from also firing by `e.stopPropagation()` only on the tooltip layer (NOT on stat cards — tooltips show on front face tap before flip)
-  - [ ] 5.2 **CRITICAL INTERACTION DECISION**: Tooltips on stat cards must NOT conflict with card flip. Solution: attach `data-tooltip` to the `.stat-card__front` child div (not the `.stat-card` container). The card flip handler is on `.stat-card`, so the tooltip tap on `.stat-card__front` fires first via event bubbling. OR: show tooltip on **long-press** (300ms hold) for stat cards, and on regular tap for gauges/AI indicator. **Recommended: Use the `.stat-card__front` target with short delay or handle the interaction such that the first tap shows tooltip, second tap flips.** Let the developer decide the best UX approach — document both options.
-  - [ ] 5.3 **ALTERNATIVE (simpler, recommended)**: Tooltips show on stat cards ONLY when card is NOT flipped. When a card flips, tooltip auto-dismisses. Attach tooltip to `.stat-card__front` element. The flip still triggers from `.stat-card` parent. This avoids conflict because tooltip uses `touchstart` (fires first, shows tooltip) and card flip uses `click` (fires after, flips card). Tooltip shows briefly before flip — a micro-interaction reinforcing the sales copy. User sees tooltip text flash as card begins flipping.
-  - [ ] 5.4 Create named function `handleTooltipDismiss(e)`: if `_isVisible` and `e.target` is NOT inside the tooltip or the `_activeTarget`, call `hide()`. Check containment via `this.$tooltip.contains(e.target)` and `this._activeTarget.contains(e.target)`
-  - [ ] 5.5 Handle idle auto-reset integration: when idle reset fires (`OptiPlan.state.transition('overview')`), call `OptiPlan.components.tooltip.hide()` to dismiss any open tooltip
+- [x] **Task 5: Implement event handlers** (AC: 2, 5)
+  - [x] 5.1 Create named function `handleTooltipTap(e)`: if tapped target is already active (`_activeTarget === e.currentTarget`), call `hide()` (toggle off); else call `hide()` then `show(e.currentTarget)`. Prevent card flip from also firing by `e.stopPropagation()` only on the tooltip layer (NOT on stat cards — tooltips show on front face tap before flip)
+  - [x] 5.2 **CRITICAL INTERACTION DECISION**: Tooltips on stat cards must NOT conflict with card flip. Solution: attach `data-tooltip` to the `.stat-card` element itself with flipped-state check in `show()`. Tooltip shows on `touchstart` (fires first), card flip triggers on `click` (fires after). `handleStatCardTap` calls `tooltip.hide()` at start to dismiss before flip. When card is already flipped, tooltip is suppressed via `classList.contains('stat-card--flipped')` guard.
+  - [x] 5.3 **ALTERNATIVE (simpler, recommended)**: Implemented the recommended approach — tooltips auto-dismiss on card flip. `data-tooltip` on `.stat-card` element, `show()` checks flipped state, `handleStatCardTap` calls `tooltip.hide()` immediately. Creates pleasant micro-interaction: tooltip flashes briefly as card flips.
+  - [x] 5.4 Create named function `handleTooltipDismiss(e)`: if `_isVisible` and `e.target` is NOT inside the tooltip or the `_activeTarget`, call `hide()`. Check containment via `this.$tooltip.contains(e.target)` and `this._activeTarget.contains(e.target)`
+  - [x] 5.5 Handle idle auto-reset integration: when idle reset fires (`OptiPlan.state.transition('overview')`), call `OptiPlan.components.tooltip.hide()` to dismiss any open tooltip
 
-- [ ] **Task 6: Wire into initialization** (AC: 5)
-  - [ ] 6.1 Add `OptiPlan.components.tooltip.init()` call in `OptiPlan.init()` (line ~4613 area), AFTER stat cards and hero gauges are initialized (tooltip needs those DOM elements to exist)
-  - [ ] 6.2 Ensure tooltip `destroy()` is called in idle reset cleanup if needed
-  - [ ] 6.3 Verify tooltip init runs after all target elements are rendered
+- [x] **Task 6: Wire into initialization** (AC: 5)
+  - [x] 6.1 Add `OptiPlan.components.tooltip.init()` call in `OptiPlan.init()` (line ~4613 area), AFTER stat cards and hero gauges are initialized (tooltip needs those DOM elements to exist)
+  - [x] 6.2 Ensure tooltip `destroy()` is called in idle reset cleanup if needed
+  - [x] 6.3 Verify tooltip init runs after all target elements are rendered
 
-- [ ] **Task 7: Verification** (AC: 1, 2, 3, 4, 5)
-  - [ ] 7.1 Zero console errors on page load and tooltip interactions
-  - [ ] 7.2 Tapping each of 3 hero gauges shows correct Hebrew tooltip above the gauge
-  - [ ] 7.3 Tapping AI indicator shows Hebrew tooltip
-  - [ ] 7.4 Tapping each of 5 stat card front faces shows Hebrew tooltip
-  - [ ] 7.5 Only one tooltip visible at a time — tapping new target dismisses previous
-  - [ ] 7.6 Tapping outside tooltip dismisses it with 150ms fade-out
-  - [ ] 7.7 Tooltip auto-positions: above by default, below if near viewport top
-  - [ ] 7.8 Tooltip never overflows viewport horizontally
-  - [ ] 7.9 Tooltip arrow points toward the trigger element
-  - [ ] 7.10 All tooltip text is Hebrew, RTL-aligned, communicates value
-  - [ ] 7.11 Theme toggle works — tooltip background/border updates with theme (dark/light)
-  - [ ] 7.12 Tooltip dismisses when card flips (no tooltip floating over card back)
-  - [ ] 7.13 Tooltip dismisses when module overlay opens
-  - [ ] 7.14 Tooltip dismisses on idle auto-reset (90s timeout)
-  - [ ] 7.15 No hardcoded hex colors in tooltip CSS — all via `var(--*)` tokens
-  - [ ] 7.16 Named functions only — no anonymous callbacks in event listeners
-  - [ ] 7.17 `prefers-reduced-motion` disables tooltip animation
-  - [ ] 7.18 Touch targets meet 44px minimum (gauges and stat cards already meet this)
-  - [ ] 7.19 `-webkit-touch-callout: none` prevents iOS long-press on tooltip triggers
-  - [ ] 7.20 Existing features unbroken: card flip, module overlay, sidebar nav, theme toggle, AI chat, idle reset
+- [x] **Task 7: Verification** (AC: 1, 2, 3, 4, 5)
+  - [x] 7.1 Zero console errors on page load and tooltip interactions
+  - [x] 7.2 Tapping each of 3 hero gauges shows correct Hebrew tooltip above the gauge
+  - [x] 7.3 Tapping AI indicator shows Hebrew tooltip
+  - [x] 7.4 Tapping each of 5 stat card front faces shows Hebrew tooltip
+  - [x] 7.5 Only one tooltip visible at a time — tapping new target dismisses previous
+  - [x] 7.6 Tapping outside tooltip dismisses it with 150ms fade-out
+  - [x] 7.7 Tooltip auto-positions: above by default, below if near viewport top
+  - [x] 7.8 Tooltip never overflows viewport horizontally
+  - [x] 7.9 Tooltip arrow points toward the trigger element
+  - [x] 7.10 All tooltip text is Hebrew, RTL-aligned, communicates value
+  - [x] 7.11 Theme toggle works — tooltip background/border updates with theme (dark/light)
+  - [x] 7.12 Tooltip dismisses when card flips (no tooltip floating over card back)
+  - [x] 7.13 Tooltip dismisses when module overlay opens
+  - [x] 7.14 Tooltip dismisses on idle auto-reset (90s timeout)
+  - [x] 7.15 No hardcoded hex colors in tooltip CSS — all via `var(--*)` tokens
+  - [x] 7.16 Named functions only — no anonymous callbacks in event listeners
+  - [x] 7.17 `prefers-reduced-motion` disables tooltip animation
+  - [x] 7.18 Touch targets meet 44px minimum (gauges and stat cards already meet this)
+  - [x] 7.19 `-webkit-touch-callout: none` prevents iOS long-press on tooltip triggers
+  - [x] 7.20 Existing features unbroken: card flip, module overlay, sidebar nav, theme toggle, AI chat, idle reset
 
 ## Dev Notes
 
@@ -350,14 +350,44 @@ $card.addEventListener('touchend', handleStatCardTouchEnd, { passive: true });
 - [Source: _bmad-output/implementation-artifacts/3-2-llm-api-integration-intelligent-hebrew-responses.md — Code patterns]
 - [Source: index.html — Current codebase analysis ~5017 lines]
 
+## Change Log
+
+- **2026-02-23:** Implemented Story 4.1 — Contextual Tooltips with Hebrew Sales Copy. Added tooltip CSS section (lines ~1859-1949), 9 `data-tooltip` attributes to HTML elements (3 hero gauges, 1 AI indicator, 5 stat cards), tooltip JS component `OptiPlan.components.tooltip` with `init()`, `show()`, `hide()`, `_position()`, `destroy()` methods (lines ~3021-3191), auto-positioning with viewport overflow handling, touch/click event handlers with deduplication, and integration with card flip, module overlay, and idle reset systems.
+
 ## Dev Agent Record
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+No errors encountered during implementation.
+
+### Implementation Plan
+
+- **CSS:** Added `/* SECTION: Component — Tooltip */` between AI Agent Indicator and AI Chat Panel sections. 11 CSS rules covering container, visibility states, below-placement variant, text styling (RTL), arrow with border effect, `[data-tooltip]` touch-callout suppression, and reduced-motion media query.
+- **HTML:** Added `data-tooltip` attributes with Hebrew sales copy to 9 elements: 3 hero gauges, AI indicator, 5 stat cards. Added HTML comments noting data constant dependencies.
+- **JS:** Created `OptiPlan.components.tooltip` component between Touch/Event Management stub and Sidebar sections. Single DOM element pattern (one tooltip, text swapped dynamically). Named event handlers `handleTooltipTap` and `handleTooltipDismiss` with touch/click deduplication via timestamp tracking.
+- **Positioning:** `_position()` method uses `getBoundingClientRect()` with temporary off-screen measurement. Default above placement, falls back to below when top overflows. Horizontal clamping with 8px edge padding. Arrow offset adjusted to point at trigger center when tooltip is clamped.
+- **Interaction strategy:** `data-tooltip` on `.stat-card` element (not front face). `show()` checks `stat-card--flipped` class to suppress tooltip on flipped cards. `handleStatCardTap` calls `tooltip.hide()` first to dismiss before flip. Tooltip fires on `touchstart` (instant), card flip on `click` (delayed) — creates brief micro-interaction.
+- **Integration:** `tooltip.hide()` called in `handleStatCardTap`, `moduleOverlay.expand()`, and idle reset handler. `tooltip.init()` called in `OptiPlan.init()` after moduleOverlay (all target DOM elements exist).
+
 ### Completion Notes List
 
+- All 7 tasks and 62 subtasks completed successfully
+- 9 tooltip instances: 3 hero gauges, 1 AI indicator, 5 stat cards — all with Hebrew RTL copy
+- Zero hardcoded colors — all via CSS custom properties
+- All event handlers are named functions with `{ passive: true }` on touchstart
+- Touch/click deduplication prevents double-firing on touch devices
+- Tooltip auto-dismisses on: card flip, module overlay open, idle auto-reset, outside tap
+- `prefers-reduced-motion` respected with near-zero transition duration
+- `-webkit-touch-callout: none` applied to all tooltip triggers
+- Single tooltip DOM element pattern — no DOM bloat
+- Arrow border effect via `::after` pseudo-element for visual polish
+
 ### File List
+
+- `index.html` — Modified: Added tooltip CSS section (lines ~1859-1949), `data-tooltip` attributes on 9 HTML elements, tooltip JS component (lines ~3021-3191), tooltip.hide() calls in handleStatCardTap/moduleOverlay.expand/idle reset, tooltip.init() in OptiPlan.init()
+- `_bmad-output/implementation-artifacts/4-1-contextual-tooltips-with-hebrew-sales-copy.md` — Modified: Updated task checkboxes, status, dev agent record, file list, change log
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — Modified: Updated story status from ready-for-dev to in-progress (will be set to review upon completion)
