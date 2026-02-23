@@ -89,6 +89,7 @@
       --sidebar-active: rgba(9,145,243,0.12);
       --bar-track: rgba(255,255,255,0.06);
       --ring-track: rgba(255,255,255,0.05);
+      --feed-hover: rgba(255,255,255,0.08);
     }
 
     [data-theme="light"] {
@@ -110,6 +111,7 @@
       --sidebar-active: rgba(9,145,243,0.08);
       --bar-track: rgba(0,0,0,0.06);
       --ring-track: rgba(0,0,0,0.06);
+      --feed-hover: rgba(0,0,0,0.04);
     }
 
     /* ================================================================ */
@@ -1320,6 +1322,10 @@
       fill: var(--text-on-color);
     }
 
+    .optirisk-heatmap__count--bright {
+      fill: var(--text-primary);
+    }
+
     /* --- Color Scale Legend --- */
     .optirisk-legend {
       display: flex;
@@ -1428,6 +1434,11 @@
 
     .optirisk-badge--active { background: rgba(9, 145, 243, 0.2); color: var(--optitrack); }
     .optirisk-badge--monitoring { background: rgba(246, 174, 45, 0.15); color: var(--optibiz); }
+
+    [data-theme="light"] .optirisk-badge--medium,
+    [data-theme="light"] .optirisk-badge--monitoring {
+      color: color-mix(in srgb, var(--optibiz) 70%, #000);
+    }
     .optirisk-badge--resolved { background: rgba(34, 197, 94, 0.15); color: var(--status-online); }
     .optirisk-badge--legal-review { background: rgba(160, 164, 184, 0.2); color: var(--text-secondary); }
 
@@ -1470,6 +1481,311 @@
     .optirisk-section--visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — OptiDocs Module                              */
+    /* ================================================================ */
+
+    /* --- Metrics Summary Row --- */
+    .optidocs-metrics {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+    }
+
+    .optidocs-metric {
+      flex: 1;
+      min-width: 120px;
+      background: color-mix(in srgb, var(--optidocs) 8%, var(--bg-card));
+      border-radius: var(--radius-sm);
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid color-mix(in srgb, var(--optidocs) 15%, transparent);
+    }
+
+    .optidocs-metric__value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .optidocs-metric__value--overdue {
+      color: #EF4444;
+    }
+
+    .optidocs-metric__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* --- Document Table --- */
+    .optidocs-table-wrapper {
+      overflow-y: auto;
+      max-height: calc(100% - 120px);
+      overscroll-behavior: contain;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-top: var(--gap);
+    }
+
+    .optidocs-table__header,
+    .optidocs-table__row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 0.6fr;
+      align-items: center;
+      gap: var(--gap-sm);
+      padding: 10px var(--gap);
+    }
+
+    .optidocs-table__header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .optidocs-table__col--header {
+      font-family: var(--font-main);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .optidocs-table__row {
+      min-height: 44px;
+      transition: background 150ms ease;
+    }
+
+    .optidocs-table__row--alt {
+      background: var(--bar-track);
+    }
+
+    .optidocs-table__row:hover {
+      background: var(--feed-hover);
+    }
+
+    .optidocs-table__col--name {
+      font-family: var(--font-main);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .optidocs-table__col--type {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .optidocs-table__col--date {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    /* --- Status Badges --- */
+    .optidocs-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-main);
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .optidocs-badge--approved {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--status-online);
+    }
+
+    .optidocs-badge--pending {
+      background: rgba(246, 174, 45, 0.2);
+      color: var(--optibiz);
+    }
+
+    .optidocs-badge--overdue {
+      background: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+    }
+
+    /* --- Assignee Initials --- */
+    .optidocs-assignee {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--optidocs) 15%, var(--bg-card));
+      color: var(--optidocs);
+      font-family: var(--font-main);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* --- Staggered Entrance Animation --- */
+    .optidocs-section {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .optidocs-section--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================================================================ */
+    /* SECTION: Component — OptiGantt Module                              */
+    /* ================================================================ */
+
+    /* --- Metrics Summary Row --- */
+    .optigantt-metrics {
+      display: flex;
+      gap: var(--gap);
+      flex-wrap: wrap;
+    }
+
+    .optigantt-metric {
+      flex: 1;
+      min-width: 120px;
+      background: color-mix(in srgb, var(--optigantt) 8%, var(--bg-card));
+      border-radius: var(--radius-sm);
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid color-mix(in srgb, var(--optigantt) 15%, transparent);
+    }
+
+    .optigantt-metric__value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .optigantt-metric__label {
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* --- SVG Gantt Chart --- */
+    .optigantt-chart {
+      width: 100%;
+      margin-top: var(--gap);
+    }
+
+    .optigantt-chart__svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .optigantt-chart__grid-line {
+      stroke: var(--border);
+      stroke-opacity: 0.3;
+      stroke-width: 1;
+    }
+
+    .optigantt-chart__axis-label {
+      fill: var(--text-muted);
+      font-family: var(--font-main);
+      font-size: 10px;
+    }
+
+    .optigantt-chart__year-label {
+      fill: var(--text-secondary);
+      font-family: var(--font-main);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .optigantt-chart__row-label {
+      fill: var(--text-secondary);
+      font-family: var(--font-main);
+      font-size: 11px;
+    }
+
+    .optigantt-chart__row-separator {
+      stroke: var(--border);
+      stroke-opacity: 0.04;
+      stroke-width: 1;
+    }
+
+    .optigantt-bar--plan {
+      fill: var(--optigantt);
+      opacity: 0.4;
+    }
+
+    .optigantt-bar--actual {
+      fill: var(--optigantt);
+    }
+
+    .optigantt-milestone {
+      fill: var(--optigantt);
+    }
+
+    .optigantt-milestone--review {
+      fill: var(--optigantt);
+      opacity: 0.7;
+    }
+
+    .optigantt-milestone--launch {
+      fill: var(--optigantt);
+      opacity: 0.85;
+    }
+
+    .optigantt-milestone__label {
+      fill: var(--text-muted);
+      font-family: var(--font-main);
+      font-size: 8px;
+    }
+
+    .optigantt-today {
+      stroke: var(--text-secondary);
+      stroke-width: 1.5;
+      stroke-dasharray: 6,4;
+    }
+
+    .optigantt-today__label {
+      fill: var(--text-secondary);
+      font-family: var(--font-main);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    /* --- Staggered Entrance Animation --- */
+    .optigantt-section {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .optigantt-section--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .optigantt-section {
+        transition: none;
+        opacity: 1;
+        transform: none;
+      }
     }
 
     /* ================================================================ */
@@ -2144,6 +2460,15 @@
     Object.freeze(OPTIGANTT_DATA.sections);
     Object.freeze(OPTIGANTT_DATA.milestones);
     Object.freeze(AI_CACHE);
+
+    // Data lookup map (const declarations aren't on window object)
+    var MODULE_DATA = {
+      OPTITRACK_DATA: OPTITRACK_DATA,
+      OPTIBIZ_DATA: OPTIBIZ_DATA,
+      OPTIRISK_DATA: OPTIRISK_DATA,
+      OPTIDOCS_DATA: OPTIDOCS_DATA,
+      OPTIGANTT_DATA: OPTIGANTT_DATA
+    };
 
     // ================================================================
     // SECTION: OptiPlan Namespace & State Management
@@ -2894,7 +3219,7 @@
           }
           if (OptiPlan.modules[moduleId].render) {
             var dataKey = config.dataKey;
-            var data = window[dataKey];
+            var data = MODULE_DATA[dataKey];
             OptiPlan.modules[moduleId].render(data);
           }
         }
@@ -3380,13 +3705,25 @@
         this.$content = document.querySelector('.module-overlay__content');
         if (!this.$content || !data) return;
 
+        // Clear pending entrance timeouts from any previous render
+        for (var t = 0; t < this._entranceTimeouts.length; t++) {
+          clearTimeout(this._entranceTimeouts[t]);
+        }
+        this._entranceTimeouts = [];
+
         var html = '';
 
         // --- Metrics Summary Row ---
         html += '<div class="optirisk-section optirisk-metrics" data-optirisk-section="metrics">';
         html += self._renderMetricCard(data.activeRisks, '\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05E4\u05E2\u05D9\u05DC\u05D9\u05DD', false);
         html += self._renderMetricCard(data.critical, '\u05E7\u05E8\u05D9\u05D8\u05D9\u05D9\u05DD', true);
-        html += self._renderMetricCard(data.topRisks.length, '\u05E1\u05D9\u05DB\u05D5\u05E0\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD', false);
+        var occupiedCells = 0;
+        for (var r = 0; r < data.heatMap.length; r++) {
+          for (var c = 0; c < data.heatMap[r].length; c++) {
+            if (data.heatMap[r][c] > 0) occupiedCells++;
+          }
+        }
+        html += self._renderMetricCard(occupiedCells + '/25', '\u05EA\u05D0\u05D9 \u05E1\u05D9\u05DB\u05D5\u05DF \u05E4\u05E2\u05D9\u05DC\u05D9\u05DD', false);
         html += '</div>';
 
         // --- Heat Map Section ---
@@ -3405,15 +3742,22 @@
 
         this.$content.innerHTML = html;
 
-        // Staggered entrance animation
+        // Staggered entrance animation (skip delays for reduced-motion)
         var sections = this.$content.querySelectorAll('.optirisk-section');
-        for (var s = 0; s < sections.length; s++) {
-          (function(section, delay) {
-            var timeout = setTimeout(function() {
-              section.classList.add('optirisk-section--visible');
-            }, delay);
-            self._entranceTimeouts.push(timeout);
-          })(sections[s], s * 100);
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+          for (var s = 0; s < sections.length; s++) {
+            sections[s].classList.add('optirisk-section--visible');
+          }
+        } else {
+          for (var s = 0; s < sections.length; s++) {
+            (function(section, delay) {
+              var timeout = setTimeout(function() {
+                section.classList.add('optirisk-section--visible');
+              }, delay);
+              self._entranceTimeouts.push(timeout);
+            })(sections[s], s * 100);
+          }
         }
       },
 
@@ -3471,7 +3815,7 @@
 
             svg += '<rect class="risk-cell--zone-' + zone + '" x="' + x + '" y="' + y + '" width="' + cellWidth + '" height="' + cellHeight + '" rx="4" />';
 
-            var countClass = count > 0 ? 'optirisk-heatmap__count--nonzero' : 'optirisk-heatmap__count--zero';
+            var countClass = count > 0 ? (zone <= 1 ? 'optirisk-heatmap__count--bright' : 'optirisk-heatmap__count--nonzero') : 'optirisk-heatmap__count--zero';
             svg += '<text class="optirisk-heatmap__count ' + countClass + '" x="' + (x + cellWidth / 2) + '" y="' + (y + cellHeight / 2 + 5) + '" text-anchor="middle">' + count + '</text>';
           }
         }
@@ -3561,39 +3905,335 @@
       }
     };
 
+    // ================================================================
+    // MODULE: OptiDocs
+    // ================================================================
     OptiPlan.modules.optidocs = {
-      init: function() {},
+      $content: null,
+      _entranceTimeouts: [],
+
+      init: function() {
+        this.$content = document.querySelector('.module-overlay__content');
+      },
+
       render: function(data) {
-        var $content = document.querySelector('.module-overlay__content');
-        if (!$content) return;
-        $content.innerHTML =
-          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
-            '<i class="ti ti-file-text" style="font-size: 64px; color: var(--optidocs); opacity: 0.3; margin-bottom: 16px;"></i>' +
-            '<span style="font-family: var(--font-main); font-size: 16px;">OptiDocs \u2014 \u05E0\u05D9\u05D4\u05D5\u05DC \u05DE\u05E1\u05DE\u05DB\u05D9\u05DD</span>' +
-            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.6</span>' +
+        var self = this;
+        this.$content = document.querySelector('.module-overlay__content');
+        if (!this.$content || !data) return;
+
+        var statusLabels = {
+          approved: '\u05D0\u05D5\u05E9\u05E8',
+          pending: '\u05DE\u05DE\u05EA\u05D9\u05DF',
+          overdue: '\u05D1\u05D0\u05D9\u05D7\u05D5\u05E8'
+        };
+
+        var html = '';
+
+        // --- Metrics Summary Row ---
+        html += '<div class="optidocs-section optidocs-metrics">';
+        html += self._renderMetricCard(data.total, '\u05E1\u05D4\u05F4\u05DB \u05DE\u05E1\u05DE\u05DB\u05D9\u05DD', '');
+        html += self._renderMetricCard(data.completionRate + '%', '\u05D0\u05D7\u05D5\u05D6 \u05D4\u05E9\u05DC\u05DE\u05D4', '');
+        html += self._renderMetricCard(data.pending, '\u05DE\u05DE\u05EA\u05D9\u05E0\u05D9\u05DD', '');
+        html += self._renderMetricCard(data.overdue, '\u05D1\u05D0\u05D9\u05D7\u05D5\u05E8', 'optidocs-metric__value--overdue');
+        html += '</div>';
+
+        // --- Document Table ---
+        html += '<div class="optidocs-section optidocs-table-wrapper">';
+        html += '<div class="optidocs-table">';
+
+        // Header row
+        html += '<div class="optidocs-table__header">';
+        html += '<span class="optidocs-table__col optidocs-table__col--header">\u05DE\u05E1\u05DE\u05DA</span>';
+        html += '<span class="optidocs-table__col optidocs-table__col--header">\u05E1\u05D5\u05D2</span>';
+        html += '<span class="optidocs-table__col optidocs-table__col--header">\u05E1\u05D8\u05D8\u05D5\u05E1</span>';
+        html += '<span class="optidocs-table__col optidocs-table__col--header">\u05EA\u05D0\u05E8\u05D9\u05DA</span>';
+        html += '<span class="optidocs-table__col optidocs-table__col--header">\u05D0\u05D7\u05E8\u05D0\u05D9</span>';
+        html += '</div>';
+
+        // Data rows
+        for (var i = 0; i < data.documents.length; i++) {
+          var doc = data.documents[i];
+          var altClass = i % 2 === 1 ? ' optidocs-table__row--alt' : '';
+          var statusKey = doc.status;
+          var statusLabel = statusLabels[statusKey] || statusKey;
+          var formattedDate = OptiPlan.utils.formatDate(doc.date);
+
+          html += '<div class="optidocs-table__row' + altClass + '">';
+          html += '<span class="optidocs-table__col optidocs-table__col--name">' + doc.name + '</span>';
+          html += '<span class="optidocs-table__col optidocs-table__col--type">' + doc.type + '</span>';
+          html += '<span class="optidocs-table__col optidocs-table__col--status"><span class="optidocs-badge optidocs-badge--' + statusKey + '">' + statusLabel + '</span></span>';
+          html += '<span class="optidocs-table__col optidocs-table__col--date">' + formattedDate + '</span>';
+          html += '<span class="optidocs-table__col optidocs-table__col--assignee"><span class="optidocs-assignee">' + doc.assignee + '</span></span>';
+          html += '</div>';
+        }
+
+        html += '</div>';
+        html += '</div>';
+
+        this.$content.innerHTML = html;
+
+        // Staggered entrance animation
+        var sections = this.$content.querySelectorAll('.optidocs-section');
+        for (var s = 0; s < sections.length; s++) {
+          (function(section, delay) {
+            var timeout = setTimeout(function() {
+              section.classList.add('optidocs-section--visible');
+            }, delay);
+            self._entranceTimeouts.push(timeout);
+          })(sections[s], s * 100);
+        }
+      },
+
+      _renderMetricCard: function(value, label, valueClass) {
+        var cls = 'optidocs-metric__value';
+        if (valueClass) cls += ' ' + valueClass;
+        return '<div class="optidocs-metric">' +
+          '<span class="' + cls + '">' + value + '</span>' +
+          '<span class="optidocs-metric__label">' + label + '</span>' +
           '</div>';
       },
+
       destroy: function() {
-        var $content = document.querySelector('.module-overlay__content');
-        if ($content) $content.innerHTML = '';
+        for (var i = 0; i < this._entranceTimeouts.length; i++) {
+          clearTimeout(this._entranceTimeouts[i]);
+        }
+        this._entranceTimeouts = [];
+        if (this.$content) this.$content.innerHTML = '';
+        this.$content = null;
       }
     };
 
     OptiPlan.modules.optigantt = {
-      init: function() {},
+      $content: null,
+      _entranceTimeouts: [],
+
+      init: function() {
+        this.$content = document.querySelector('.module-overlay__content');
+      },
+
       render: function(data) {
-        var $content = document.querySelector('.module-overlay__content');
-        if (!$content) return;
-        $content.innerHTML =
-          '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);">' +
-            '<i class="ti ti-calendar" style="font-size: 64px; color: var(--optigantt); opacity: 0.3; margin-bottom: 16px;"></i>' +
-            '<span style="font-family: var(--font-main); font-size: 16px;">OptiGantt \u2014 \u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD</span>' +
-            '<span style="font-family: var(--font-main); font-size: 12px; margin-top: 8px; opacity: 0.6;">Content coming in Story 2.7</span>' +
+        var self = this;
+        this.$content = document.querySelector('.module-overlay__content');
+        if (!this.$content || !data) return;
+
+        // Clear pending entrance timeouts from any previous render
+        for (var t = 0; t < this._entranceTimeouts.length; t++) {
+          clearTimeout(this._entranceTimeouts[t]);
+        }
+        this._entranceTimeouts = [];
+
+        var html = '';
+
+        // --- Task 1: Metrics Summary Row ---
+        var totalSections = data.sections.length;
+        var onTrack = 0;
+        var delayed = 0;
+        for (var m = 0; m < data.sections.length; m++) {
+          if (data.sections[m].progress >= 50) {
+            onTrack++;
+          } else {
+            delayed++;
+          }
+        }
+        var milestoneCount = data.milestones.length;
+
+        html += '<div class="optigantt-section optigantt-metrics" data-optigantt-section="metrics">';
+        html += self._renderMetricCard(totalSections, '\u05E7\u05D8\u05E2\u05D9\u05DD');
+        html += self._renderMetricCard(onTrack, '\u05D1\u05DE\u05E1\u05DC\u05D5\u05DC');
+        html += self._renderMetricCard(delayed, '\u05D1\u05E2\u05D9\u05DB\u05D5\u05D1');
+        html += self._renderMetricCard(milestoneCount, '\u05D0\u05D1\u05E0\u05D9 \u05D3\u05E8\u05DA');
+        html += '</div>';
+
+        // --- Tasks 2-7: SVG Gantt Chart ---
+        html += '<div class="optigantt-section optigantt-chart" data-optigantt-section="chart">';
+        html += self._renderGanttChart(data);
+        html += '</div>';
+
+        this.$content.innerHTML = html;
+
+        // --- Task 9: Staggered entrance animation ---
+        var sections = this.$content.querySelectorAll('.optigantt-section');
+        for (var s = 0; s < sections.length; s++) {
+          (function(section, delay) {
+            var timeout = setTimeout(function applyGanttVisible() {
+              section.classList.add('optigantt-section--visible');
+            }, delay);
+            self._entranceTimeouts.push(timeout);
+          })(sections[s], s * 100);
+        }
+      },
+
+      _renderMetricCard: function(value, label) {
+        return '<div class="optigantt-metric">' +
+          '<span class="optigantt-metric__value">' + value + '</span>' +
+          '<span class="optigantt-metric__label">' + label + '</span>' +
           '</div>';
       },
+
+      _renderGanttChart: function(data) {
+        // Chart dimensions (viewBox units)
+        var svgWidth = 900;
+        var svgHeight = 340;
+        var labelAreaWidth = 140;
+        var gridStartX = labelAreaWidth;
+        var gridEndX = svgWidth - 20;
+        var gridWidth = gridEndX - gridStartX;
+        var topPadding = 30;
+        var bottomPadding = 30;
+        var rowCount = data.sections.length;
+        var rowHeight = 40;
+        var gridHeight = rowCount * rowHeight;
+        var gridStartY = topPadding;
+        var gridEndY = gridStartY + gridHeight;
+
+        // Timeline date range
+        var timelineStart = new Date('2022-04-01');
+        var timelineEnd = new Date('2027-12-31');
+        var totalMs = timelineEnd.getTime() - timelineStart.getTime();
+
+        // Date to X position helper
+        function dateToX(dateStr) {
+          var d = new Date(dateStr);
+          var elapsedMs = d.getTime() - timelineStart.getTime();
+          return gridStartX + (elapsedMs / totalMs) * gridWidth;
+        }
+
+        var svg = '<svg class="optigantt-chart__svg" viewBox="0 0 ' + svgWidth + ' ' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="\u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD \u2014 \u05EA\u05E8\u05E9\u05D9\u05DD \u05D2\u05E0\u05D8">';
+
+        // --- Task 2: Monthly column grid lines and x-axis labels ---
+        var startYear = 2022;
+        var startMonth = 4; // April 2022
+        var endYear = 2027;
+        var endMonth = 12;
+
+        for (var y = startYear; y <= endYear; y++) {
+          var mStart = (y === startYear) ? startMonth : 1;
+          var mEnd = (y === endYear) ? endMonth : 12;
+          for (var mo = mStart; mo <= mEnd; mo++) {
+            var monthStr = y + '-' + (mo < 10 ? '0' : '') + mo + '-01';
+            var x = dateToX(monthStr);
+
+            // Grid line
+            svg += '<line class="optigantt-chart__grid-line" x1="' + x + '" y1="' + gridStartY + '" x2="' + x + '" y2="' + gridEndY + '" />';
+
+            // Year label at January
+            if (mo === 1) {
+              svg += '<text class="optigantt-chart__year-label" x="' + x + '" y="' + (gridStartY - 6) + '" text-anchor="middle">' + y + '</text>';
+            }
+            // Quarter labels (every 3 months: Jan, Apr, Jul, Oct)
+            if (mo % 3 === 1) {
+              var monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+              svg += '<text class="optigantt-chart__axis-label" x="' + x + '" y="' + (gridEndY + 15) + '" text-anchor="middle">' + monthNames[mo] + '</text>';
+            }
+          }
+        }
+
+        // --- Task 3: Section Row Labels (Y-Axis) ---
+        var sectionIdLabels = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6'];
+        for (var r = 0; r < rowCount; r++) {
+          var rowCenterY = gridStartY + (r * rowHeight) + (rowHeight / 2);
+          var sectionLabel = sectionIdLabels[r] + ' ' + data.sections[r].name;
+          svg += '<text class="optigantt-chart__row-label" x="' + (labelAreaWidth - 8) + '" y="' + (rowCenterY + 4) + '" text-anchor="end">' + sectionLabel + '</text>';
+
+          // Row separator lines (between sections)
+          if (r < rowCount - 1) {
+            var separatorY = gridStartY + ((r + 1) * rowHeight);
+            svg += '<line class="optigantt-chart__row-separator" x1="' + gridStartX + '" y1="' + separatorY + '" x2="' + gridEndX + '" y2="' + separatorY + '" />';
+          }
+        }
+
+        // --- Task 4: Planned Duration Bars ---
+        var barHeight = 20;
+        var barRx = 3;
+        for (var p = 0; p < data.sections.length; p++) {
+          var sec = data.sections[p];
+          var planX1 = dateToX(sec.plannedStart);
+          var planX2 = dateToX(sec.plannedEnd);
+          var planWidth = planX2 - planX1;
+          var barY = gridStartY + (p * rowHeight) + (rowHeight - barHeight) / 2;
+
+          svg += '<rect class="optigantt-bar--plan" x="' + planX1 + '" y="' + barY + '" width="' + planWidth + '" height="' + barHeight + '" rx="' + barRx + '" />';
+        }
+
+        // --- Task 5: Actual Progress Bars ---
+        for (var a = 0; a < data.sections.length; a++) {
+          var secA = data.sections[a];
+          var actStartX = dateToX(secA.actualStart);
+          var actBarY = gridStartY + (a * rowHeight) + (rowHeight - barHeight) / 2;
+          var actEndX;
+
+          if (secA.actualEnd !== null) {
+            // Section complete — use actual end date
+            actEndX = dateToX(secA.actualEnd);
+          } else {
+            // In progress — calculate from progress percentage
+            var plannedDurationMs = new Date(secA.plannedEnd).getTime() - new Date(secA.plannedStart).getTime();
+            var progressMs = plannedDurationMs * (secA.progress / 100);
+            var progressDate = new Date(new Date(secA.actualStart).getTime() + progressMs);
+            actEndX = gridStartX + ((progressDate.getTime() - timelineStart.getTime()) / totalMs) * gridWidth;
+          }
+
+          var actWidth = actEndX - actStartX;
+          if (actWidth > 0) {
+            svg += '<rect class="optigantt-bar--actual" x="' + actStartX + '" y="' + actBarY + '" width="' + actWidth + '" height="' + barHeight + '" rx="' + barRx + '" />';
+          }
+        }
+
+        // --- Task 6: Diamond Milestone Markers ---
+        for (var mi = 0; mi < data.milestones.length; mi++) {
+          var ms = data.milestones[mi];
+          var msX = dateToX(ms.date);
+
+          // Find row index for this milestone's section
+          var msRowIdx = 0;
+          for (var si = 0; si < data.sections.length; si++) {
+            if (data.sections[si].id === ms.section) {
+              msRowIdx = si;
+              break;
+            }
+          }
+          var msCenterY = gridStartY + (msRowIdx * rowHeight) + (rowHeight / 2);
+          var diamondSize = 5;
+
+          // Determine CSS class based on milestone type
+          var milestoneClass = 'optigantt-milestone';
+          if (ms.type === 'review') {
+            milestoneClass += ' optigantt-milestone--review';
+          } else if (ms.type === 'launch') {
+            milestoneClass += ' optigantt-milestone--launch';
+          }
+
+          // Diamond polygon (rotated square)
+          var points = msX + ',' + (msCenterY - diamondSize) + ' ' +
+                       (msX + diamondSize) + ',' + msCenterY + ' ' +
+                       msX + ',' + (msCenterY + diamondSize) + ' ' +
+                       (msX - diamondSize) + ',' + msCenterY;
+          svg += '<polygon class="' + milestoneClass + '" points="' + points + '" />';
+
+          // Milestone label — positioned above diamond
+          svg += '<text class="optigantt-milestone__label" x="' + msX + '" y="' + (msCenterY - diamondSize - 4) + '" text-anchor="middle">' + ms.label + '</text>';
+        }
+
+        // --- Task 7: Today Indicator Line ---
+        var today = new Date();
+        var todayMs = today.getTime() - timelineStart.getTime();
+        if (todayMs >= 0 && todayMs <= totalMs) {
+          var todayX = gridStartX + (todayMs / totalMs) * gridWidth;
+          svg += '<path class="optigantt-today" d="M' + todayX + ' ' + gridStartY + ' L' + todayX + ' ' + gridEndY + '" />';
+          svg += '<text class="optigantt-today__label" x="' + todayX + '" y="' + (gridEndY + 26) + '" text-anchor="middle">\u05D4\u05D9\u05D5\u05DD</text>';
+        }
+
+        svg += '</svg>';
+        return svg;
+      },
+
       destroy: function() {
-        var $content = document.querySelector('.module-overlay__content');
-        if ($content) $content.innerHTML = '';
+        for (var i = 0; i < this._entranceTimeouts.length; i++) {
+          clearTimeout(this._entranceTimeouts[i]);
+        }
+        this._entranceTimeouts = [];
+        if (this.$content) this.$content.innerHTML = '';
+        this.$content = null;
       }
     };
 

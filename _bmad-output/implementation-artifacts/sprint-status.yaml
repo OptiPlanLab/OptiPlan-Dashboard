@@ -58,14 +58,14 @@ development_status:
   2-2-module-expansion-overlay-container-layer-3: done
   2-3-optitrack-module-permit-matrix-activity-feed: done
   2-4-optibiz-module-cash-flow-chart-financial-kpis: done
-  2-5-optirisk-module-risk-heat-map-top-risks-table: review
-  2-6-optidocs-module-document-tracking-table: ready-for-dev
-  2-7-optigantt-module-schedule-timeline: backlog
+  2-5-optirisk-module-risk-heat-map-top-risks-table: done
+  2-6-optidocs-module-document-tracking-table: review
+  2-7-optigantt-module-schedule-timeline: review
   epic-2-retrospective: optional
 
   # ─── Epic 3: AI Intelligence ────────────────────────────────────────────────
-  epic-3: backlog
-  3-1-ai-chat-panel-ui-interaction-shell: backlog
+  epic-3: in-progress
+  3-1-ai-chat-panel-ui-interaction-shell: ready-for-dev
   3-2-llm-api-integration-intelligent-hebrew-responses: backlog
   epic-3-retrospective: optional
 
