@@ -62,7 +62,7 @@ Target deployment: GitHub Pages as static files. Vanilla HTML/CSS/JS chosen for 
 | **Project Context** | Brownfield (built on existing OptiPlan platform specs and design system) |
 | **Target Platform** | iPad landscape, touch-first, responsive |
 | **Deployment** | GitHub Pages (static files) |
-| **Tech Stack** | Vanilla HTML / CSS / JS, Google Fonts (Heebo), no build tools |
+| **Tech Stack** | Vanilla HTML / CSS / JS, Google Fonts (Varela Round), no build tools |
 
 ## Success Criteria
 
@@ -110,7 +110,7 @@ The investor who walks up to the iPad:
 - Live AI chat with LLM API integration — suggests questions, answers in Hebrew about the project
 - Subtle animated gradient background or ambient motion at idle
 - All animations: card flip (~400ms), expand (~500ms), gauge fill on load (~800ms)
-- Full RTL Hebrew, Heebo font, OptiPlan logo
+- Full RTL Hebrew, Varela Round font, OptiPlan logo
 - iPad landscape optimized, touch-first (min 44x44px targets)
 - Single HTML file (or minimal files), GitHub Pages deployed
 - Hardcoded realistic data for the Gush Dan Metro fictitious project
@@ -253,7 +253,7 @@ Not in scope. Conference-specific demo for sighted touch users. No ARIA, screen 
 
 ### Implementation Considerations
 
-- **Font loading:** Heebo from Google Fonts, must not block first paint
+- **Font loading:** Varela Round from Google Fonts, must not block first paint
 - **Logo:** Loaded asset with text fallback if unreachable
 - **AI chat:** API key embedded client-side (acceptable for demo scope). CORS handling required for GitHub Pages origin.
 - **Offline behavior:** All non-AI features must work without network. AI chat falls back to cached responses.
@@ -278,7 +278,7 @@ Not in scope. Conference-specific demo for sighted touch users. No ARIA, screen 
 | **P0** | Layer 1 — top bar, 3 gauges, 5 module cards, AI indicator | First impression. Without this, nothing else matters. |
 | **P0** | Idle-state animations — gradient, gauge pulse, card stagger | The "magnet" effect. Must work even when nobody's touching. |
 | **P0** | Card flip (Layer 2) — all 5 modules with KPIs | Second interaction. Proves depth exists. |
-| **P0** | Full RTL Hebrew, Heebo font, OptiPlan logo, premium styling | Non-negotiable for Israeli investor audience. |
+| **P0** | Full RTL Hebrew, Varela Round font, OptiPlan logo, premium styling | Non-negotiable for Israeli investor audience. |
 | **P1** | Module expansion (Layer 3) — all 5 modules with charts/tables | Deep Diver and Skeptic journeys depend on this. |
 | **P1** | AI chat with LLM API — suggested questions + free text | The "holy shit" moment. Must-have per owner direction. |
 | **P1** | Internally consistent hardcoded data across all modules | Skeptic-proofing. Numbers must cross-reference. |
@@ -427,7 +427,7 @@ Not in scope. Conference-specific demo for sighted touch users. No ARIA, screen 
 | **API authentication** | API key embedded client-side (acceptable for demo scope) | No backend to proxy through |
 | **CORS handling** | API calls must work from GitHub Pages origin | Cross-origin restrictions may apply depending on provider |
 | **Fallback mechanism** | 5-8 pre-cached Q&A pairs served when API is unreachable | Seamless experience regardless of connectivity |
-| **Font loading** | Google Fonts (Heebo) with `font-display: swap` | Prevent flash of invisible text on slow WiFi |
+| **Font loading** | Google Fonts (Varela Round) with `font-display: swap` | Prevent flash of invisible text on slow WiFi |
 
 ### Deployment & Hosting
 
@@ -436,4 +436,4 @@ Not in scope. Conference-specific demo for sighted touch users. No ARIA, screen 
 | **Hosting** | GitHub Pages (static files only) | Zero cost, zero infrastructure, URL accessible from any network |
 | **File structure** | Single HTML file or HTML + 1 CSS + 1 JS maximum | Minimal HTTP requests, simplest possible deployment |
 | **Build tools** | None — no compilation, no bundling, no transpilation | What you write is what ships |
-| **External dependencies** | Google Fonts (Heebo) + LLM API only | No CDN libraries, no frameworks |
+| **External dependencies** | Google Fonts (Varela Round) + LLM API only | No CDN libraries, no frameworks |
