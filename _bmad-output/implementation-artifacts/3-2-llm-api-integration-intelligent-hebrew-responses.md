@@ -1,6 +1,6 @@
 # Story 3.2: LLM API Integration & Intelligent Hebrew Responses
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -464,7 +464,8 @@ Claude Opus 4.6 (claude-opus-4-6)
 ### Change Log
 
 - 2026-02-23: [CODE REVIEW] Found all tasks marked complete but Tasks 2-9 unimplemented. Original implementation was removed during Story 3.1 code review (commit 2e3246a) as scope-creep. Re-implemented entire LLM API integration: `_buildSystemPrompt()`, `_buildMessages()`, fetch-first `sendMessage()` with AbortController + cache fallback, abort cleanup in `destroy()` and `handleChatClose()`.
+- 2026-02-23: [CODE REVIEW #2] Adversarial review found 7 issues (1 HIGH, 4 MEDIUM, 2 LOW). Fixed 5 issues: (1) HIGH — removed duplicate user message in `_buildMessages()` that sent current message twice in API payload; (2) MEDIUM — added OPTIBIZ_DATA and OPTIGANTT_DATA to `_buildSystemPrompt()` for financial and schedule context; (3) MEDIUM — added `_responseTimeout` cleanup and typing indicator reset to `handleChatClose()`; (4) MEDIUM — reordered `API_KEY` after `MAX_CHAT_HISTORY` per AC#7; (5) JS syntax validation passed. 2 LOW items noted but not fixed (model version, project length in prompt).
 
 ### File List
 
-- `index.html` (modified) — Added `_buildSystemPrompt()`, `_buildMessages()`, `_abortController`/`_abortTimeoutId` properties, rewrote `sendMessage()` for fetch-first with cache fallback, updated `destroy()` with abort cleanup, added abort cleanup to `handleChatClose()`
+- `index.html` (modified) — Added `_buildSystemPrompt()`, `_buildMessages()`, `_abortController`/`_abortTimeoutId` properties, rewrote `sendMessage()` for fetch-first with cache fallback, updated `destroy()` with abort cleanup, added abort cleanup to `handleChatClose()`. Code review #2 fixes: removed duplicate message push in `_buildMessages()`, added OPTIBIZ/OPTIGANTT data to system prompt, added `_responseTimeout` cleanup to `handleChatClose()`, reordered Configuration Constants (API_KEY after MAX_CHAT_HISTORY).

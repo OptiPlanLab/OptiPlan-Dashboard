@@ -64,15 +64,15 @@ development_status:
   epic-2-retrospective: optional
 
   # ─── Epic 3: AI Intelligence ────────────────────────────────────────────────
-  epic-3: in-progress
+  epic-3: done
   3-1-ai-chat-panel-ui-interaction-shell: done
-  3-2-llm-api-integration-intelligent-hebrew-responses: review
+  3-2-llm-api-integration-intelligent-hebrew-responses: done
   epic-3-retrospective: optional
 
   # ─── Epic 4: Conference Readiness & Polish ──────────────────────────────────
   epic-4: in-progress
   4-1-contextual-tooltips-with-hebrew-sales-copy: review
   4-2-cross-module-data-consistency-audit: review
-  4-3-ipad-safari-hardening-touch-optimization: ready-for-dev
-  4-4-long-running-stability-session-management: backlog
+  4-3-ipad-safari-hardening-touch-optimization: review
+  4-4-long-running-stability-session-management: ready-for-dev
   epic-4-retrospective: optional
