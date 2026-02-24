@@ -768,8 +768,9 @@
       background: var(--bg-card);
       border-top: 3px solid var(--module);
       border-radius: var(--radius);
-      overflow: hidden;
-      padding: 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 8px;
       display: flex;
       flex-direction: column;
     }
@@ -786,12 +787,12 @@
 
     /* Back face — header */
     .stat-card__back-header {
-      margin-bottom: var(--gap-sm);
+      margin-bottom: 4px;
     }
 
     .stat-card__back-title {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -807,7 +808,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 0;
+      padding: 2px 0;
       border-bottom: 1px solid var(--border);
     }
 
@@ -817,14 +818,14 @@
 
     .stat-card__kpi-label {
       font-family: var(--font-main);
-      font-size: 13px;
+      font-size: 11px;
       color: var(--text-secondary);
     }
 
     .stat-card__kpi-value {
       font-family: var(--font-mono);
       font-weight: 700;
-      font-size: 15px;
+      font-size: 12px;
       color: var(--text-primary);
     }
 
@@ -847,17 +848,18 @@
     /* Back face — CTA button */
     .stat-card__back-cta {
       width: 100%;
-      padding: 6px;
-      min-height: 32px;
+      padding: 5px;
+      min-height: 28px;
       background: var(--module);
       color: var(--text-on-color);
       border: none;
       border-radius: var(--radius-sm);
       font-family: var(--font-main);
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
       touch-action: manipulation;
       margin-top: auto;
+      flex-shrink: 0;
     }
 
     /* ================================================================ */
@@ -4098,14 +4100,12 @@
     // ================================================================
 
     function handleStatCardTap(e) {
-      // Dismiss tooltip before any card action
-      OptiPlan.components.tooltip.hide();
-
       var card = e.currentTarget;
       var moduleId = card.dataset.module;
 
       // If tapping the CTA button, open module overlay
       if (e.target.classList.contains('stat-card__back-cta')) {
+        OptiPlan.components.tooltip.hide();
         var ctaModuleId = e.currentTarget.dataset.module;
         OptiPlan.components.moduleOverlay.expand(ctaModuleId);
         return;
