@@ -87,7 +87,7 @@ The core loop: **Idle magnetism > First tap (card flip) > Depth discovery (expan
 | **Touch targets** | Minimum 44x44px (Apple HIG) | Non-negotiable for fat-finger reliability at a conference |
 | **Offline capability** | All non-AI features work without network | Conference WiFi is unreliable; the demo must never break |
 | **Tech stack** | Vanilla HTML/CSS/JS, single file | Zero-dependency deployment, fastest build velocity, GitHub Pages compatible |
-| **RTL** | Full Hebrew RTL with Heebo font | Israeli investor audience, non-negotiable |
+| **RTL** | Full Hebrew RTL with Varela Round font | Israeli investor audience, non-negotiable |
 | **Animation engine** | CSS transitions + GPU-composited properties only (transform, opacity) | 60fps on iPad hardware without framework overhead |
 
 ### Effortless Interactions
@@ -166,7 +166,7 @@ The target post-experience emotion is **belief** — not excitement, not admirat
 | **Confusion** | Lost in navigation, unclear what to tap | Persistent back button, clear visual hierarchy, obvious touch targets |
 | **Skepticism** | Inconsistent data, shallow module, dead end | Cross-reference all numbers, full depth in every module, zero disabled states |
 | **Impatience** | Slow animation, delayed response, loading state | All data hardcoded (instant), GPU-composited animations (60fps), <100ms touch feedback |
-| **Cheapness** | Generic UI patterns, stock-feeling charts, decorative excess | "Calvin Klein" restraint, Heebo typography, custom color palette, no rounded corners >6px |
+| **Cheapness** | Generic UI patterns, stock-feeling charts, decorative excess | "Calvin Klein" restraint, Varela Round typography, custom color palette, no rounded corners >6px |
 
 ### Design Implications
 
@@ -316,7 +316,7 @@ All design decisions encoded as CSS variables on `:root`, enabling single-source
 | **Colors — Base** | `--navy: #1B365D`, `--steel: #4A86B8`, `--sky: #89C4E8`, `--ice: #D6EAF5`, `--white: #FFFFFF` | Core palette from build document |
 | **Colors — Semantic** | `--text: #2C3E50`, `--text-light: #5D6D7E`, `--success: #27AE60`, `--warning: #F39C12`, `--danger: #E74C3C` | Semantic meaning, not module-specific |
 | **Colors — Module** | `--optitrack: #3B82F6`, `--optibiz: #8B5CF6`, `--optirisk: #EF4444`, `--optidocs: #22C55E`, `--optigantt: #6366F1` | Module identity accents |
-| **Typography** | `--font-family: 'Heebo', sans-serif`, `--font-weight-light: 300`, `--font-weight-bold: 700`, `--font-weight-black: 900` | Heebo weight scale |
+| **Typography** | `--font-family: 'Varela Round', sans-serif`, `--font-weight-light: 300`, `--font-weight-bold: 700`, `--font-weight-black: 900` | Varela Round weight scale |
 | **Spacing** | `--space-sm: 8px`, `--space-md: 16px`, `--space-lg: 24px`, `--space-xl: 32px` | Consistent spacing rhythm |
 | **Animation** | `--flip-duration: 400ms`, `--expand-duration: 500ms`, `--gauge-duration: 800ms`, `--ease-premium: cubic-bezier(0.4, 0, 0.2, 1)` | Animation timing constants |
 | **Layout** | `--max-width: 1200px`, `--card-gap: 16px`, `--card-radius: 4px`, `--border-width: 1px` | Structural constants |
@@ -498,9 +498,9 @@ The key design decision: **no call-to-action, no "learn more" button, no pitch s
 
 ### Typography System
 
-**Typeface: Heebo (Google Fonts)**
+**Typeface: Varela Round (Google Fonts)**
 
-Heebo is a geometric sans-serif designed specifically for Hebrew. It provides excellent readability at all sizes, a modern professional feel, and proper Hebrew glyph rendering. Latin characters are equally well-supported for numbers, module names, and technical abbreviations.
+Varela Round is a rounded geometric sans-serif that provides a friendlier, more approachable feel while maintaining professionalism. It offers excellent readability at all sizes and proper Hebrew glyph rendering. Latin characters are equally well-supported for numbers, module names, and technical abbreviations. (Chosen over Heebo per stakeholder preference — see Design Rationale.)
 
 **Type Scale (modular, based on 1rem = 16px):**
 
@@ -519,7 +519,7 @@ Heebo is a geometric sans-serif designed specifically for Hebrew. It provides ex
 1. **Numbers are always bold or black weight.** KPIs, percentages, currency values — numbers are the hero content and must command attention.
 2. **Labels are always light weight.** The contrast between bold numbers and light labels creates the Stripe-inspired hierarchy that makes data scannable.
 3. **No font-weight between 300 and 700.** The dramatic weight contrast (light vs. bold vs. black) is a deliberate design choice — medium weights create visual ambiguity.
-4. **Hebrew text uses the same scale.** Heebo renders Hebrew at visually equivalent sizes to Latin, so no size adjustments needed for RTL content.
+4. **Hebrew text uses the same scale.** Varela Round renders Hebrew at visually equivalent sizes to Latin, so no size adjustments needed for RTL content.
 5. **Maximum 2 sizes per component.** Any card, table, or section uses at most a primary size (number/title) and secondary size (label/body). Three sizes in one component = visual noise.
 
 ### Spacing & Layout Foundation
